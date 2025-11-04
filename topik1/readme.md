@@ -13,13 +13,16 @@ number,check,korean,english,example,translation
 ```
 
 ### Enhanced Files: `extra/1.csv` through `extra/18.csv`
-Format (7 fields):
+Format (8 fields):
 ```
-number,check,korean,japanese,english,example,translation
+number,check,korean,hanja,japanese,english,example,translation
 ```
 
 Both versions have an empty `check` column for personal study tracking.
-The `extra/` files include an empty `japanese` column for annotating Japanese equivalents, especially useful for Sino-Korean words (e.g., 가격 → 価格).
+The `extra/` files include `hanja` and `japanese` columns for Sino-Korean word etymology:
+- `hanja`: Traditional Chinese characters used in Korean (e.g., 가격 → 價格)
+- `japanese`: Japanese kanji equivalents (e.g., 가격 → 価格)
+- Example: 가격, 價格, 価格 showing Korean → Hanja → Japanese
 
 ## Extraction Strategy
 
@@ -104,28 +107,36 @@ for i in range(1, 19):
         csv.writer(f).writerows(rows)
 ```
 
-## Filling Japanese Column
+## Filling Hanja and Japanese Columns
 
-**Status**: 🚧 In Progress (Files 1-5 complete: 500/1847 words)
+**Status**: 🚧 In Progress (Restarting with new 8-field format)
 
-**Method**: Manual "eyeballing" - reading each CSV file and adding Japanese kanji for Sino-Korean words only.
+**Method**: Manual "eyeballing" - reading each CSV file and adding both Hanja and Japanese for Sino-Korean words.
 
-**Important**: The `japanese` column should contain **Sino-origin correspondences**, not just translations:
-- ✅ Good: 가격 (價格) → 価格 (same Sino-origin)
-- ✅ Good: 건강 (健康) → 健康 (same Sino-origin)
-- ❌ Avoid: 감기 → 風邪 (different words; 감기 is 感氣 in hanja, 風邪 is Japanese word for "cold")
-- ❌ Avoid: 걱정 → 心配 (different words; 걱정 is 掛念, 心配 is Japanese word for "worry")
+**Approach**:
+1. **Hanja column**: Traditional Chinese characters (Hanzi) as used in Korean
+   - Example: 가격 → 價格
+   - Example: 학교 → 學校
 
-However, some semantic translation is acceptable for practical study purposes, even when kanji differ slightly.
+2. **Japanese column**: Japanese kanji equivalents
+   - Example: 가격 → 価格 (simplified from 價格)
+   - Example: 학교 → 学校 (simplified from 學校)
 
-**Native Korean words**: Leave `japanese` column empty (e.g., 가다, 먹다, 좋다).
+3. **Native Korean words**: Leave both `hanja` and `japanese` columns empty
+   - Examples: 가다, 먹다, 좋다, 예쁘다
 
-**Progress by file:**
-- [x] extra/1.csv (words 1-100)
-- [x] extra/2.csv (words 101-200)
-- [x] extra/3.csv (words 201-300)
-- [x] extra/4.csv (words 301-400)
-- [x] extra/5.csv (words 401-500)
+**Benefits of dual columns**:
+- Shows etymological connection between Korean Hanja and Japanese kanji
+- Reveals simplification differences (e.g., 價格 vs 価格)
+- Useful for learners of both Korean and Japanese
+- Native Korean words clearly identifiable by empty cells
+
+**Progress by file (8-field format with hanja + japanese):**
+- [x] extra/1.csv (words 1-100) - Complete
+- [ ] extra/2.csv (words 101-200)
+- [ ] extra/3.csv (words 201-300)
+- [ ] extra/4.csv (words 301-400)
+- [ ] extra/5.csv (words 401-500)
 - [ ] extra/6.csv (words 501-600)
 - [ ] extra/7.csv (words 601-700)
 - [ ] extra/8.csv (words 701-800)
