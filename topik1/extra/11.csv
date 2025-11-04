@@ -13,7 +13,7 @@ number,check,korean,hanja,japanese,english,example,translation
 1012,,쓰다,,,bitter,맛이 쓰다,the taste is bitter
 1013,,쓰레기,,,garbage,쓰레기를 줍다,pick up garbage
 1014,,쓰레기통,,,trash can,쓰레기통에 버리다,throw in the trash can
-1015,,씨,,,"Mr, Mrs",마이클 씨,Mr. Michael
+1015,,씨,氏,氏,"Mr, Mrs",마이클 씨,Mr. Michael
 1016,,씹다,,,chew,껌을 씹다,chew gum
 1017,,씻다,,,wash,손을 씻다,wash hands
 1018,,아,,,Ah,"아, 그래요?",Oh yeah?
@@ -49,18 +49,18 @@ number,check,korean,hanja,japanese,english,example,translation
 1048,,아프다,,,sick,다리가 아프다,legs hurt
 1049,,아홉,,,nine,숫자,number
 1050,,아흔,,,ninety,숫자,number
-1051,,악기,,,musical instrument,악기를 연주하다,play an instrument
+1051,,악기,樂器,楽器,musical instrument,악기를 연주하다,play an instrument
 1052,,안,,,inside,밖,outside
 1053,,안,,,not,안 춥다,It's not cold
 1054,,안개,,,fog,안개가 끼다,foggy
-1055,,안경,,,glasses,안경을 쓰다,wear glasses
-1056,,안내,,,information,관광 안내,tourist information
-1057,,안내문,,,notice,안내문을 받다,receive notice
+1055,,안경,眼鏡,眼鏡,glasses,안경을 쓰다,wear glasses
+1056,,안내,案內,案内,information,관광 안내,tourist information
+1057,,안내문,案內文,案内文,notice,안내문을 받다,receive notice
 1058,,안녕,,,hi,친구야! 안녕.,friend! hi.
 1059,,안녕히,,,bye,안녕히 계세요,good bye
 1060,,안다,,,"hug, hold",아기를 안다,hug the baby
 1061,,안되다,,,not,공부가 안되다,can't study
-1062,,안전,,,safety,안전을 지키다,keep safe
+1062,,안전,安全,安全,safety,안전을 지키다,keep safe
 1063,,안쪽,,,inside,바깥쪽,outside
 1064,,앉다,,,sit,의자에 앉다,sit on a chair
 1065,,알다,,,know,사실을 알다,know the facts
@@ -70,23 +70,23 @@ number,check,korean,hanja,japanese,english,example,translation
 1069,,앞,,,front,앞으로 나가다,move forward
 1070,,앞쪽,,,front,앞쪽으로 향하다,head forward
 1071,,애,,,"child, kid",어른,adult
-1072,,애인,,,lover,연인,lover
+1072,,애인,愛人,恋人,lover,연인,lover
 1073,,앨범,,,album,사진 앨범,photo album
 1074,,야,,,night,"야, 같이 가자","Hey, let's go together"
-1075,,야구,,,baseball,축구,soccer
-1076,,야채,,,vegetable,야채를 먹다,eat vegetables
-1077,,약,,,about,약 1시간,about 1 hour
-1078,,약,,,medicine,약을 먹다,take medicine
-1079,,약간,,,slightly,약간 크다,a bit big
-1080,,약국,,,pharmacy,약국에 가다,go to the pharmacy
-1081,,약사,,,pharmacist,약사가 되다,become a pharmacist
-1082,,약속,,,promise,약속을 지키다,keep a promise
-1083,,약하다,,,weak,힘이 약하다,have little strength
+1075,,야구,野球,野球,baseball,축구,soccer
+1076,,야채,野菜,野菜,vegetable,야채를 먹다,eat vegetables
+1077,,약,約,約,about,약 1시간,about 1 hour
+1078,,약,藥,薬,medicine,약을 먹다,take medicine
+1079,,약간,若干,若干,slightly,약간 크다,a bit big
+1080,,약국,藥局,薬局,pharmacy,약국에 가다,go to the pharmacy
+1081,,약사,藥師,薬剤師,pharmacist,약사가 되다,become a pharmacist
+1082,,약속,約束,約束,promise,약속을 지키다,keep a promise
+1083,,약하다,弱,弱,weak,힘이 약하다,have little strength
 1084,,얇다,,,thin,두께가 얇다,thickness is thin
 1085,,양말,,,socks,양말을 신다,wear socks
-1086,,양복,,,suit,양복을 입다,wear a suit
-1087,,양식,,,form,한식,Korean food
-1088,,양식집,,,Western food,양식집에 가다,go to a western food restaurant
+1086,,양복,洋服,洋服,suit,양복을 입다,wear a suit
+1087,,양식,洋食,洋食,form,한식,Korean food
+1088,,양식집,洋食,洋食,Western food,양식집에 가다,go to a western food restaurant
 1089,,양치질,,,brushing teeth,양치질을 하다,brush one's teeth
 1090,,얘기,,,story,얘기를 들려주다,tell a story
 1091,,어,,,Oh,"어, 이게 뭐야?","Uh, what is this?"
