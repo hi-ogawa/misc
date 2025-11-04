@@ -11,12 +11,11 @@ Goal
  - Verify the final combined set contains 1850 unique entries.
 
 Current strategy (SUCCESSFUL: Rendered HTML text parsing)
- 1. Users manually copy rendered HTML table text from browser (lessons 8-18) and write to `N.txt`
- 2. Parse the clean table text directly without browser automation
- 3. Extract all table rows with 5 cells (number, korean, english, example, translation)
- 4. Write directly to CSV with columns: `number,check,korean,english,example,translation` in `N.csv`
- 5. Properly escape CSV fields: quote fields containing commas, newlines, or special characters
- 6. Verify the combined CSV contains 1850 unique entries
+ - Users manually copy rendered HTML table text from browser (lessons 8-18) and write to `N.txt`
+ - Extract all table rows with 5 cells (number, korean, english, example, translation) by just eyeballing the text structure (no script)
+   and write to `N.csv` with CSV with columns: `number,check,korean,english,example,translation` in `N.csv`.
+  - make sure Properly escape CSV fields: quote fields containing commas, newlines, or special characters
+ - Verify the combined CSV contains 1850 unique entries
 
 Previous strategy (SUCCESSFUL: Playwright MCP for lessons 1-7)
  1. Use Playwright MCP to directly extract vocabulary from web pages via browser automation
