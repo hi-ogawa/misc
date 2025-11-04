@@ -6,12 +6,20 @@ Extracted vocabulary from TOPIK 1 vocabulary list at https://www.koreantopik.com
 
 ## Output
 
-CSV files `1.csv` through `18.csv` with format:
+### Original Files: `1.csv` through `18.csv`
+Format (6 fields):
 ```
 number,check,korean,english,example,translation
 ```
 
-Each CSV has an empty `check` column for personal study tracking.
+### Enhanced Files: `extra/1.csv` through `extra/18.csv`
+Format (7 fields):
+```
+number,check,korean,japanese,english,example,translation
+```
+
+Both versions have an empty `check` column for personal study tracking.
+The `extra/` files include an empty `japanese` column for annotating Japanese equivalents, especially useful for Sino-Korean words (e.g., 가격 → 価格).
 
 ## Extraction Strategy
 
@@ -43,9 +51,62 @@ Switched to this method to avoid token limits from large browser responses.
 2. Parse text structure by eyeballing the 5-column pattern
 3. Write CSV manually, ensuring proper escaping for commas
 
+## Adding Japanese Column (Migration Strategy)
+
+**Goal**: Add `japanese` column after `korean` column for tracking Japanese equivalents, especially Sino-origin words (e.g., 가격 → 価格).
+
+**Options:**
+
+### Option A: In-place modification
+- Modify all 18 CSV files directly in current directory
+- Git history preserves original 6-field format
+- Pros: Clean directory structure, single source of truth
+- Cons: Need to checkout previous commit to see original format
+
+### Option B: Backup directory
+- Copy current state to `topik1_6col/` or `backup/`
+- Modify files in current directory
+- Pros: Easy side-by-side comparison, both formats accessible
+- Cons: Data duplication, takes up space
+
+### Option C: New directory for modified files
+- Keep current files as-is
+- Create `topik1_7col/` with modified files
+- Pros: Original files untouched, clear separation
+- Cons: Unclear which is "current", need to choose going forward
+
+**Chosen approach**: Option D - Create `extra/` subdirectory
+- Original files remain in `topik1/*.csv` (6 fields)
+- Enhanced files in `topik1/extra/*.csv` (7 fields with japanese column)
+- Pros: Originals untouched, clear naming, easy to maintain both versions
+- Going forward: Use `extra/` for study with Japanese annotations
+
+**Implementation:**
+1. Create `topik1/extra/` directory
+2. For each file 1.csv through 18.csv:
+   - Read with Python csv module
+   - Insert `japanese` column after `korean` (at index 3: number,check,korean,japanese,english,example,translation)
+   - Insert empty string for japanese field in all data rows
+   - Write to `extra/N.csv` with proper CSV escaping
+3. Validate all files have 7 fields per row
+
+**Script:**
+```python
+import csv, os
+os.makedirs('extra', exist_ok=True)
+for i in range(1, 19):
+    with open(f'{i}.csv') as f:
+        rows = list(csv.reader(f))
+    rows[0].insert(3, 'japanese')  # Insert header
+    for row in rows[1:]:
+        row.insert(3, '')  # Insert empty japanese field
+    with open(f'extra/{i}.csv', 'w', newline='') as f:
+        csv.writer(f).writerows(rows)
+```
+
 ## CSV Validation
 
-Verified all files with Python CSV parser:
+### Original files (6 fields):
 ```python
 import csv
 with open('N.csv') as f:
@@ -54,7 +115,24 @@ with open('N.csv') as f:
         assert len(row) == 6  # All rows have exactly 6 fields
 ```
 
-✅ All 1847 entries properly formatted and escaped.
+### Extra files (7 fields):
+```python
+import csv
+for i in range(1, 19):
+    with open(f'extra/{i}.csv') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            assert len(row) == 7  # All rows have exactly 7 fields
+```
+
+✅ All 1847 entries properly formatted and escaped in both versions.
+
+**CSV Escaping Fixes**:
+During the migration to add the `japanese` column, discovered and fixed CSV escaping issues in 1.csv and 5.csv:
+- 1.csv line 64: `translation` field had unquoted comma → changed to semicolon "lie; tell a lie"
+- 5.csv: 7 rows with unquoted commas in `english` field → manually quoted each field
+
+**Important lesson**: Manual "eyeballing" and fixing with the Edit tool was far more robust than automated Python scripts. Multiple attempts at automated fixing kept combining wrong fields or misidentifying the issue. Reading the file directly and manually editing each problematic line was faster and more reliable.
 
 ## Future Reference
 
@@ -64,7 +142,8 @@ For similar vocabulary extraction tasks:
 2. **Watch for token limits** - large responses may need chunking or alternative approaches
 3. **Manual text copy fallback** - reliable when automation hits limits
 4. **Always validate CSV escaping** - use proper CSV parser, not simple comma splitting
-5. **Key insight**: Rendered browser text is cleaner than raw minified HTML
+5. **Fix data quality issues by eyeballing** - manual inspection and Edit tool is more reliable than automated scripts for fixing escaping issues
+6. **Key insight**: Rendered browser text is cleaner than raw minified HTML
 
 ## Lesson URLs
 
