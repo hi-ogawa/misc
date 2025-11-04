@@ -24,6 +24,10 @@ The `extra/` files include `hanja` and `japanese` columns for Sino-Korean word e
 - `japanese`: Japanese kanji equivalents (e.g., 가격 → 価格)
 - Example: 가격, 價格, 価格 showing Korean → Hanja → Japanese
 
+### Consolidated File: `extra/all.csv`
+All 1847 vocabulary entries in a single file (1848 lines: 1 header + 1847 entries).
+Combines all 18 lesson files for convenient bulk import/processing.
+
 ## Extraction Strategy
 
 ### Method 1: Playwright MCP (Lessons 1-7)
@@ -162,14 +166,24 @@ with open('N.csv') as f:
         assert len(row) == 6  # All rows have exactly 6 fields
 ```
 
-### Extra files (7 fields):
+### Extra files (8 fields):
 ```python
 import csv
 for i in range(1, 19):
     with open(f'extra/{i}.csv') as f:
         reader = csv.reader(f)
         for row in reader:
-            assert len(row) == 7  # All rows have exactly 7 fields
+            assert len(row) == 8  # All rows have exactly 8 fields
+```
+
+### Consolidated file (8 fields):
+```python
+import csv
+with open('extra/all.csv') as f:
+    rows = list(csv.reader(f))
+    assert len(rows) == 1848  # 1 header + 1847 entries
+    for row in rows:
+        assert len(row) == 8  # All rows have exactly 8 fields
 ```
 
 ✅ All 1847 entries properly formatted and escaped in both versions.
