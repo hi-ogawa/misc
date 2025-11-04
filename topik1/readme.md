@@ -141,7 +141,7 @@ for i in range(1, 19):
 - [x] extra/7.csv (words 601-700)
 - [x] extra/8.csv (words 701-800)
 - [x] extra/9.csv (words 801-900)
-- [ ] extra/10.csv (words 901-1000)
+- [x] extra/10.csv (words 901-1000)
 - [ ] extra/11.csv (words 1001-1100)
 - [ ] extra/12.csv (words 1101-1200)
 - [ ] extra/13.csv (words 1201-1300)
