@@ -132,7 +132,7 @@ for i in range(1, 19):
 - Native Korean words clearly identifiable by empty cells
 
 **Progress by file (8-field format with hanja + japanese):**
-- [x] extra/1.csv (words 1-100) - Complete
+- [ ] extra/1.csv (words 1-100)
 - [ ] extra/2.csv (words 101-200)
 - [ ] extra/3.csv (words 201-300)
 - [ ] extra/4.csv (words 301-400)
