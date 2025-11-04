@@ -15,8 +15,10 @@ Current strategy (SUCCESSFUL: Playwright MCP)
  2. Navigate to each lesson URL using `mcp__playwright__browser_navigate`
  3. Use `mcp__playwright__browser_evaluate` with JavaScript to query the vocabulary table (CSS selector: `table[border="1"]`)
  4. Extract all table rows with 5 cells (number, korean, english, example, translation)
- 5. Write directly to CSV with columns: `number,check,korean,english,example,translation`
- 6. Verify the combined CSV contains 1850 unique entries
+ 5. Store data in `window.vocabData` and retrieve in chunks (50 entries at a time) to avoid token limits
+ 6. Write directly to CSV with columns: `number,check,korean,english,example,translation`
+ 7. Properly escape CSV fields: quote fields containing commas, newlines, or special characters
+ 8. Verify the combined CSV contains 1850 unique entries
 
 Alternative approach (FAILED: HTML parsing)
  - Downloading HTML files and parsing with Python HTMLParser failed due to heavily minified HTML with complex nested tags
@@ -28,9 +30,28 @@ Progress
  - [x] Add this `readme.md` summarizing strategy and tracking progress
  - [x] Downloaded main TOC page and extracted all 18 lesson URLs
  - [x] Set up Playwright MCP for browser automation
- - [x] Successfully extracted lesson 1 vocabulary (100 entries) using Playwright MCP
- - [x] Created `1.csv` with checklist format (number, check, korean, english, example, translation)
- - [ ] Extract remaining lessons 2-18 using Playwright MCP
+
+Extraction progress (18 lessons)
+ - [x] Lesson 1 (words 1-100) → 1.csv
+ - [x] Lesson 2 (words 101-200) → 2.csv
+ - [x] Lesson 3 (words 201-300) → 3.csv
+ - [x] Lesson 4 (words 301-400) → 4.csv
+ - [x] Lesson 5 (words 401-500) → 5.csv
+ - [x] Lesson 6 (words 501-600) → 6.csv
+ - [ ] Lesson 7 (words 601-700) → 7.csv
+ - [ ] Lesson 8 (words 701-800) → 8.csv
+ - [ ] Lesson 9 (words 801-900) → 9.csv
+ - [ ] Lesson 10 (words 901-1000) → 10.csv
+ - [ ] Lesson 11 (words 1001-1100) → 11.csv
+ - [ ] Lesson 12 (words 1101-1200) → 12.csv
+ - [ ] Lesson 13 (words 1201-1300) → 13.csv
+ - [ ] Lesson 14 (words 1301-1400) → 14.csv
+ - [ ] Lesson 15 (words 1401-1500) → 15.csv
+ - [ ] Lesson 16 (words 1501-1600) → 16.csv
+ - [ ] Lesson 17 (words 1601-1700) → 17.csv
+ - [ ] Lesson 18 (words 1701-1850) → 18.csv
+
+Final verification
  - [ ] Verify the combined CSV contains 1850 unique entries
 
 Lesson URLs (18 total)
