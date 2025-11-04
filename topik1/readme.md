@@ -10,15 +10,22 @@ Goal
  - Generate CSV files `1.csv`, `2.csv`, … `18.csv` with checklist format.
  - Verify the final combined set contains 1850 unique entries.
 
-Current strategy (SUCCESSFUL: Playwright MCP)
+Current strategy (SUCCESSFUL: Rendered HTML text parsing)
+ 1. Users manually copy rendered HTML table text from browser (lessons 8-18) and write to `N.txt`
+ 2. Parse the clean table text directly without browser automation
+ 3. Extract all table rows with 5 cells (number, korean, english, example, translation)
+ 4. Write directly to CSV with columns: `number,check,korean,english,example,translation` in `N.csv`
+ 5. Properly escape CSV fields: quote fields containing commas, newlines, or special characters
+ 6. Verify the combined CSV contains 1850 unique entries
+
+Previous strategy (SUCCESSFUL: Playwright MCP for lessons 1-7)
  1. Use Playwright MCP to directly extract vocabulary from web pages via browser automation
  2. Navigate to each lesson URL using `mcp__playwright__browser_navigate`
  3. Use `mcp__playwright__browser_evaluate` with JavaScript to query the vocabulary table (CSS selector: `table[border="1"]`)
  4. Extract all table rows with 5 cells (number, korean, english, example, translation)
  5. Store data in `window.vocabData` and retrieve in chunks (50 entries at a time) to avoid token limits
- 6. Write directly to CSV with columns: `number,check,korean,english,example,translation`
- 7. Properly escape CSV fields: quote fields containing commas, newlines, or special characters
- 8. Verify the combined CSV contains 1850 unique entries
+ 6. Write directly to CSV files
+ 7. Note: This approach hit token limits for larger responses, switched to rendered HTML text parsing for lessons 8+
 
 Alternative approach (FAILED: HTML parsing)
  - Downloading HTML files and parsing with Python HTMLParser failed due to heavily minified HTML with complex nested tags
@@ -38,8 +45,8 @@ Extraction progress (18 lessons)
  - [x] Lesson 4 (words 301-400) → 4.csv
  - [x] Lesson 5 (words 401-500) → 5.csv
  - [x] Lesson 6 (words 501-600) → 6.csv
- - [ ] Lesson 7 (words 601-700) → 7.csv
- - [ ] Lesson 8 (words 701-800) → 8.csv
+ - [x] Lesson 7 (words 601-700) → 7.csv
+ - [x] Lesson 8 (words 701-800) → 8.csv
  - [ ] Lesson 9 (words 801-900) → 9.csv
  - [ ] Lesson 10 (words 901-1000) → 10.csv
  - [ ] Lesson 11 (words 1001-1100) → 11.csv
