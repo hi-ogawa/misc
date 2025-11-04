@@ -109,7 +109,7 @@ for i in range(1, 19):
 
 ## Filling Hanja and Japanese Columns
 
-**Status**: 🚧 In Progress (Restarting with new 8-field format)
+**Status**: ✅ Complete
 
 **Method**: Manual "eyeballing" - reading each CSV file and adding both Hanja and Japanese for Sino-Korean words.
 
@@ -146,10 +146,10 @@ for i in range(1, 19):
 - [x] extra/12.csv (words 1101-1200)
 - [x] extra/13.csv (words 1201-1300)
 - [x] extra/14.csv (words 1301-1400)
-- [ ] extra/15.csv (words 1401-1500)
-- [ ] extra/16.csv (words 1501-1600)
-- [ ] extra/17.csv (words 1601-1700)
-- [ ] extra/18.csv (words 1701-1847)
+- [x] extra/15.csv (words 1401-1500)
+- [x] extra/16.csv (words 1501-1600)
+- [x] extra/17.csv (words 1601-1700)
+- [x] extra/18.csv (words 1701-1847)
 
 ## CSV Validation
 
