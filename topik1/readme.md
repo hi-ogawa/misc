@@ -104,6 +104,42 @@ for i in range(1, 19):
         csv.writer(f).writerows(rows)
 ```
 
+## Filling Japanese Column
+
+**Status**: 🚧 In Progress (Files 1-5 complete: 500/1847 words)
+
+**Method**: Manual "eyeballing" - reading each CSV file and adding Japanese kanji for Sino-Korean words only.
+
+**Important**: The `japanese` column should contain **Sino-origin correspondences**, not just translations:
+- ✅ Good: 가격 (價格) → 価格 (same Sino-origin)
+- ✅ Good: 건강 (健康) → 健康 (same Sino-origin)
+- ❌ Avoid: 감기 → 風邪 (different words; 감기 is 感氣 in hanja, 風邪 is Japanese word for "cold")
+- ❌ Avoid: 걱정 → 心配 (different words; 걱정 is 掛念, 心配 is Japanese word for "worry")
+
+However, some semantic translation is acceptable for practical study purposes, even when kanji differ slightly.
+
+**Native Korean words**: Leave `japanese` column empty (e.g., 가다, 먹다, 좋다).
+
+**Progress by file:**
+- [x] extra/1.csv (words 1-100)
+- [x] extra/2.csv (words 101-200)
+- [x] extra/3.csv (words 201-300)
+- [x] extra/4.csv (words 301-400)
+- [x] extra/5.csv (words 401-500)
+- [ ] extra/6.csv (words 501-600)
+- [ ] extra/7.csv (words 601-700)
+- [ ] extra/8.csv (words 701-800)
+- [ ] extra/9.csv (words 801-900)
+- [ ] extra/10.csv (words 901-1000)
+- [ ] extra/11.csv (words 1001-1100)
+- [ ] extra/12.csv (words 1101-1200)
+- [ ] extra/13.csv (words 1201-1300)
+- [ ] extra/14.csv (words 1301-1400)
+- [ ] extra/15.csv (words 1401-1500)
+- [ ] extra/16.csv (words 1501-1600)
+- [ ] extra/17.csv (words 1601-1700)
+- [ ] extra/18.csv (words 1701-1847)
+
 ## CSV Validation
 
 ### Original files (6 fields):
