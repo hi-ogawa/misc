@@ -4,6 +4,11 @@ Columns: number, korean, english
 Your task: Generate natural example sentences for each entry.
 
 REQUIREMENTS:
+- **CRITICAL: The example sentence MUST contain the vocabulary word from the "korean" column**
+  - For verbs: use the verb stem in conjugated form (e.g., 가지다 → 가져요, 가지고, 가진)
+  - For adjectives: use the stem in any natural form (e.g., 가볍다 → 가벼운, 가벼워요)
+  - For nouns: use the exact noun (e.g., 가족 → 가족이랑)
+  - NEVER substitute with synonyms or different words
 - Avoid single-word examples (must have at least 2 distinct content words, not counting particles)
 - Prefer complete sentences over noun phrases
 - Keep sentences minimal: 3-4 words is ideal
@@ -37,6 +42,7 @@ Examples:
 - 가족 → "가족이랑 살아요" (live with family)
 - 갈색 → "갈색 신발을 샀어요" (bought brown shoes)
 - 강하다 → "강한 바람이 불어요" (strong wind is blowing)
+- 가지다 → "좋은 생각을 가져요" (have a good idea) - NOT "좋은 생각이 있어요"
 
 Output ONLY: number, korean, example_ko, example_en (tab-separated)
 

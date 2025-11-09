@@ -135,3 +135,4 @@ The audio files are now available in all Anki decks and will sync across devices
 - No rate limiting issues encountered
 - Can regenerate specific files by deleting and re-running the script
 - Script automatically resumes from where it left off (skips existing files)
+- For fixing examples and regenerating audio, see `prompts/generate-fix.md`
