@@ -21,73 +21,54 @@ Following the TOPIK 1 workflow documented in [README.md](README.md), we'll enhan
 ```
 input/korean_english_2.tsv (base)
     ↓
-    ├─→ generate-etymology2.md  → output/topik2-etymology-*.tsv
-    ├─→ generate-example3.md    → output/topik2-examples-*.tsv
-    ├─→ generate-notes.md       → output/topik2-notes-*.tsv
-    └─→ generate-audio.md       → output/topik2-audio/*.mp3
-         ↓
-    Google Sheets (combine all columns)
-         ↓
+    generate-combined.md → output/topik2-combined-*.tsv
+    (etymology + examples + notes in one file per batch)
+    ↓
+    Consolidate → output/topik2-combined-all.tsv
+    ↓
+    generate-audio.md → output/topik2-audio/*.mp3
+    ↓
+    Google Sheets (review/edit)
+    ↓
     Anki Import
 ```
 
 ## Processing Plan
 
-### Phase 1: Etymology Generation
-**Prompt**: `prompts/generate-etymology2.md` (adapt for TOPIK 2)
+### Phase 1: Combined Enhancement Generation
+**Prompt**: `prompts/generate-combined.md`
 
-- [ ] Process batches of 100 entries each
-- [ ] Output files:
-  - `output/topik2-etymology-1.tsv` (words 1-100)
-  - `output/topik2-etymology-2.tsv` (words 101-200)
-  - ...
-  - `output/topik2-etymology-39.tsv` (words 3801-3900)
-- [ ] Create consolidated: `output/topik2-etymology-all.tsv`
+**Strategy**: Manual multi-terminal processing for context isolation
+- Open multiple Claude Code terminals
+- Each terminal processes one batch independently
+- Edit prompt to specify batch number and range
 
-**Output format**: `number`, `korean`, `etymology`
-- Sino-Korean: Show Hanja / Japanese (e.g., "希望", "價格 / 価格")
-- Compounds: Show components (e.g., "눈 + 물")
-- Loanwords: Show source (e.g., "computer", "アルバイト / Arbeit")
-- Native Korean: Leave blank
+**Output**: One TSV file per batch with all enhancements combined
+- `output/topik2-combined-1.tsv` (words 1-100)
+- `output/topik2-combined-2.tsv` (words 101-200)
+- ...
+- `output/topik2-combined-39.tsv` (words 3801-3900)
 
-### Phase 2: Example Sentences Generation
-**Prompt**: `prompts/generate-example3.md` (adapt for TOPIK 2)
+**Format** (7 columns):
+```
+number	korean	english	etymology	example_ko	example_en	notes
+```
 
-- [ ] Process batches of 100 entries each
-- [ ] Output files:
-  - `output/topik2-examples-1.tsv` (words 1-100)
-  - `output/topik2-examples-2.tsv` (words 101-200)
-  - ...
-  - `output/topik2-examples-39.tsv` (words 3801-3900)
-- [ ] Create consolidated: `output/topik2-examples-all.tsv`
+**Content per row:**
+- **etymology**: Sino-Korean hanja/kanji, compounds, loanwords (blank for native Korean)
+- **example_ko**: Natural sentence containing the word with particles
+- **example_en**: English translation of example
+- **notes**: Related word, antonym, or honorific pair (blank if none)
 
-**Output format**: `number`, `korean`, `example_ko`, `example_en`
-- Natural, common usage
-- Must contain the vocabulary word
-- Include particles explicitly
-- 3-4 words ideal
+### Phase 2: Consolidation
+- [ ] Concatenate all 39 batch files into `output/topik2-combined-all.tsv`
+- [ ] Validate: Should have 3901 lines (1 header + 3900 entries)
+- [ ] All rows have 7 columns
 
-### Phase 3: Notes Generation
-**Prompt**: `prompts/generate-notes.md` (adapt for TOPIK 2)
-
-- [ ] Process batches of 100 entries each
-- [ ] Output files:
-  - `output/topik2-notes-1.tsv` (words 1-100)
-  - `output/topik2-notes-2.tsv` (words 101-200)
-  - ...
-  - `output/topik2-notes-39.tsv` (words 3801-3900)
-- [ ] Create consolidated: `output/topik2-notes-all.tsv`
-
-**Output format**: `number`, `korean`, `notes`
-- Related words (synonyms, antonyms)
-- Family/people pairs
-- Honorific pairs
-- Leave blank if none
-
-### Phase 4: Audio Generation
+### Phase 3: Audio Generation
 **Script**: `scripts/generate-audio.py` (adapt for TOPIK 2)
 
-- [ ] Modify script to read from `output/topik2-examples-all.tsv`
+- [ ] Modify script to read `example_ko` column from `output/topik2-combined-all.tsv`
 - [ ] Generate audio files to `output/topik2-audio/`
 - [ ] Output: `0001.mp3` to `3900.mp3` (4-digit padded)
 - [ ] Voice: `ko-KR-SunHiNeural` (female)
@@ -95,8 +76,8 @@ input/korean_english_2.tsv (base)
 - [ ] Create archive: `output/koreantopik2_audio.zip`
 - [ ] Copy to Anki: `cp output/topik2-audio/koreantopik2_*.mp3 ~/.local/share/Anki2/"User 1"/collection.media/`
 
-### Phase 5: Consolidation
-- [ ] Combine all TSV files in Google Sheets
+### Phase 4: Final Review
+- [ ] Import `output/topik2-combined-all.tsv` into Google Sheets
 - [ ] Review and edit as needed
 - [ ] Import into Anki deck
 
@@ -109,33 +90,15 @@ input/korean_english_2.tsv (base)
 | Audio prefix | `koreantopik1_` | `koreantopik2_` |
 | Output files | `*-1.tsv` to `*-19.tsv` | `*-1.tsv` to `*-39.tsv` |
 
-## Prompt Adaptations Needed
-
-Each prompt file needs minor updates:
-
-1. **Input path**: Change to `input/korean_english_2.tsv`
-2. **Output pattern**: Change to `output/topik2-*-N.tsv`
-3. **Batch count**: Update to 39 batches (instead of 19)
-
 ## File Naming Convention
 
 ```
 output/
-├── topik2-etymology-1.tsv
-├── topik2-etymology-2.tsv
+├── topik2-combined-1.tsv      # Batch 1 (words 1-100)
+├── topik2-combined-2.tsv      # Batch 2 (words 101-200)
 ├── ...
-├── topik2-etymology-39.tsv
-├── topik2-etymology-all.tsv
-├── topik2-examples-1.tsv
-├── topik2-examples-2.tsv
-├── ...
-├── topik2-examples-39.tsv
-├── topik2-examples-all.tsv
-├── topik2-notes-1.tsv
-├── topik2-notes-2.tsv
-├── ...
-├── topik2-notes-39.tsv
-├── topik2-notes-all.tsv
+├── topik2-combined-39.tsv     # Batch 39 (words 3801-3900)
+├── topik2-combined-all.tsv    # Consolidated (all 3900 words)
 └── topik2-audio/
     ├── koreantopik2_0001.mp3
     ├── koreantopik2_0002.mp3
@@ -145,26 +108,12 @@ output/
 
 ## Progress Tracking
 
-### Etymology
+### Combined Enhancement (Etymology + Examples + Notes)
 - [ ] Batch 1-10 (words 1-1000)
 - [ ] Batch 11-20 (words 1001-2000)
 - [ ] Batch 21-30 (words 2001-3000)
 - [ ] Batch 31-39 (words 3001-3900)
-- [ ] Consolidated all file
-
-### Examples
-- [ ] Batch 1-10 (words 1-1000)
-- [ ] Batch 11-20 (words 1001-2000)
-- [ ] Batch 21-30 (words 2001-3000)
-- [ ] Batch 31-39 (words 3001-3900)
-- [ ] Consolidated all file
-
-### Notes
-- [ ] Batch 1-10 (words 1-1000)
-- [ ] Batch 11-20 (words 1001-2000)
-- [ ] Batch 21-30 (words 2001-3000)
-- [ ] Batch 31-39 (words 3001-3900)
-- [ ] Consolidated all file
+- [ ] Consolidated all file: `topik2-combined-all.tsv`
 
 ### Audio
 - [ ] Generate all audio files (3900 files)
@@ -174,7 +123,9 @@ output/
 
 ## Status
 
-**Current Phase**: Planning complete, ready to start Phase 1 (Etymology)
+**Current Phase**: Planning complete, ready to start Phase 1 (Combined Enhancement)
+
+**Approach**: Manual multi-terminal processing using `prompts/generate-combined.md`
 
 ---
 *Created: 2025-11-09*
