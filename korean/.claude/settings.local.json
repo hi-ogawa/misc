@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(awk:*)"
+      "Bash(awk:*)",
+      "Bash(edge-tts:*)",
+      "Bash(python scripts/generate-audio.py:*)",
+      "Bash(for file in [0-9][0-9][0-9][0-9].mp3)",
+      "Bash(do mv \"$file\" \"koreantopik1_$file\")",
+      "Bash(done)",
+      "Read(//home/hiroshi/.local/share/Anki2/**)"
     ],
     "deny": [],
     "ask": []
