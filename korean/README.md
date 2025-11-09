@@ -23,11 +23,12 @@ korean/
 │   ├── generate-notes.md
 │   ├── generate-audio.md
 │   └── generate-fix.md
+├── scripts/          # Helper scripts
+│   └── generate-audio.py  # Audio generation script (tracked)
 ├── topik1/           # TOPIK 1 vocabulary data (not tracked)
 │   └── readme.md     # Detailed extraction docs (tracked)
 ├── input/            # Input data files (not tracked)
 ├── output/           # Generated content (not tracked)
-├── scripts/          # Helper scripts (not tracked)
 └── README.md         # This file
 ```
 
@@ -78,6 +79,7 @@ Each prompt in `prompts/` directory processes the base vocabulary:
 
 **Tracked in git:**
 - `prompts/*.md` - All Claude prompts
+- `scripts/generate-audio.py` - Audio generation script (for reproducibility)
 - `topik1/readme.md` - Extraction process documentation
 - `README.md` - This file
 
@@ -86,7 +88,6 @@ Each prompt in `prompts/` directory processes the base vocabulary:
 - `topik1/*.csv`, `topik1/*.txt` - Raw extraction files
 - `output/*` - Generated enhancement files (etymology, examples, notes, etc.)
 - `*.mp3` - Audio files
-- `scripts/*` - Helper scripts
 - Temporary/intermediate files
 
 **Combined results:**
