@@ -1,0 +1,104 @@
+## context
+
+- table of 3900 korean vocabulary is available in https://www.koreantopik.com/2024/09/complete-topik-2-vocabulary-list-3900.html
+- separated in 39 pages.
+- goal is to extract and save it as csv
+
+## strategy
+
+- [x] save links for 39 pages in `links.md`
+- [x] open each page and save text content in `data/N.txt`
+  - [x] `data/1.txt` to `data/39.txt`
+- [x] extract and convert to csv. columns should be `number,korean,english,example(ko),example(en)`
+  - [x] `data/csv/1.csv` - words 1-100
+  - [x] `data/csv/2.csv` - words 101-200
+  - [x] `data/csv/3.csv` - words 201-300
+  - [x] `data/csv/4.csv` - words 301-400
+  - [x] `data/csv/5.csv` - words 401-500
+  - [x] `data/csv/6.csv` - words 501-600
+  - [x] `data/csv/7.csv` - words 601-700
+  - [x] `data/csv/8.csv` - words 701-800
+  - [x] `data/csv/9.csv` - words 801-900
+  - [x] `data/csv/10.csv` - words 901-1000
+  - [x] `data/csv/11.csv` - words 1001-1100
+  - [x] `data/csv/12.csv` - words 1101-1200
+  - [x] `data/csv/13.csv` - words 1201-1300
+  - [x] `data/csv/14.csv` - words 1301-1400
+  - [x] `data/csv/15.csv` - words 1401-1500
+  - [x] `data/csv/16.csv` - words 1501-1600
+  - [x] `data/csv/17.csv` - words 1601-1700
+  - [x] `data/csv/18.csv` - words 1701-1800
+  - [x] `data/csv/19.csv` - words 1801-1900
+  - [x] `data/csv/20.csv` - words 1901-2000
+  - [x] `data/csv/21.csv` - words 2001-2100
+  - [x] `data/csv/22.csv` - words 2101-2200
+  - [x] `data/csv/23.csv` - words 2201-2300
+  - [x] `data/csv/24.csv` - words 2301-2400
+  - [x] `data/csv/25.csv` - words 2401-2500
+  - [x] `data/csv/26.csv` - words 2501-2600
+  - [x] `data/csv/27.csv` - words 2601-2700
+  - [x] `data/csv/28.csv` - words 2701-2800
+  - [x] `data/csv/29.csv` - words 2801-2900
+  - [x] `data/csv/30.csv` - words 2901-3000
+  - [x] `data/csv/31.csv` - words 3001-3100
+  - [x] `data/csv/32.csv` - words 3101-3200
+  - [x] `data/csv/33.csv` - words 3201-3300
+  - [x] `data/csv/34.csv` - words 3301-3400
+  - [x] `data/csv/35.csv` - words 3401-3500
+  - [x] `data/csv/36.csv` - words 3501-3600
+  - [x] `data/csv/37.csv` - words 3601-3700
+  - [x] `data/csv/38.csv` - words 3701-3800
+  - [x] `data/csv/39.csv` - words 3801-3900
+- [x] create enhanced CSV format with Hanja and Japanese kanji columns
+  - format: `number,korean,hanja,japanese,english,example_ko,example_en`
+  - example: `32,가정,假定,仮定,assumption,가정을 해 보다,let assume/suppose`
+  - rules:
+    - Sino-Korean words (derived from Chinese): both Hanja and Japanese kanji are filled in
+    - Pure Korean words: both Hanja and Japanese columns are empty
+    - this helps identify word origins and shows relationship between Korean and Japanese kanji
+  - [x] `data/csv-extra/1.csv` - words 1-100
+  - [x] `data/csv-extra/2.csv` - words 101-200
+  - [x] `data/csv-extra/3.csv` - words 201-300
+  - [x] `data/csv-extra/4.csv` - words 301-400
+  - [x] `data/csv-extra/5.csv` - words 401-500
+  - [x] `data/csv-extra/6.csv` - words 501-600
+  - [x] `data/csv-extra/7.csv` - words 601-700
+  - [x] `data/csv-extra/8.csv` - words 701-800
+  - [x] `data/csv-extra/9.csv` - words 801-900
+  - [x] `data/csv-extra/10.csv` - words 901-1000
+  - [x] `data/csv-extra/11.csv` - words 1001-1100
+  - [x] `data/csv-extra/12.csv` - words 1101-1200
+  - [x] `data/csv-extra/13.csv` - words 1201-1300
+  - [x] `data/csv-extra/14.csv` - words 1301-1400
+  - [x] `data/csv-extra/15.csv` - words 1401-1500
+  - [x] `data/csv-extra/16.csv` - words 1501-1600
+  - [x] `data/csv-extra/17.csv` - words 1601-1700
+  - [x] `data/csv-extra/18.csv` - words 1701-1800
+  - [x] `data/csv-extra/19.csv` - words 1801-1900
+  - [x] `data/csv-extra/20.csv` - words 1901-2000
+  - [x] `data/csv-extra/21.csv` - words 2001-2100
+  - [x] `data/csv-extra/22.csv` - words 2101-2200
+  - [x] `data/csv-extra/23.csv` - words 2201-2300
+  - [x] `data/csv-extra/24.csv` - words 2301-2400
+  - [x] `data/csv-extra/25.csv` - words 2401-2500
+  - [x] `data/csv-extra/26.csv` - words 2501-2600
+  - [x] `data/csv-extra/27.csv` - words 2601-2700
+  - [x] `data/csv-extra/28.csv` - words 2701-2800
+  - [x] `data/csv-extra/29.csv` - words 2801-2900
+  - [x] `data/csv-extra/30.csv` - words 2901-3000
+  - [x] `data/csv-extra/31.csv` - words 3001-3100
+  - [x] `data/csv-extra/32.csv` - words 3101-3200
+  - [x] `data/csv-extra/33.csv` - words 3201-3300
+  - [x] `data/csv-extra/34.csv` - words 3301-3400
+  - [x] `data/csv-extra/35.csv` - words 3401-3500
+  - [x] `data/csv-extra/36.csv` - words 3501-3600
+  - [x] `data/csv-extra/37.csv` - words 3601-3700
+  - [x] `data/csv-extra/38.csv` - words 3701-3800
+  - [x] `data/csv-extra/39.csv` - words 3801-3900
+  - [x] `data/csv-extra/all.csv` - all words 1-3900 (concatenated)
+
+## guide
+
+- avoid scripting. just "eyeball" the text like you are human.
+- don't worry about token limit.
+- update readme.md checkbox after each csv-extra file is completed and committed.
