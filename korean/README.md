@@ -33,21 +33,26 @@ korean/
 
 ## Workflow
 
-### 1. Source Data
-- TOPIK 1 vocabulary list: 1847 words from koreantopik.com
-- Extraction details: See [topik1/readme.md](topik1/readme.md)
+### 1. Vocabulary Extraction
+- Source: TOPIK 1 vocabulary list (1847 words) from koreantopik.com
+- Process documented in [topik1/readme.md](topik1/readme.md)
+- Output: `input/korean-english.tsv` (base vocabulary file)
 
-### 2. Enhancement Pipeline
-1. **Etymology**: Add Hanja (漢字) and Japanese cognates for Sino-Korean words
-2. **Examples**: Generate example sentences with translations
-3. **Audio**: Create pronunciation audio files using edge-tts
-4. **Notes**: Add study notes and memory aids
+### 2. Enhancement via Claude Prompts
+Each prompt in `prompts/` directory processes the base vocabulary:
 
-### 3. Claude Prompts
-All prompts are in `prompts/` directory. Each handles a specific transformation:
-- Input: TSV/CSV vocabulary files
-- Output: Enhanced files with additional columns
-- Processing: Automated via Claude Code
+- **Input**: `input/korean-english.tsv`
+- **Prompts**: `prompts/generate-*.md` (etymology, examples, notes, audio, etc.)
+- **Output**: `output/*-N.tsv` (chunked files) and `output/*-all.tsv` (consolidated)
+
+### 3. Manual Consolidation
+- Combine generated TSV files in Google Sheets
+- Review and edit as needed
+- Final output ready for Anki import
+
+### 4. Anki Import
+- Load consolidated vocabulary into Anki deck
+- Study with enhanced content (etymology, examples, audio, notes)
 
 ## Progress
 
@@ -60,13 +65,21 @@ All prompts are in `prompts/` directory. Each handles a specific transformation:
 
 ## Data Files
 
-Data files (CSV, TSV, MP3, TXT) are **not tracked in git**:
-- Input vocabulary files
-- Generated audio
-- Intermediate processing files
-- Output files
+**Tracked in git:**
+- `prompts/*.md` - All Claude prompts
+- `topik1/readme.md` - Extraction process documentation
+- `README.md` - This file
 
-Only prompts and documentation are version controlled.
+**Not tracked in git:**
+- `input/korean-english.tsv` - Base vocabulary file (generated from topik1 extraction)
+- `topik1/*.csv`, `topik1/*.txt` - Raw extraction files
+- `output/*` - Generated enhancement files (etymology, examples, notes, etc.)
+- `*.mp3` - Audio files
+- `scripts/*` - Helper scripts
+- Temporary/intermediate files
+
+**Combined results:**
+- All generated data combined and available on [Google Drive](https://drive.google.com/drive/u/0/folders/1fzfewUUWmRCqEhtdHFK0wuN3PO0qnSPB)
 
 ## Usage
 
