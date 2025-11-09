@@ -20,14 +20,15 @@ List of corrected entries (number, korean, example_ko, example_en):
    ```bash
    python scripts/generate-audio.py --start 24 --end 24 --force
    ```
-3. **Rename audio file** - Add prefix:
+3. **Rename audio file** - Add `_fix` suffix (forces Anki to detect new file):
    ```bash
-   mv output/audio/0024.mp3 output/audio/koreantopik1_0024.mp3
+   mv output/audio/0024.mp3 output/audio/koreantopik1_0024_fix.mp3
    ```
 4. **Copy audio to Anki**:
    ```bash
-   cp output/audio/koreantopik1_0024.mp3 ~/.local/share/Anki2/"User 1"/collection.media/
+   cp output/audio/koreantopik1_0024_fix.mp3 ~/.local/share/Anki2/"User 1"/collection.media/
    ```
+5. **Update Anki card** - Change audio field from `[sound:koreantopik1_0024.mp3]` to `[sound:koreantopik1_0024_fix.mp3]`
 
 ## Status
 - [x] Entry 24: 가지다
