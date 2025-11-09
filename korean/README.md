@@ -54,6 +54,17 @@ Each prompt in `prompts/` directory processes the base vocabulary:
 - Load consolidated vocabulary into Anki deck
 - Study with enhanced content (etymology, examples, audio, notes)
 
+### 5. Maintenance & Fixes
+- During practice in Anki, you may find issues:
+  - Awkward or unnatural example sentences
+  - Incorrect translations
+  - Audio pronunciation problems
+- Use `prompts/generate-fix.md` to track fixes:
+  - Document the corrected entry (number, korean, example_ko, example_en)
+  - Generate new audio with `_fix` suffix
+  - Update Anki card to use new audio file
+- Fixes are tracked ad-hoc in the prompt file only (no sync back to source files)
+
 ## Progress
 
 - [x] TOPIK 1 vocabulary extraction (1847 words)
