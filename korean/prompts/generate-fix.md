@@ -11,7 +11,10 @@
 3. Update Anki card to use new audio file
 4. Mark as done in Status section
 
-**Note**: Original `examples-all.tsv` and Google Sheets remain unchanged. This is just for tracking individual fixes.
+**Requirements**:
+- Need `output/examples-all.tsv` locally (script reads from it to generate audio)
+- Download from [Google Drive](https://drive.google.com/drive/u/0/folders/1fzfewUUWmRCqEhtdHFK0wuN3PO0qnSPB) if not present
+- Script uses the file as-is (no edits needed - just for audio generation)
 
 ## Fixed Examples
 
