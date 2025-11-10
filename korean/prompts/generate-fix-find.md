@@ -9,9 +9,27 @@
 
 ## Strategy for Identifying Bad Examples
 
-### Criteria for "Bad" Examples
+### Phase 1: Critical Issue - Vocabulary Word Missing Entirely
 
-Review each entry for these issues:
+**Focus**: Identify entries where the vocabulary word from "korean" column does NOT appear in "example_ko" at all (including conjugated or derived forms).
+
+This is the most objective and critical issue to fix first:
+- The example sentence must demonstrate the target vocabulary
+- According to generate-example3.md requirements:
+  - Verbs: must use verb stem in conjugated form (가지다 → 가져요, 가지고, 가진)
+  - Adjectives: must use stem in some form (가볍다 → 가벼운, 가벼워요)
+  - Nouns: must use the exact noun
+  - NEVER substitute with synonyms
+
+**Example of bad entry**:
+```
+24	가지다	have	돈이 많이 있어요	have a lot of money
+```
+Problem: "가지다" doesn't appear in example - uses synonym "있다" instead.
+
+### Future Phases (not implemented yet)
+
+Other criteria for "Bad" Examples to address later:
 
 1. **Unnatural Korean**
    - Awkward phrasing that native speakers wouldn't use
@@ -24,75 +42,69 @@ Review each entry for these issues:
    - Broken English (e.g., "go to store often" → "I often go to the store")
    - Overly literal translations that sound unnatural in English
 
-3. **Vocabulary Usage**
-   - Example doesn't clearly demonstrate the target word's meaning
-   - Target word used incorrectly or in unusual context
-   - Better example exists that's more common/clear
-
-4. **Grammar Errors**
+3. **Grammar Errors**
    - Incorrect verb conjugations
    - Missing or wrong particles (이/가, 을/를, 에, etc.)
    - Tense mismatches between Korean and English
 
-5. **TOPIK 1 Level Appropriateness**
+4. **TOPIK 1 Level Appropriateness**
    - Too complex grammar for beginners
    - Uses uncommon vocabulary
    - Cultural references that need explanation
 
-### Review Process
+### Review Process (Phase 1)
 
-**Phase 1: Automated Detection**
-- Review all entries with AI assistance
-- Flag entries matching bad example criteria
-- Prioritize common patterns (missing articles, broken English, etc.)
+Process input in batches of 100 entries (following project convention).
 
-**Phase 2: Manual Review**
-- Verify flagged entries
-- Identify additional issues missed by automated scan
-- Decide which entries truly need fixing vs. acceptable variations
+For each entry:
+1. Extract the base word from "korean" column
+2. Check if any form of the word appears in "example_ko"
+   - For verbs ending in -다: check for stem (remove 다) in any conjugation
+   - For adjectives ending in -다: check for stem in any form
+   - For nouns: check for exact word
+   - For compounds (e.g., 가져가다): check for any part appearing
+3. Flag entries where the word is completely missing
+4. Generate natural replacement example using the target word
 
-**Phase 3: Generate Fixes**
-- Create natural, corrected versions
-- Ensure Korean and English both sound natural
-- Keep sentences simple and clear for TOPIK 1 level
-- Maintain the same vocabulary word being demonstrated
+**Important**: Use direct Korean language understanding, NOT scripts.
+Process by batches manually to ensure accuracy.
 
 ### Output Format
 
 **output/topik1-examples-bad.tsv**
 ```
 number	korean	english	example_ko	example_en	issue
-2	가격	price	가격이 너무 비싸요	price is too expensive	Missing article: "the price"
+24	가지다	have	돈이 많이 있어요	have a lot of money	Word missing: uses 있다 instead of 가지다
 ```
 
 **output/topik1-examples-fix.tsv**
 ```
 number	korean	english	example_ko	example_en
-2	가격	price	이 가격이 너무 비싸요	This price is too expensive
+24	가지다	have	좋은 생각을 가져요	have a good idea
 ```
 
-### Common Patterns to Fix
+### Detection Examples
 
-1. **Missing English articles**
-   - "go to store" → "go to the store"
-   - "price is expensive" → "the price is expensive"
+**Missing word (synonym used)**:
+- Entry: 가지다 → "돈이 많이 있어요" ❌ (uses 있다 instead)
+- Fix: "좋은 생각을 가져요" ✓
 
-2. **Broken English structure**
-   - "meet friend sometimes" → "I sometimes meet my friend"
-   - "bought new furniture" → "I bought new furniture"
+**Missing word (different expression)**:
+- Entry: 걱정하다 → "마음이 불안해요" ❌ (uses 불안하다 instead)
+- Fix: "너무 걱정하지 마세요" ✓
 
-3. **Unnatural Korean particles**
-   - Review particle usage (은/는, 이/가, 을/를)
-   - Ensure natural topic/subject marking
-
-4. **Overly simple English**
-   - Add subjects where implicit (I, you, it, etc.)
-   - Add possessives where appropriate (my, your, etc.)
+**Correct usage (word appears in conjugated form)**:
+- Entry: 가지다 → "질문이 있어요" ❌ WAIT - this is different verb 있다
+- Entry: 가볍다 → "가벼운 가방을 샀어요" ✓ (가볍- stem present)
+- Entry: 가다 → "학교에 먼저 가요" ✓ (가- stem present)
 
 ## Implementation Notes
 
-- Process in batches if needed (e.g., 100 entries at a time)
-- Use Claude to review and flag issues
-- Keep original structure: number, korean, english, example_ko, example_en
-- Document issue type for learning purposes
-- Prioritize fixes that improve clarity and naturalness
+- Input: `input/tmp.tsv` (1847 entries)
+- Process in batches of 100 entries (following project convention)
+- Use direct Korean language understanding to identify missing words
+- Output both bad entries (with issue column) and fixes
+- Batch outputs:
+  - `output/topik1-examples-bad-1.tsv`, `bad-2.tsv`, etc. (or just one combined file)
+  - `output/topik1-examples-fix-1.tsv`, `fix-2.tsv`, etc. (or just one combined file)
+- Follow generate-example3.md guidelines when creating fixes
