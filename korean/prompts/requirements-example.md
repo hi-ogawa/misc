@@ -54,7 +54,7 @@ REQUIREMENTS:
   - **Adverbs**: Use in natural sentences with specific context
     - Example: 꼭 → "내일 꼭 와야 해요" (not just "꼭 오세요")
 
-- **Minimum 3 어절 (spacing units)** 
+- **Minimum 3 어절 (spacing units) and 4 or more encouraged** 
   - 2 어절 patterns are usually too bare: 불이 났어요, 공을 던져요
   - 3+ 어절 forces additional context: 갑자기 불이 났어요, 공을 높이 던져요
 
