@@ -30,34 +30,43 @@ REQUIREMENTS:
   - Add enough detail to make the scene CONCRETE and VISUALIZABLE
   - **ALWAYS include particles (가/이, 는/은, 를/을, etc.) explicitly for learning purposes**
   - **NEVER drop the subject (주어) - ALWAYS include it explicitly**
-    - ❌ "고장이 났어요" (What broke? Subject missing!)
-    - ✅ "에어컨이 고장 났어요" (Clear subject - air conditioner)
+    - ❌ "고장이 났어요" (What broke? Subject missing! Not visualizable)
+    - ✅ "자전거가 고장 났어요" (Specific object - bicycle)
 
 - **Avoid generic/overused patterns:**
   - ❌ Generic verbs like 주세요, 있어요, 만났어요, 오세요 (unless specifically characteristic)
-    - Bad: 기름을 좀 주세요 (could be any noun, subject dropped)
-    - Good: 생선을 기름에 튀겼어요 (shows what you DO with oil, explicit object)
+    - ❌ 기름을 좀 주세요 (could be any noun, subject dropped)
+    - ✅ 생선을 기름에 튀겼어요 (shows what you DO with oil, explicit object)
   - ❌ Filler words like 좀, 너무 (unless they add meaningful context)
-    - Bad: 계산을 좀 해 주세요 (generic request, subject dropped)
-    - Good: 이번 계산이 복잡해요 (shows characteristic of calculations, adds context)
-  - ❌ Missing critical context elements
-    - Bad: 갑자기 나타났어요 (who/what appeared? Too bare)
-    - Good: 친구가 갑자기 나타났어요 (clear subject, visualizable)
+    - ❌ 계산을 좀 해 주세요 (generic request, subject dropped)
+    - ✅ 이번 계산이 복잡해요 (shows characteristic of calculations, adds context)
+  - ❌ Too generic contexts that could apply to anything
+    - ❌ "고등학생이 공부해요" (Where? What subject? Too generic)
+    - ✅ "고등학생이 도서관에서 수학을 공부해요" (Location + specific subject matter)
   - Test: Can this sentence work with many different nouns/verbs? If yes, make it more specific
 
-- **Prefer distinctive elements:**
-  - ✅ Specific objects/subjects over generic ones
-    - Bad: 기자를 만났어요 (could be anyone, too bare)
-    - Good: 기자가 여러 질문을 했어요 (shows what journalists DO, visualizable)
+- **Prefer distinctive, concrete elements:**
+  - ✅ Concrete nouns instead of pronouns/demonstratives
+    - ❌ "이거 주세요" (What is "this"? No concrete context)
+    - ✅ "물 한 잔 주세요" (Concrete object + counter)
+    - ❌ "그것이 필요해요" (What is "that"? Too abstract)
+    - ✅ "회의 자료가 필요해요" (Specific concrete noun)
+  - ✅ Specific nouns instead of generic ones
+    - ❌ "사람이 왔어요" (Which person? Not specific enough)
+    - ✅ "친구가 집에 왔어요" (Specific relationship + location)
+    - ❌ "기자를 만났어요" (Could be anyone, too bare)
+    - ✅ "기자가 여러 질문을 했어요" (Shows what journalists DO, visualizable)
   - ✅ Characteristic actions that show word's typical usage
-    - Bad: 내일 가져올게요 (what will you bring? Too vague)
-    - Good: 내일 우산을 가져올게요 (specific object, concrete)
+    - ❌ "내일 가져올게요" (What will you bring? Too vague)
+    - ✅ "내일 우산을 가져올게요" (Specific object, concrete)
   - ✅ Concrete spatial/temporal/situational context
-    - Bad: 가운데에 앉으세요 (middle of what? No context)
-    - Good: 방 가운데에 테이블이 있어요 (specific location, visualizable scene)
-  - ✅ Show semantic relationships and contrasts
-    - Okay: 과일 겉은 딱딱해요 (shows literal "outer surface")
-    - Better: 겉과 속이 달라요 (shows surface vs inside contrast)
+    - ❌ "가운데에 앉으세요" (Middle of what? No context)
+    - ✅ "방 가운데에 테이블이 있어요" (Specific location, visualizable scene)
+  - ✅ Semantic relationships and contrasts
+    - Okay: "과일 겉은 딱딱해요" (Shows literal "outer surface")
+    - Better: "겉과 속이 달라요" (Shows surface vs inside contrast)
+  - Exception: When the vocabulary word itself IS a pronoun/demonstrative (이거, 그거, etc.), use it but add maximum concrete context:
+    - For 이거: "이거는 제가 어제 산 책이에요" (Adds concrete noun "책" + time)
 
 - **Word type specific guidelines:**
   - **Adjectives**: Often better with modifying form + noun + verb
@@ -72,42 +81,12 @@ REQUIREMENTS:
 - **Must include at least ONE concrete context element** (location/time/manner/specific object)
   - ❌ "나비가 날아다녀요" (Too bare - where? when? how?)
   - ✅ "나비가 꽃 사이를 날아다녀요" (Location - among flowers)
-  - ❌ "공을 던져요" (Too bare - who? where? how?)
-  - ✅ "동생이 공을 높이 던져요" (Subject + manner - brother throws high)
+  - ❌ "공을 던져요" (Too bare - who? where? Not visualizable)
+  - ✅ "동생이 공을 높이 던져요" (Subject + manner - can picture the scene)
 
 - **For pedagogical purposes, prefer explicit subjects/objects over natural ellipsis**
   - Goal: Create concrete mental images and word associations
-  - ✅ 친구가 갑자기 나타났어요 (clear who appeared)
   - ❌ 갑자기 나타났어요 (grammatically fine, but lacks learning context)
-  - ✅ 김을 구워 먹었어요 (what you do with seaweed)
+  - ✅ 친구가 갑자기 나타났어요 (clear who appeared)
   - ❌ 구워 먹었어요 (too vague for vocabulary learning)
-
-- **AVOID pronouns and demonstratives as subjects/objects (이거, 그거, 저거, 그것, 이것, 사람, etc.):**
-  - These are "empty" words that provide no concrete, visualizable context
-  - ❌ "이거 주세요" (What is "this"? Not visualizable)
-  - ❌ "그것이 필요해요" (What is "that"? Too abstract)
-  - ❌ "사람이 왔어요" (Which person? Generic)
-  - ✅ "가방이 필요해요" (Concrete noun - bag)
-  - ✅ "회의 자료가 필요해요" (Specific object - meeting materials)
-  - ✅ "친구가 왔어요" (Specific relationship - friend)
-  - Exception: When the vocabulary word itself IS the pronoun/demonstrative, use it but add maximum concrete context:
-    - For 이거: "이거는 제가 어제 산 책이에요" (adds concrete noun "책" + time)
-
-**COMMON MISTAKES TO AVOID:**
-- ❌ "고등학생이 공부해요" → TOO GENERIC (where? what subject?)
-- ✅ "고등학생이 도서관에서 수학을 공부해요" (location + specific subject matter)
-
-- ❌ "고장이 났어요" → SUBJECT MISSING (what broke? Not visualizable)
-- ✅ "자전거가 고장 났어요" (specific object - bicycle)
-
-- ❌ "공을 던졌어요" → TOO BARE (who threw? where? Not visualizable)
-- ✅ "동생이 공을 높이 던졌어요" (subject + manner - can picture the scene)
-
-- ❌ "이거 주세요" → PRONOUN (what is "this"? No concrete context)
-- ✅ "물 한 잔 주세요" → Concrete object + counter
-
-- ❌ "그것이 필요해요" → DEMONSTRATIVE (what is "that"? Too abstract)
-- ✅ "회의 자료가 필요해요" → Specific concrete noun
-
-- ❌ "사람이 왔어요" → GENERIC NOUN (which person? Not specific enough)
-- ✅ "친구가 집에 왔어요" → Specific relationship + location
+  - ✅ 김을 구워 먹었어요 (what you do with seaweed)
