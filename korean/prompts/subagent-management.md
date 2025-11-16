@@ -74,6 +74,36 @@ Each subagent should follow this structure:
 - Easy debugging (isolate issues to specific batches)
 - No cascading failures
 
+## Model Selection
+
+**IMPORTANT: Manager must confirm model choice with user before launching subagents**
+
+**Model selection considerations:**
+
+| Task Type | Recommended Model | Reasoning |
+|-----------|------------------|-----------|
+| **Etymology** | Haiku (confirm first) | Mechanical/factual lookup task, clear right/wrong answers |
+| **Examples** | Sonnet (confirm first) | Creative generation requiring language nuance and quality |
+| **Notes** | Sonnet (confirm first) | Semantic analysis across 5,720 words, subjective relationships |
+
+**Before launching subagents:**
+1. ✅ Review the generation task requirements
+2. ✅ Propose a model choice with reasoning
+3. ✅ **Ask user to confirm** before proceeding
+4. ✅ Show user the exact subagent prompt that will be used
+5. ✅ Launch subagents only after user approval
+
+**Factors to consider:**
+- **Task complexity**: Mechanical vs creative/semantic
+- **Quality requirements**: Formulaic vs nuanced
+- **Cost vs quality tradeoff**: Total entries × model cost
+- **Error tolerance**: Easy to verify vs subjective quality
+
+**Pilot run recommendation:**
+- Process 1-2 batches with proposed model
+- User reviews quality
+- Adjust model choice if needed before full run
+
 ## Parallel Execution
 
 Subagents can run:
