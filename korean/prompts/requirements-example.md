@@ -26,8 +26,12 @@ REQUIREMENTS:
 - **Sentence structure requirements:**
   - Must include at least one noun (명사) AND one verb (동사)
   - Prefer complete sentences over noun phrases
-  - Keep sentences minimal but context-rich
-  - Add enough detail to make the scene CONCRETE and VISUALIZABLE
+  - **Keep sentences SIMPLE and MINIMAL - one main idea only**
+    - ❌ Avoid compound sentences: "엄마가 프라이팬에 기름을 두르고 계란을 부쳤어요" (Too long - two actions)
+    - ✅ Simple sentence: "엄마가 계란을 기름에 부쳤어요" (One clear action)
+    - ❌ Avoid clauses: "소풍 갈 때 엄마가 김밥을 싸 주셨어요" (Time clause + main clause)
+    - ✅ Simple: "엄마가 소풍 도시락에 김밥을 쌌어요" (One statement)
+  - Add enough detail to make the scene CONCRETE and VISUALIZABLE, but no more
   - **ALWAYS include particles (가/이, 는/은, 를/을, etc.) explicitly for learning purposes**
   - **NEVER drop the subject (주어) - ALWAYS include it explicitly**
     - ❌ "고장이 났어요" (What broke? Subject missing! Not visualizable)
