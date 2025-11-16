@@ -98,15 +98,29 @@ File naming follows a consistent pattern across datasets:
 - Examples: `output/{dataset}/examples-N.tsv`
 - Notes: `output/{dataset}/notes-N.tsv`
 
-## Quality Assurance
+## Manager Verification (Orchestration Level)
 
-After batch completion:
-- Verify file count matches expected batch count
-- Check TSV formatting (proper tabs, no CSV issues)
-- Spot-check content quality against requirements
-- Regenerate individual batches if issues found
+**What the orchestrating agent SHOULD verify:**
+- ✅ File creation: Does the output file exist?
+- ✅ Basic structure: Correct line count (~100-101 entries including header)?
+- ✅ Format check: Valid TSV with proper tabs and expected columns?
+
+**What the orchestrating agent should NOT do:**
+- ❌ Read and verify content quality of all entries
+- ❌ Judge whether generated content meets quality standards
+- ❌ Compare outputs against requirements in detail
+
+**Rationale:**
+- Reading all outputs defeats the purpose of isolated generation (token overhead, context contamination risk)
+- If requirements are good and subagents follow them, outputs should be good
+- Trust subagents to execute their task based on requirements
+- Detailed quality review happens later in the workflow (manual review phase)
+- Easy to regenerate individual batches if issues are found later
 
 **Regeneration is safe:**
-- Delete contaminated batch output
+- Delete problematic batch output
 - Re-run subagent for that batch only
 - No impact on other batches
+
+**Quality contract:**
+The requirements files are the quality contract. Manager oversees process execution, not content quality.
