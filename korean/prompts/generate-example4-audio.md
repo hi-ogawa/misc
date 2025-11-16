@@ -105,45 +105,72 @@ zip -r ../koreantopik1_v2_audio.zip koreantopik1_v2_*.mp3
 
 Result: `output/koreantopik1_v2_audio.zip` (24M, 1847 files)
 
-### 3. Update Anki cards
+### 3. Copy audio files to Anki media directory
 
-**Context:**
-- Existing Anki cards have progress/notes that should be preserved
-- Need to update 3 columns: `example_ko`, `example_en`, `example_ko_audio`
-- Keep existing columns: `number`, `korean`, `english`, `etymology`, `notes`
-- Anki can match and update existing notes using `number` as the anchor field
-
-**Steps:**
-
-1. Generate update TSV with 4 columns (number + 3 fields to update):
-```bash
-python scripts/generate-anki-update.py \
-  --input output/examples-v2-all.tsv \
-  --output output/anki-update-v2.tsv
-```
-
-Output format (`output/anki-update-v2.tsv`):
-```
-number	example_ko	example_en	example_ko_audio
-1	가게에 자주 가요	I often go to the store	[sound:koreantopik1_v2_0001.mp3]
-2	가격이 너무 비싸요	The price is too expensive	[sound:koreantopik1_v2_0002.mp3]
-```
-
-2. Copy audio files to Anki media directory:
 ```bash
 cp output/audio-v2/koreantopik1_v2_*.mp3 ~/.local/share/Anki2/"User 1"/collection.media/
 ```
 
-3. Import update TSV in Anki:
-- File → Import → Select `output/anki-update-v2.tsv`
-- **Important settings:**
-  - Field separator: Tab
-  - **Field 1 (number): Set as "Field used to match existing notes"**
-  - Map fields: `number` → number, `example_ko` → example_ko, `example_en` → example_en, `example_ko_audio` → example_ko_audio
-  - Check "Update existing notes when first field matches"
-  - Import
+This copies all 1847 audio files to Anki's media folder so they can be referenced in cards.
 
-Anki will find existing cards by `number` and update only the 3 mapped fields, preserving all other data (korean, english, etymology, notes, review history).
+### 4. Update Anki cards
+
+**Context:**
+- Existing Anki cards have progress/notes that should be preserved
+- Need to update 3 columns: `example_ko`, `example_en`, `example_ko_audio`
+- Keep existing columns: `number`, `korean`, `english`, `etymology`, `notes`, tags
+- **Important:** Anki 2.1.55+ has a bug where partial imports blank unmapped fields
+- **Solution:** Export → Merge → Reimport all columns
+
+**Anki export format:**
+```
+#separator:tab
+#html:true
+#tags column:9
+1	가게	store	가게에 자주 가요	go to store often		상점	[sound:koreantopik1_0001.mp3]
+2	가격	price	가격이 너무 비싸요	price is too expensive	價格 / 価格		[sound:koreantopik1_0002.mp3]
+```
+
+8 data columns: `number`, `korean`, `english`, `example_ko`, `example_en`, `etymology`, `notes`, `example_ko_audio`, (9th = tags)
+
+**Steps:**
+
+1. User exports existing Anki deck at `input/koreantopik1_anki.txt`:
+   - File → Export → Notes in Plain Text (.txt)
+   - Include: All fields, tags
+
+2. Merge exported Anki data with updated examples:
+```bash
+# Update all cards
+python scripts/generate-anki-update.py \
+  --anki-export input/koreantopik1_anki.txt \
+  --new-examples output/examples-v2-all.tsv \
+  --output output/koreantopik1_anki_updated.txt \
+  --audio-prefix koreantopik1_v2
+
+# Or update specific range
+python scripts/generate-anki-update.py \
+  --anki-export input/koreantopik1_anki.txt \
+  --new-examples output/examples-v2-all.tsv \
+  --output output/koreantopik1_anki_updated.txt \
+  --audio-prefix koreantopik1_v2 \
+  --start 1 --end 100
+```
+
+This script:
+- Reads existing Anki export (preserves all columns + tags)
+- Updates 3 columns: `example_ko`, `example_en`, `example_ko_audio` from v2 data
+- Preserves all other columns: `korean`, `english`, `etymology`, `notes`, tags, review history
+- Supports range filtering with `--start` and `--end`
+- Outputs complete Anki import file with updated examples
+
+3. Import merged file in Anki:
+- File → Import → Select `output/koreantopik1_anki_updated.txt`
+- Anki detects the format automatically from headers
+- Verify field mapping looks correct
+- Import
+
+All cards will be updated with new examples and audio, preserving review history and other fields.
 
 ## Troubleshooting
 
