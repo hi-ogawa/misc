@@ -32,6 +32,25 @@ python scripts/generate-audio.py \
   --concurrency 5
 ```
 
+**Troubleshootin**
+
+Listen to random samples:
+```bash
+# Play random files to verify quality
+mpv output/audio-v2/0001.mp3
+mpv output/audio-v2/0500.mp3
+mpv output/audio-v2/1000.mp3
+```
+
+**Notes:**
+- Edge TTS is free with no API key required
+- Default is sequential (concurrency=1) - safe and reliable
+- Concurrency uses async subprocess for efficient I/O
+- Script supports resuming (skips existing files)
+- Ctrl-C interruption is handled gracefully
+- Monitor for socket timeouts if using high concurrency
+- Can adjust concurrency based on network stability
+
 ## Verify generation
 
 ```bash
@@ -173,23 +192,3 @@ This script:
 - Import
 
 All cards will be updated with new examples and audio, preserving review history and other fields.
-
-## Troubleshooting
-
-### Quality Check
-Listen to random samples:
-```bash
-# Play random files to verify quality
-mpv output/audio-v2/0001.mp3
-mpv output/audio-v2/0500.mp3
-mpv output/audio-v2/1000.mp3
-```
-
-## Notes
-- Edge TTS is free with no API key required
-- Default is sequential (concurrency=1) - safe and reliable
-- Concurrency uses async subprocess for efficient I/O
-- Script supports resuming (skips existing files)
-- Ctrl-C interruption is handled gracefully
-- Monitor for socket timeouts if using high concurrency
-- Can adjust concurrency based on network stability
