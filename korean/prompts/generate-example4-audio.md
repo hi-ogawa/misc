@@ -1,13 +1,13 @@
 # Generate Audio for Korean Examples (v2)
 
 ## Goal
-Generate audio pronunciation files for all `example_ko` entries in the updated vocabulary list using Microsoft Edge TTS with parallelization.
+Generate audio pronunciation files for all `example_ko` entries in the updated vocabulary list using Microsoft Edge TTS with optional async concurrency.
 
 ## Status
 ⏳ **PLANNED** - Ready to generate
 
 ## Context
-This is a regeneration of audio files following updates to example sentences. The previous version (generate-audio.md) generated 1,847 files sequentially in ~20 minutes. This version uses the newly parallelized script for faster generation.
+This is a regeneration of audio files following updates to example sentences. The previous version (generate-audio.md) generated 1,847 files sequentially in ~20 minutes. This version uses an async subprocess implementation with configurable concurrency for faster generation.
 
 ## Input
 - Source: `output/examples-v2-all.tsv`
@@ -28,39 +28,58 @@ This is a regeneration of audio files following updates to example sentences. Th
 mkdir -p output/audio-v2
 ```
 
-### 2. Test parallel generation with small batch
-Start conservative to test for rate limits:
+### 2. Test with small batch (sequential first)
+Start sequential to verify basic functionality:
 ```bash
 python scripts/generate-audio.py \
   --input output/examples-v2-all.tsv \
   --output output/audio-v2 \
-  --start 1 --end 100 \
-  --workers 8 \
+  --start 1 --end 10 \
   --force
 ```
 
-**Expected**: ~30-60 seconds for 100 files (vs ~60-80 seconds sequential)
+**Expected**: ~10 seconds for 10 files (default concurrency=1)
 
-### 3. Monitor for rate limiting
-Watch for errors during the test batch:
-- HTTP 429 errors
-- Connection timeouts
+### 3. Test with concurrency
+Try with 8 concurrent tasks to test for rate limits:
+```bash
+python scripts/generate-audio.py \
+  --input output/examples-v2-all.tsv \
+  --output output/audio-v2 \
+  --start 11 --end 100 \
+  --concurrency 8 \
+  --force
+```
+
+**Expected**: ~20-30 seconds for 90 files
+
+Watch for errors:
+- Socket timeouts
+- Connection errors
 - Failed generations
 
 If no issues, proceed with full generation.
 
 ### 4. Generate all audio files
+Sequential (safest):
+```bash
+python scripts/generate-audio.py \
+  --input output/examples-v2-all.tsv \
+  --output output/audio-v2
+```
+
+Or with concurrency (faster):
 ```bash
 python scripts/generate-audio.py \
   --input output/examples-v2-all.tsv \
   --output output/audio-v2 \
-  --workers 8
+  --concurrency 8
 ```
 
 **Expected performance**:
-- Workers: 8 (default)
-- Estimated time: 5-8 minutes (vs 20 minutes sequential)
-- Rate: ~300-400 files/minute
+- Sequential (concurrency=1): ~20 minutes
+- Concurrent (concurrency=8): ~5-8 minutes
+- Rate: ~300-400 files/minute with concurrency
 - Speedup: 3-4x faster
 
 ### 5. Verify generation
@@ -72,28 +91,50 @@ ls output/audio-v2/*.mp3 | wc -l
 du -sh output/audio-v2/
 ```
 
-## Parallelization Settings
+## Concurrency Settings
 
-### Conservative (recommended start)
+### Sequential (default, safest)
 ```bash
---workers 4
+# No flag needed - concurrency=1 by default
+# Estimated time: ~20 minutes
+# Risk: None
+```
+
+### Conservative
+```bash
+--concurrency 4
 # Estimated time: ~8-10 minutes
 # Risk: Very low
 ```
 
-### Default (recommended)
+### Moderate (recommended for speed)
 ```bash
---workers 8
+--concurrency 8
 # Estimated time: ~5-8 minutes
 # Risk: Low
 ```
 
-### Aggressive (if default works well)
+### Aggressive (if moderate works well)
 ```bash
---workers 16
+--concurrency 16
 # Estimated time: ~3-5 minutes
-# Risk: Medium (possible rate limiting)
+# Risk: Medium (possible rate limiting/timeouts)
 ```
+
+## Implementation Notes
+
+**Architecture**:
+- Single-threaded async using `asyncio.create_subprocess_exec()`
+- Processes files in chunks of `--concurrency` size
+- Global counters track progress (safe in single thread)
+- Each task logs immediately upon completion
+- Ctrl-C handling with graceful shutdown
+
+**Why async subprocess?**
+- More efficient than threads for I/O-bound tasks
+- No thread overhead
+- Can handle higher concurrency (20-50+ if needed)
+- edge-tts CLI runs as subprocess (non-blocking async)
 
 ## Post-Processing Steps
 
@@ -146,11 +187,12 @@ done
 
 ## Troubleshooting
 
-### Rate Limiting
-If you encounter errors:
-1. Reduce workers: `--workers 4`
-2. Add delays between batches (process in chunks)
-3. Check Edge TTS service status
+### Socket Timeouts / Connection Errors
+If you encounter errors like `SocketTimeoutError`:
+1. Reduce concurrency: `--concurrency 4` or `--concurrency 1`
+2. The script continues on errors - failed files are logged
+3. Re-run the same command to retry failed files (existing ones skipped)
+4. Check Edge TTS service status
 
 ### Partial Generation
 The script automatically skips existing files:
@@ -159,8 +201,14 @@ The script automatically skips existing files:
 python scripts/generate-audio.py \
   --input output/examples-v2-all.tsv \
   --output output/audio-v2 \
-  --workers 8
+  --concurrency 8
 ```
+
+### Ctrl-C Interruption
+Press Ctrl-C to stop generation:
+- Shows partial progress
+- Existing files are preserved
+- Resume by running the same command (skips existing)
 
 ### Quality Check
 Listen to random samples:
@@ -173,18 +221,20 @@ mpv output/audio-v2/1000.mp3
 
 ## Performance Comparison
 
-| Method | Workers | Time | Rate | Speedup |
-|--------|---------|------|------|---------|
-| v1 (Sequential) | 1 | 20 min | 93/min | 1x |
-| v2 (Parallel, conservative) | 4 | ~10 min | 185/min | 2x |
-| v2 (Parallel, default) | 8 | ~6 min | 308/min | 3.3x |
-| v2 (Parallel, aggressive) | 16 | ~4 min | 462/min | 5x* |
+| Method | Concurrency | Time | Rate | Speedup |
+|--------|-------------|------|------|---------|
+| Sequential (default) | 1 | 20 min | 93/min | 1x |
+| Conservative | 4 | ~10 min | 185/min | 2x |
+| Moderate | 8 | ~6 min | 308/min | 3.3x |
+| Aggressive | 16 | ~4 min | 462/min | 5x* |
 
-*Aggressive setting may hit rate limits - use with caution
+*Aggressive setting may hit rate limits/timeouts - use with caution
 
 ## Notes
 - Edge TTS is free with no API key required
-- Parallelization significantly improves generation time
+- Default is sequential (concurrency=1) - safe and reliable
+- Concurrency uses async subprocess for efficient I/O
 - Script supports resuming (skips existing files)
-- Monitor first batch for any rate limiting issues
-- Can adjust worker count based on performance/errors
+- Ctrl-C interruption is handled gracefully
+- Monitor for socket timeouts if using high concurrency
+- Can adjust concurrency based on network stability
