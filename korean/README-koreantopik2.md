@@ -33,26 +33,35 @@ Following the successful completion of TOPIK 1 (1847 words), this document outli
 ```
 korean/
 ├── input/
+│   ├── korean.tsv                 # Vocabulary reference (5720 words: TOPIK 1+2)
 │   ├── koreantopik2.tsv           # Base TOPIK 2 file (3873 entries)
 │   └── koreantopik2-batch-N.tsv   # Pre-split batches (1-39, pending)
-├── output/topik2/                 # TOPIK 2 enhancement outputs (pending)
+├── output/koreantopik2/           # TOPIK 2 enhancement outputs (pending)
 │   ├── etymology-N.tsv            # Etymology batches (1-39)
 │   ├── examples-N.tsv             # Example sentence batches (1-39)
 │   ├── notes-N.tsv                # Study notes batches (1-39)
 │   ├── etymology-all.tsv          # Consolidated etymology
 │   ├── examples-all.tsv           # Consolidated examples
 │   ├── notes-all.tsv              # Consolidated notes
-│   └── master-all.tsv             # All columns combined
-├── prompts/topik2/                # TOPIK 2-specific prompts (pending)
-│   ├── generate-etymology.md
-│   ├── generate-examples.md
-│   ├── generate-notes.md
-│   └── generate-audio.md
+│   ├── master-all.tsv             # All columns combined
+│   └── audio/                     # Audio files directory
+│       └── koreantopik2_*.mp3     # Audio files (3873 files)
+├── prompts/
+│   ├── requirements-etymology.md  # Etymology requirements (shared)
+│   ├── requirements-example.md    # Example requirements (shared)
+│   ├── requirements-notes.md      # Notes requirements (shared)
+│   └── koreantopik2/              # TOPIK 2-specific generation prompts
+│       ├── generate-etymology.md  # Etymology execution strategy
+│       ├── generate-examples.md   # Examples execution strategy
+│       ├── generate-notes.md      # Notes execution strategy
+│       └── generate-audio.md      # Audio generation procedure
 ├── topik2/                        # Original extraction work
-│   ├── data/csv-extra/all.csv    # Raw extracted data with Hanja/Japanese
-│   ├── readme.md                 # Extraction documentation
-│   └── links.md                  # 39 lesson URLs
-└── koreantopik2_*.mp3             # Audio files (pending, 3873 files)
+│   ├── data/csv-extra/all.csv     # Raw extracted data with Hanja/Japanese
+│   ├── readme.md                  # Extraction documentation
+│   └── links.md                   # 39 lesson URLs
+└── scripts/
+    ├── generate-audio.py          # Audio generation script
+    └── generate-audio-verify.py   # Audio verification script
 ```
 
 ## Workflow Plan
@@ -60,23 +69,34 @@ korean/
 ### Phase 1: Preparation & Setup
 
 #### 1.1 Create TOPIK 2 Prompts Directory
-- [ ] Create `prompts/topik2/` directory
-- [ ] Adapt `generate-etymology2.md` → `prompts/topik2/generate-etymology.md`
-  - Update input: `input/koreantopik2.tsv`
-  - Update batches: 1-39 (instead of 1-19)
-  - Update output: `output/topik2/etymology-N.tsv`
-- [ ] Adapt `generate-example4.md` → `prompts/topik2/generate-examples.md`
-  - Update batch count: 39 batches
-  - Update output: `output/topik2/examples-N.tsv`
-- [ ] Adapt `generate-notes.md` → `prompts/topik2/generate-notes.md`
-  - Update batch count: 39 batches
-  - Update output: `output/topik2/notes-N.tsv`
-- [ ] Adapt `generate-example4-audio.md` → `prompts/topik2/generate-audio.md`
-  - Update file prefix: `koreantopik2_NNNN.mp3`
-  - Update entry count: 3873 files
+- [x] Create `prompts/koreantopik2/` directory
+- [x] Create `prompts/koreantopik2/generate-etymology.md`
+  - References: `prompts/requirements-etymology.md` (shared)
+  - Input: `input/koreantopik2-batch-N.tsv` (39 batches)
+  - Output: `output/koreantopik2/etymology-N.tsv`
+  - Strategy: Subagent-based parallel execution
+- [x] Create `prompts/koreantopik2/generate-examples.md`
+  - References: `prompts/requirements-example.md` (shared)
+  - Input: `input/koreantopik2-batch-N.tsv` (39 batches)
+  - Output: `output/koreantopik2/examples-N.tsv`
+  - Strategy: Subagent-based parallel execution
+- [x] Create `prompts/koreantopik2/generate-notes.md`
+  - References: `prompts/requirements-notes.md` (shared)
+  - Input 1: `input/korean.tsv` (5720 words for cross-referencing)
+  - Input 2: `input/koreantopik2-batch-N.tsv` (batch files)
+  - Output: `output/koreantopik2/notes-N.tsv`
+  - Strategy: Two-step input (vocab reference + explicit batch)
+- [x] Create `prompts/koreantopik2/generate-audio.md`
+  - Input: `output/koreantopik2/examples-all.tsv`
+  - Output: `output/koreantopik2/audio/koreantopik2_NNNN.mp3`
+  - Uses: `scripts/generate-audio.py`
 
 #### 1.2 Pre-split Input File
-- [ ] Create `output/topik2/` directory
+- [x] Vocabulary reference: `input/korean.tsv` (already exists)
+  - Contains: 5720 Korean words (TOPIK 1 + TOPIK 2)
+  - Format: Single column, one word per line, no header
+  - Used by notes generation for cross-referencing
+- [ ] Create `output/koreantopik2/` directory
 - [ ] Split `input/koreantopik2.tsv` into batches:
   - [ ] `input/koreantopik2-batch-1.tsv` (entries 1-100)
   - [ ] `input/koreantopik2-batch-2.tsv` (entries 101-200)
@@ -92,11 +112,11 @@ Generate Hanja and Japanese cognates for Sino-Korean words.
 - Example: `32	가정	假定 / 仮定`
 
 **Progress** (39 batches):
-- [ ] `output/topik2/etymology-1.tsv` (words 1-100)
-- [ ] `output/topik2/etymology-2.tsv` (words 101-200)
+- [ ] `output/koreantopik2/etymology-1.tsv` (words 1-100)
+- [ ] `output/koreantopik2/etymology-2.tsv` (words 101-200)
 - [ ] ... (batches 3-38)
-- [ ] `output/topik2/etymology-39.tsv` (words 3801-3873)
-- [ ] Consolidate → `output/topik2/etymology-all.tsv`
+- [ ] `output/koreantopik2/etymology-39.tsv` (words 3801-3873)
+- [ ] Consolidate → `output/koreantopik2/etymology-all.tsv`
 
 #### 2.2 Example Sentences
 Natural Korean example sentences with English translations.
@@ -106,23 +126,29 @@ Natural Korean example sentences with English translations.
 **Strategy**: Use subagents for parallel processing (39 independent batches)
 
 **Progress** (39 batches):
-- [ ] `output/topik2/examples-1.tsv` (words 1-100)
-- [ ] `output/topik2/examples-2.tsv` (words 101-200)
+- [ ] `output/koreantopik2/examples-1.tsv` (words 1-100)
+- [ ] `output/koreantopik2/examples-2.tsv` (words 101-200)
 - [ ] ... (batches 3-38)
-- [ ] `output/topik2/examples-39.tsv` (words 3801-3873)
-- [ ] Consolidate → `output/topik2/examples-all.tsv`
+- [ ] `output/koreantopik2/examples-39.tsv` (words 3801-3873)
+- [ ] Consolidate → `output/koreantopik2/examples-all.tsv`
 
 #### 2.3 Study Notes
 Related words, antonyms, honorific pairs, etc.
 
 **Format**: `number, korean, notes`
 
+**Strategy**: Two-step input for better cross-referencing
+- Input 1: Vocabulary reference (`input/korean.tsv` - 5720 words: TOPIK 1+2)
+- Input 2: Batch file (`input/koreantopik2-batch-N.tsv` - 100 entries)
+- Output: Only entries from batch file
+- Rationale: Vocab reference enables finding antonyms/pairs across all TOPIK vocabulary
+
 **Progress** (39 batches):
-- [ ] `output/topik2/notes-1.tsv` (words 1-100)
-- [ ] `output/topik2/notes-2.tsv` (words 101-200)
+- [ ] `output/koreantopik2/notes-1.tsv` (words 1-100)
+- [ ] `output/koreantopik2/notes-2.tsv` (words 101-200)
 - [ ] ... (batches 3-38)
-- [ ] `output/topik2/notes-39.tsv` (words 3801-3873)
-- [ ] Consolidate → `output/topik2/notes-all.tsv`
+- [ ] `output/koreantopik2/notes-39.tsv` (words 3801-3873)
+- [ ] Consolidate → `output/koreantopik2/notes-all.tsv`
 
 #### 2.4 Audio Generation
 Korean pronunciation audio using edge-tts.
@@ -140,13 +166,13 @@ Korean pronunciation audio using edge-tts.
 ### Phase 3: Consolidation & Import
 
 #### 3.1 Consolidate Outputs
-- [ ] Create `output/topik2/etymology-all.tsv` (merge batches 1-39)
-- [ ] Create `output/topik2/examples-all.tsv` (merge batches 1-39)
-- [ ] Create `output/topik2/notes-all.tsv` (merge batches 1-39)
+- [ ] Create `output/koreantopik2/etymology-all.tsv` (merge batches 1-39)
+- [ ] Create `output/koreantopik2/examples-all.tsv` (merge batches 1-39)
+- [ ] Create `output/koreantopik2/notes-all.tsv` (merge batches 1-39)
 
 #### 3.2 Create Master File
 - [ ] Combine all columns: `number, korean, etymology, english, example_ko, example_en, notes, audio`
-- [ ] Output: `output/topik2/master-all.tsv`
+- [ ] Output: `output/koreantopik2/master-all.tsv`
 - [ ] Validate: 3873 entries (+ header)
 
 #### 3.3 Manual Review & Google Sheets
@@ -163,7 +189,7 @@ Korean pronunciation audio using edge-tts.
 ### Phase 4: Maintenance
 
 #### 4.1 Fix Workflow
-- [ ] Create `prompts/topik2/generate-fix.md` (or reuse existing)
+- [ ] Create `prompts/koreantopik2/generate-fix.md` (adapted from TOPIK 1 version)
 - [ ] Track corrections during Anki practice
 - [ ] Generate replacement audio with `_fix` suffix
 - [ ] Update Anki cards as needed
@@ -215,15 +241,21 @@ number	korean	etymology	english	example_ko	example_en	notes	audio
 | Audio files | 1,847 MP3s | 3,873 MP3s |
 | Vocabulary level | Beginner | Intermediate-Advanced |
 | File prefix | `koreantopik1_` | `koreantopik2_` |
-| Output directory | `output/` | `output/topik2/` |
+| Output directory | `output/` | `output/koreantopik2/` |
+| Prompts directory | `prompts/` | `prompts/koreantopik2/` |
+| Requirements | `prompts/requirements-*.md` | Same (shared) |
 
 ## Strategy & Recommendations
 
 ### Processing Strategy
 1. **Start small**: Process batches 1-2 end-to-end to validate workflow
-2. **Parallel processing**: Use subagents for example generation (39 agents in parallel)
+2. **Parallel processing**: Use subagents for all enhancement types (39 agents in parallel)
+   - **Etymology**: Each agent reads batch file (100 entries)
+   - **Examples**: Each agent reads batch file (100 entries)
+   - **Notes**: Each agent reads vocab reference (5720 words) + batch file (100 entries)
 3. **Checkpointing**: Commit outputs after completing each enhancement type
 4. **Resource monitoring**: TOPIK 2 is advanced vocabulary, may need more tokens per word
+5. **Requirements reuse**: All prompts reference shared `requirements-*.md` files
 
 ### Audio Generation Strategy
 - Generate in chunks (10 batches = ~1000 files at a time)
@@ -255,6 +287,25 @@ Before full processing, validate workflow with batches 1-2:
 - Individual lesson links: See [topik2/links.md](topik2/links.md)
 - Extraction documentation: [topik2/readme.md](topik2/readme.md)
 - TOPIK 1 completed work: [topik1/readme.md](topik1/readme.md)
+
+---
+
+## Prompt Architecture
+
+**Separation of concerns:**
+- **Requirements files** (`prompts/requirements-*.md`): Define WHAT makes good content
+  - Shared across TOPIK 1 and TOPIK 2
+  - Focus on quality criteria
+  - Dataset-agnostic
+- **Generation files** (`prompts/koreantopik2/generate-*.md`): Define HOW to execute
+  - TOPIK 2 specific (batch counts, file paths)
+  - Execution strategy (subagents, parallelization)
+  - Input/output formats
+
+**Benefits:**
+- Clean reuse of quality requirements
+- Easy to adapt for future datasets
+- Clear separation between quality and execution
 
 ---
 
