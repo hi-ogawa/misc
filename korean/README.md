@@ -15,15 +15,16 @@ This project uses Claude prompts to enhance Korean vocabulary learning materials
 ```
 korean/
 ├── prompts/          # Claude Code prompts (tracked in git)
+│   ├── requirements-example.md
+│   ├── requirements-notes.md
 │   ├── generate-etymology2.md
-│   ├── generate-example3.md
+│   ├── generate-example4.md
+│   ├── generate-example4-audio.md
 │   ├── generate-notes.md
-│   ├── generate-audio.md
 │   └── generate-fix.md
 ├── scripts/          # Helper scripts
-│   └── generate-audio.py  # Audio generation script (tracked)
-├── topik1/           # TOPIK 1 vocabulary data (not tracked)
-│   └── readme.md     # Detailed extraction docs (tracked)
+│   ├── generate-audio.py  # Audio generation script (tracked)
+|   └── ... 
 ├── input/            # Input data files (not tracked)
 ├── output/           # Generated content (not tracked)
 └── README.md         # This file
