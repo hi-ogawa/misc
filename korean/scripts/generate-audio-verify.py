@@ -4,73 +4,127 @@ Verify MP3 files using ffprobe to detect broken or corrupted audio files.
 """
 
 import argparse
-import subprocess
+import asyncio
 import json
+import os
 from pathlib import Path
 import sys
 
+# Global counters (safe in single-threaded async)
+completed = 0
+valid_count = 0
 
-def verify_mp3(mp3_path: Path) -> tuple[bool, str]:
+
+async def verify_mp3(mp3_path: Path, total: int, timeout: float) -> tuple[Path, bool, str]:
     """
     Verify an MP3 file using ffprobe.
 
     Returns:
-        (is_valid, error_message)
+        (mp3_path, is_valid, error_message)
     """
+    global completed, valid_count
+
     try:
         # Run ffprobe to get file info
-        result = subprocess.run(
-            [
+        async def run_ffprobe():
+            process = await asyncio.create_subprocess_exec(
                 'ffprobe',
                 '-v', 'error',
                 '-show_entries', 'format=duration,size',
                 '-show_entries', 'stream=codec_type,codec_name',
                 '-of', 'json',
-                str(mp3_path)
-            ],
-            capture_output=True,
-            text=True,
-            timeout=10
-        )
+                str(mp3_path),
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
+            stdout, stderr = await process.communicate()
+            return process.returncode, stdout, stderr
+
+        returncode, stdout, stderr = await asyncio.wait_for(run_ffprobe(), timeout=timeout)
+
+        completed += 1
 
         # If ffprobe returns non-zero, the file is likely broken
-        if result.returncode != 0:
-            error_msg = result.stderr.strip() or "ffprobe returned non-zero exit code"
-            return False, error_msg
+        if returncode != 0:
+            error_msg = stderr.decode().strip() or "ffprobe returned non-zero exit code"
+            print(f"  [{completed}/{total}] ✗ {mp3_path.name}: {error_msg}")
+            return (mp3_path, False, error_msg)
 
         # Parse the JSON output
         try:
-            data = json.loads(result.stdout)
+            data = json.loads(stdout.decode())
         except json.JSONDecodeError:
-            return False, "Failed to parse ffprobe output"
+            error_msg = "Failed to parse ffprobe output"
+            print(f"  [{completed}/{total}] ✗ {mp3_path.name}: {error_msg}")
+            return (mp3_path, False, error_msg)
 
         # Check if we have format information
         if 'format' not in data:
-            return False, "No format information found"
+            error_msg = "No format information found"
+            print(f"  [{completed}/{total}] ✗ {mp3_path.name}: {error_msg}")
+            return (mp3_path, False, error_msg)
 
         # Check duration
         duration = float(data['format'].get('duration', 0))
         if duration <= 0:
-            return False, f"Invalid duration: {duration}"
+            error_msg = f"Invalid duration: {duration}"
+            print(f"  [{completed}/{total}] ✗ {mp3_path.name}: {error_msg}")
+            return (mp3_path, False, error_msg)
 
         # Check if we have audio streams
         streams = data.get('streams', [])
         audio_streams = [s for s in streams if s.get('codec_type') == 'audio']
 
         if not audio_streams:
-            return False, "No audio streams found"
+            error_msg = "No audio streams found"
+            print(f"  [{completed}/{total}] ✗ {mp3_path.name}: {error_msg}")
+            return (mp3_path, False, error_msg)
 
-        return True, "OK"
+        # Valid file
+        valid_count += 1
+        print(f"  [{completed}/{total}] ✓ {mp3_path.name}")
+        return (mp3_path, True, "OK")
 
-    except subprocess.TimeoutExpired:
-        return False, "ffprobe timeout"
+    except asyncio.TimeoutError:
+        completed += 1
+        error_msg = f"ffprobe timeout after {timeout}s"
+        print(f"  [{completed}/{total}] ✗ {mp3_path.name}: {error_msg}")
+        return (mp3_path, False, error_msg)
     except FileNotFoundError:
-        return False, "ffprobe not found - please install ffmpeg"
+        completed += 1
+        error_msg = "ffprobe not found - please install ffmpeg"
+        print(f"  [{completed}/{total}] ✗ {mp3_path.name}: {error_msg}")
+        return (mp3_path, False, error_msg)
     except Exception as e:
-        return False, f"Unexpected error: {str(e)}"
+        completed += 1
+        error_msg = f"Unexpected error: {str(e)}"
+        print(f"  [{completed}/{total}] ✗ {mp3_path.name}: {error_msg}")
+        return (mp3_path, False, error_msg)
+
+
+async def verify_all(mp3_files, concurrency, total, timeout):
+    """Verify MP3 files in chunks."""
+    results = []
+
+    # Process in chunks
+    for i in range(0, len(mp3_files), concurrency):
+        batch = mp3_files[i:i+concurrency]
+
+        # Run this batch concurrently
+        tasks = [
+            verify_mp3(mp3_path, total, timeout)
+            for mp3_path in batch
+        ]
+
+        batch_results = await asyncio.gather(*tasks)
+        results.extend(batch_results)
+
+    return results
 
 
 def main():
+    global completed, valid_count
+
     parser = argparse.ArgumentParser(description="Verify MP3 files using ffprobe")
     parser.add_argument(
         "--output",
@@ -89,6 +143,18 @@ def main():
         type=int,
         default=None,
         help="End at this file number (inclusive, e.g., 100 for 0100.mp3)"
+    )
+    parser.add_argument(
+        "--concurrency",
+        type=int,
+        default=os.cpu_count() or 4,
+        help=f"Number of concurrent verification tasks (default: {os.cpu_count() or 4}, based on CPU cores)"
+    )
+    parser.add_argument(
+        "--timeout",
+        type=float,
+        default=5.0,
+        help="Timeout in seconds for each verification (default: 5)"
     )
 
     args = parser.parse_args()
@@ -117,30 +183,35 @@ def main():
             print(f"Range: {args.start or 1} to {args.end or 'end'}")
         return 0
 
+    total = len(mp3_files)
     range_info = ""
     if args.start or args.end:
         range_info = f" (range: {args.start or 1}-{args.end or 'end'})"
+
     print(f"Found {len(mp3_files)} MP3 file(s) in {output_dir}{range_info}")
+    print(f"Concurrency: {args.concurrency}")
     print(f"Verifying...\n")
 
-    broken_files = []
+    # Reset global counters
+    completed = 0
     valid_count = 0
+    interrupted = False
 
-    for mp3_path in mp3_files:
-        is_valid, message = verify_mp3(mp3_path)
+    try:
+        results = asyncio.run(verify_all(mp3_files, args.concurrency, total, args.timeout))
+    except KeyboardInterrupt:
+        interrupted = True
+        print("\n\nInterrupted by user (Ctrl-C)")
+        results = []
 
-        if is_valid:
-            valid_count += 1
-            print(f"✓ {mp3_path.name}")
-        else:
-            broken_files.append((mp3_path, message))
-            print(f"✗ {mp3_path.name}: {message}")
+    # Collect broken files from results
+    broken_files = [(path, error) for path, is_valid, error in results if not is_valid]
 
     # Print summary
     print(f"\n{'='*60}")
     print(f"Summary:")
-    print(f"  Valid files:  {valid_count}/{len(mp3_files)}")
-    print(f"  Broken files: {len(broken_files)}/{len(mp3_files)}")
+    print(f"  Valid files:  {valid_count}/{total}")
+    print(f"  Broken files: {len(broken_files)}/{total}")
 
     if broken_files:
         print(f"\n{'='*60}")
@@ -149,6 +220,9 @@ def main():
             print(f"  - {path.name}")
             print(f"    Error: {error}")
         return 1
+    elif interrupted:
+        print("\nVerification incomplete (interrupted)")
+        return 130  # Standard exit code for SIGINT
     else:
         print("\nAll MP3 files are valid!")
         return 0
