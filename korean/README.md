@@ -15,10 +15,7 @@ This project uses Claude prompts to enhance Korean vocabulary learning materials
 ```
 korean/
 ├── prompts/          # Claude Code prompts (tracked in git)
-│   ├── generate-etymology.md
 │   ├── generate-etymology2.md
-│   ├── generate-examples.md
-│   ├── generate-example2.md
 │   ├── generate-example3.md
 │   ├── generate-notes.md
 │   ├── generate-audio.md

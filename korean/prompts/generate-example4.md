@@ -1,0 +1,29 @@
+Generate natural example sentences for Korean vocabulary entries.
+
+## Requirements
+
+**All generation requirements are in `prompts/requirements-example.md`**
+
+Read and follow all requirements before generating examples.
+
+## Input/Output Format
+
+**Input**: `input/korean-english.tsv`
+- Columns: number, korean, english
+- Total: 1847 entries
+
+**Output**: TSV files (tab-separated)
+- Columns: number, korean, example_ko, example_en
+- Batches of 100 entries each:
+  - `output/examples-v2-1.tsv` (entries 1-100)
+  - `output/examples-v2-2.tsv` (entries 101-200)
+  - ...
+  - `output/examples-v2-19.tsv` (entries 1801-1847)
+
+## Process
+
+1. Read `prompts/requirements-example.md` for complete generation requirements
+2. Process input file in batches of 100 entries
+3. Generate examples following all requirements
+4. Write output to corresponding batch file
+5. Process directly using Korean language understanding (no script-based automation)
