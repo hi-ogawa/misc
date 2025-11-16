@@ -89,7 +89,17 @@ ls output/audio-v2/*.mp3 | wc -l
 
 # Check file sizes (should be ~15KB average)
 du -sh output/audio-v2/
+
+# Verify MP3 integrity using ffprobe
+python scripts/generate-audio-verify.py
 ```
+
+**Verification Strategy**:
+- Uses `ffprobe` (from ffmpeg) to validate each MP3 file
+- Checks: valid format, audio streams, duration > 0
+- Reports broken/corrupted files with error details
+- Script: `scripts/generate-audio-verify.py`
+- All files should pass validation for successful generation
 
 ## Concurrency Settings
 

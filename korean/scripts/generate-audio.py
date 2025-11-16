@@ -15,7 +15,7 @@ completed = 0
 success_count = 0
 
 
-async def generate_audio(number: int, text: str, voice: str, output_dir: Path, skip_existing: bool, total: int, timeout: float, concurrency: int) -> tuple[int, bool, str]:
+async def generate_audio(number: int, text: str, voice: str, output_dir: Path, skip_existing: bool, total: int, timeout: float, concurrency: int, failed_log_path: Path) -> tuple[int, bool, str]:
     """Generate audio file for a single text entry using edge-tts CLI.
 
     Returns:
@@ -55,13 +55,18 @@ async def generate_audio(number: int, text: str, voice: str, output_dir: Path, s
             print(f"  [{completed}/{total}] {message}")
             return (number, True, message)
         else:
-            message = f"ERROR {number:04d} ({duration:.2f}s): {stderr.decode()}"
+            error_msg = stderr.decode().strip()
+            with open(failed_log_path, "a", encoding="utf-8") as f:
+                f.write(f"{number}\tProcess error: {error_msg}\n")
+            message = f"ERROR {number:04d} ({duration:.2f}s): {error_msg}"
             print(f"  [{completed}/{total}] {message}")
             return (number, False, message)
 
     except asyncio.TimeoutError:
         completed += 1
         duration = time.perf_counter() - start_time
+        with open(failed_log_path, "a", encoding="utf-8") as f:
+            f.write(f"{number}\tTimeout after {timeout}s\n")
         message = f"ERROR {number:04d} ({duration:.2f}s): Timeout after {timeout}s"
         print(f"  [{completed}/{total}] {message}")
         return (number, False, message)
@@ -69,12 +74,14 @@ async def generate_audio(number: int, text: str, voice: str, output_dir: Path, s
     except Exception as e:
         completed += 1
         duration = time.perf_counter() - start_time
+        with open(failed_log_path, "a", encoding="utf-8") as f:
+            f.write(f"{number}\t{str(e)}\n")
         message = f"ERROR {number:04d} ({duration:.2f}s): {e}"
         print(f"  [{completed}/{total}] {message}")
         return (number, False, message)
 
 
-async def generate_all(filtered_rows, args, output_dir, total):
+async def generate_all(filtered_rows, args, output_dir, total, failed_log_path):
     """Generate audio files in chunks."""
     concurrency = args.concurrency
 
@@ -92,7 +99,8 @@ async def generate_all(filtered_rows, args, output_dir, total):
                 not args.force,
                 total,
                 args.timeout,
-                concurrency
+                concurrency,
+                failed_log_path
             )
             for row in batch
         ]
@@ -150,7 +158,13 @@ def main():
         "--timeout",
         type=float,
         default=10.0,
-        help="Timeout in seconds for each generation (default: 30)"
+        help="Timeout in seconds for each generation (default: 10)"
+    )
+    parser.add_argument(
+        "--failed-log",
+        type=str,
+        default=None,
+        help="Log file for failed generations (default: <output>/failed.txt)"
     )
 
     args = parser.parse_args()
@@ -202,8 +216,11 @@ def main():
     success_count = 0
     interrupted = False
 
+    # Determine failed log path
+    failed_log_path = Path(args.failed_log) if args.failed_log else output_dir / "failed.txt"
+
     try:
-        asyncio.run(generate_all(filtered_rows, args, output_dir, total))
+        asyncio.run(generate_all(filtered_rows, args, output_dir, total, failed_log_path))
 
     except KeyboardInterrupt:
         interrupted = True
@@ -213,9 +230,15 @@ def main():
     if interrupted:
         print(f"Partially completed: {success_count}/{total} files generated before interruption")
         print(f"To resume, run the same command again (existing files will be skipped)")
-        sys.exit(130)  # Standard exit code for SIGINT
     else:
         print(f"Completed: {success_count}/{total} files generated successfully")
+
+    # Report if there were failures
+    if failed_log_path.exists():
+        print(f"Failed entries logged to: {failed_log_path}")
+
+    if interrupted:
+        sys.exit(130)  # Standard exit code for SIGINT
 
     if success_count < total:
         sys.exit(1)
