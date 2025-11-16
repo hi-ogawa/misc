@@ -38,8 +38,8 @@ korean/
 ├── input/
 │   ├── korean.tsv                 # Vocabulary reference (5720 words: TOPIK 1+2)
 │   ├── koreantopik2.tsv           # Base TOPIK 2 file (3873 entries)
-│   └── koreantopik2-batch-N.tsv   # Pre-split batches (1-39, pending)
-├── output/koreantopik2/           # TOPIK 2 enhancement outputs (pending)
+│   └── koreantopik2-batch-N.tsv   # Pre-split batches (1-39)
+├── output/koreantopik2/           # TOPIK 2 enhancement outputs
 │   ├── etymology-N.tsv            # Etymology batches (1-39)
 │   ├── examples-N.tsv             # Example sentence batches (1-39)
 │   ├── notes-N.tsv                # Study notes batches (1-39)
@@ -47,8 +47,9 @@ korean/
 │   ├── examples-all.tsv           # Consolidated examples
 │   ├── notes-all.tsv              # Consolidated notes
 │   ├── master-all.tsv             # All columns combined
-│   └── audio/                     # Audio files directory
-│       └── koreantopik2_*.mp3     # Audio files (3873 files)
+│   └── audio/                     # Audio files directory (flat structure)
+│       ├── koreantopik2_korean_*.mp3     # 3,873 vocabulary audio files
+│       └── koreantopik2_example_ko_*.mp3 # 3,873 example audio files
 ├── prompts/
 │   ├── requirements-etymology.md  # Etymology requirements (shared)
 │   ├── requirements-example.md    # Example requirements (shared)
@@ -57,13 +58,13 @@ korean/
 │       ├── generate-etymology.md  # Etymology execution strategy
 │       ├── generate-examples.md   # Examples execution strategy
 │       ├── generate-notes.md      # Notes execution strategy
-│       └── generate-audio.md      # Audio generation procedure
+│       └── generate-audio-dual.md # Dual audio generation (vocab + example)
 ├── topik2/                        # Original extraction work
 │   ├── data/csv-extra/all.csv     # Raw extracted data with Hanja/Japanese
 │   ├── readme.md                  # Extraction documentation
 │   └── links.md                   # 39 lesson URLs
 └── scripts/
-    ├── generate-audio.py          # Audio generation script
+    ├── generate-audio.py          # Audio generation script (supports dual audio)
     └── generate-audio-verify.py   # Audio verification script
 ```
 
@@ -109,12 +110,18 @@ korean/
 - [x] Batches 1-39 → `output/koreantopik2/notes-N.tsv`
 - [x] Consolidate → `output/koreantopik2/notes-all.tsv`
 
-#### 2.4 Audio Generation
+#### 2.4 Audio Generation (Dual Audio)
 
-**Prompt**: `prompts/koreantopik2/generate-audio.md`
+**Prompt**: `prompts/koreantopik2/generate-audio-dual.md`
+
+**Two audio types**:
+- **Vocabulary audio** (`korean` field): Isolated word/phrase pronunciation
+- **Example audio** (`example_ko` field): Example sentence pronunciation
 
 **Progress**:
-- [x] Generate all 3873 audio files → `output/koreantopik2/audio/`
+- [x] Example audio generated (3,873 files as `koreantopik2_NNNN.mp3`)
+- [ ] Rename existing example audio → `koreantopik2_example_ko_*.mp3`
+- [ ] Generate vocabulary audio (3,873 files) → `koreantopik2_korean_*.mp3`
 
 ### Phase 3: Consolidation & Import
 
@@ -136,24 +143,28 @@ korean/
 
 **Output**: `output/koreantopik2/master-all.tsv`
 
-**Columns** (8 total):
+**Columns** (9 total):
 ```
-number	korean	english	etymology	example_ko	example_en	notes	example_ko_audio
+number	korean	english	etymology	example_ko	example_en	notes	korean_audio	example_ko_audio
 ```
 
-**Audio field format**:
-- `example_ko_audio`: `[sound:koreantopik2_NNNN.mp3]`
+**Audio field formats**:
+- `korean_audio`: `[sound:koreantopik2_korean_0001.mp3]` (isolated word pronunciation)
+- `example_ko_audio`: `[sound:koreantopik2_example_ko_0001.mp3]` (sentence pronunciation)
 
 **Steps**:
 1. [ ] Join all TSV files on `number` column
-2. [ ] Add `example_ko_audio` column with format `[sound:koreantopik2_{number:04d}.mp3]`
-3. [ ] Validate: 3873 entries (+ header = 3874 lines)
-4. [ ] Verify all audio file references exist
+2. [ ] Add `korean_audio` column with format `[sound:koreantopik2_korean_{number:04d}.mp3]`
+3. [ ] Add `example_ko_audio` column with format `[sound:koreantopik2_example_ko_{number:04d}.mp3]`
+4. [ ] Validate: 3873 entries (+ header = 3874 lines)
+5. [ ] Verify all audio file references exist
 
 **Quality checks**:
 - All rows must have matching number across all source files
 - No missing columns (empty strings are OK)
-- Audio file path format must be exact: `[sound:koreantopik2_NNNN.mp3]`
+- Audio file path formats must be exact:
+  - Vocabulary: `[sound:koreantopik2_korean_NNNN.mp3]`
+  - Example: `[sound:koreantopik2_example_ko_NNNN.mp3]`
 
 #### 3.3 Manual Review & Google Sheets
 - [ ] Upload to Google Drive
@@ -205,13 +216,14 @@ number	korean	notes
 5	가능	불가능
 ```
 
-**Master file** (8 columns):
+**Master file** (9 columns):
 ```
-number	korean	english	etymology	example_ko	example_en	notes	example_ko_audio
+number	korean	english	etymology	example_ko	example_en	notes	korean_audio	example_ko_audio
 ```
 
-Audio field format:
-- `example_ko_audio`: `[sound:koreantopik2_0001.mp3]`
+Audio field formats:
+- `korean_audio`: `[sound:koreantopik2_korean_0001.mp3]`
+- `example_ko_audio`: `[sound:koreantopik2_example_ko_0001.mp3]`
 
 ## Key Differences from TOPIK 1
 
@@ -221,9 +233,10 @@ Audio field format:
 | Batches | 19 | 39 |
 | Last batch size | 47 entries | 73 entries |
 | Processing time | ~X hours | ~2X hours (est.) |
-| Audio files | 1,847 MP3s | 3,873 MP3s |
+| Audio files | 1,847 MP3s | 7,746 MP3s (korean + example_ko) |
+| Audio structure | Single audio | Dual audio (korean + example_ko) |
 | Vocabulary level | Beginner | Intermediate-Advanced |
-| File prefix | `koreantopik1_` | `koreantopik2_` |
+| File naming | `koreantopik1_NNNN.mp3` | `koreantopik2_korean_NNNN.mp3`<br>`koreantopik2_example_ko_NNNN.mp3` |
 | Output directory | `output/` | `output/koreantopik2/` |
 | Prompts directory | `prompts/` | `prompts/koreantopik2/` |
 | Requirements | `prompts/requirements-*.md` | Same (shared) |
@@ -246,10 +259,12 @@ All enhancement generation uses isolated subagents for clean, parallel processin
 4. **Resource monitoring**: TOPIK 2 is advanced vocabulary, may need more tokens per word
 5. **Requirements reuse**: All prompts reference shared `requirements-*.md` files
 
-### Audio Generation Strategy
-- Generate in chunks (10 batches = ~1000 files at a time)
-- Verify file creation after each chunk
-- Avoid overwhelming edge-tts service
+### Audio Generation Strategy (Dual Audio)
+- **Two sets**: Vocabulary audio (isolated) + Example audio (contextual)
+- Generate in chunks with concurrency (5-10 concurrent tasks recommended)
+- Verify file creation after each generation
+- Edge TTS is free and reliable, but respect rate limits
+- Total storage: ~100-120MB for 7,746 MP3 files
 
 ### Validation Checkpoints
 After each phase:

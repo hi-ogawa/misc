@@ -15,15 +15,19 @@ completed = 0
 success_count = 0
 
 
-async def generate_audio(number: int, text: str, voice: str, output_dir: Path, skip_existing: bool, total: int, timeout: float, concurrency: int, failed_log_path: Path) -> tuple[int, bool, str]:
+async def generate_audio(number: int, text: str, voice: str, output_dir: Path, skip_existing: bool, total: int, timeout: float, concurrency: int, failed_log_path: Path, prefix: str = "") -> tuple[int, bool, str]:
     """Generate audio file for a single text entry using edge-tts CLI.
+
+    Args:
+        prefix: Optional filename prefix (e.g., "vocab_" or "example_")
 
     Returns:
         Tuple of (number, success, message)
     """
     global completed, success_count
 
-    output_file = output_dir / f"{number:04d}.mp3"
+    filename = f"{prefix}{number:04d}.mp3" if prefix else f"{number:04d}.mp3"
+    output_file = output_dir / filename
 
     if skip_existing and output_file.exists():
         completed += 1
@@ -81,7 +85,7 @@ async def generate_audio(number: int, text: str, voice: str, output_dir: Path, s
         return (number, False, message)
 
 
-async def generate_all(filtered_rows, args, output_dir, total, failed_log_path):
+async def generate_all(filtered_rows, args, output_dir, total, failed_log_path, field_name: str, prefix: str):
     """Generate audio files in chunks."""
     concurrency = args.concurrency
 
@@ -93,14 +97,15 @@ async def generate_all(filtered_rows, args, output_dir, total, failed_log_path):
         tasks = [
             generate_audio(
                 int(row["number"]),
-                str(row["example_ko"]),
+                str(row[field_name]),
                 args.voice,
                 output_dir,
                 not args.force,
                 total,
                 args.timeout,
                 concurrency,
-                failed_log_path
+                failed_log_path,
+                prefix
             )
             for row in batch
         ]
@@ -123,6 +128,18 @@ def main():
         type=str,
         default="output/audio",
         help="Output directory (default: output/audio)"
+    )
+    parser.add_argument(
+        "--field",
+        type=str,
+        default="example_ko",
+        help="TSV column to generate audio from (default: example_ko)"
+    )
+    parser.add_argument(
+        "--prefix",
+        type=str,
+        default="",
+        help="Filename prefix (e.g., 'vocab_' or 'example_')"
     )
     parser.add_argument(
         "--voice",
@@ -183,7 +200,7 @@ def main():
     rows = []
     with open(input_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f, delimiter="\t")
-        required_columns = ["number", "example_ko"]
+        required_columns = ["number", args.field]
 
         # Check columns
         if not all(col in reader.fieldnames for col in required_columns):
@@ -206,7 +223,9 @@ def main():
 
     total = len(filtered_rows)
     print(f"Generating audio for entries {args.start}-{args.end} ({total} total)")
+    print(f"Field: {args.field}")
     print(f"Voice: {args.voice}")
+    print(f"Prefix: '{args.prefix}' (filename format: {args.prefix}NNNN.mp3)")
     print(f"Concurrency: {args.concurrency}")
     print(f"Output: {output_dir}/")
     print()
@@ -220,7 +239,7 @@ def main():
     failed_log_path = Path(args.failed_log) if args.failed_log else output_dir / "failed.txt"
 
     try:
-        asyncio.run(generate_all(filtered_rows, args, output_dir, total, failed_log_path))
+        asyncio.run(generate_all(filtered_rows, args, output_dir, total, failed_log_path, args.field, args.prefix))
 
     except KeyboardInterrupt:
         interrupted = True
