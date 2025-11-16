@@ -90,43 +90,70 @@ korean/
 **Prompt**: `prompts/koreantopik2/generate-etymology.md`
 
 **Progress** (39 batches):
-- [ ] Batches 1-39 → `output/koreantopik2/etymology-N.tsv`
-- [ ] Consolidate → `output/koreantopik2/etymology-all.tsv`
+- [x] Batches 1-39 → `output/koreantopik2/etymology-N.tsv`
+- [x] Consolidate → `output/koreantopik2/etymology-all.tsv`
 
 #### 2.2 Example Sentences
 
 **Prompt**: `prompts/koreantopik2/generate-examples.md`
 
 **Progress** (39 batches):
-- [ ] Batches 1-39 → `output/koreantopik2/examples-N.tsv`
-- [ ] Consolidate → `output/koreantopik2/examples-all.tsv`
+- [x] Batches 1-39 → `output/koreantopik2/examples-N.tsv`
+- [x] Consolidate → `output/koreantopik2/examples-all.tsv`
 
 #### 2.3 Study Notes
 
 **Prompt**: `prompts/koreantopik2/generate-notes.md`
 
 **Progress** (39 batches):
-- [ ] Batches 1-39 → `output/koreantopik2/notes-N.tsv`
-- [ ] Consolidate → `output/koreantopik2/notes-all.tsv`
+- [x] Batches 1-39 → `output/koreantopik2/notes-N.tsv`
+- [x] Consolidate → `output/koreantopik2/notes-all.tsv`
 
 #### 2.4 Audio Generation
 
 **Prompt**: `prompts/koreantopik2/generate-audio.md`
 
 **Progress**:
-- [ ] Generate all 3873 audio files → `output/koreantopik2/audio/`
+- [x] Generate all 3873 audio files → `output/koreantopik2/audio/`
 
 ### Phase 3: Consolidation & Import
 
 #### 3.1 Consolidate Outputs
-- [ ] Create `output/koreantopik2/etymology-all.tsv` (merge batches 1-39)
-- [ ] Create `output/koreantopik2/examples-all.tsv` (merge batches 1-39)
-- [ ] Create `output/koreantopik2/notes-all.tsv` (merge batches 1-39)
+- [x] Create `output/koreantopik2/etymology-all.tsv` (merge batches 1-39)
+- [x] Create `output/koreantopik2/examples-all.tsv` (merge batches 1-39)
+- [x] Create `output/koreantopik2/notes-all.tsv` (merge batches 1-39)
 
 #### 3.2 Create Master File
-- [ ] Combine all columns: `number, korean, etymology, english, example_ko, example_en, notes, audio`
-- [ ] Output: `output/koreantopik2/master-all.tsv`
-- [ ] Validate: 3873 entries (+ header)
+
+**Goal**: Combine all enhancement outputs into a single TSV file ready for Anki import.
+
+**Input files**:
+- `input/koreantopik2.tsv` (base: number, korean, english)
+- `output/koreantopik2/etymology-all.tsv` (etymology column)
+- `output/koreantopik2/examples-all.tsv` (example_ko, example_en columns)
+- `output/koreantopik2/notes-all.tsv` (notes column)
+- Audio files: `output/koreantopik2/audio/koreantopik2_*.mp3`
+
+**Output**: `output/koreantopik2/master-all.tsv`
+
+**Columns** (8 total):
+```
+number	korean	english	etymology	example_ko	example_en	notes	example_ko_audio
+```
+
+**Audio field format**:
+- `example_ko_audio`: `[sound:koreantopik2_NNNN.mp3]`
+
+**Steps**:
+1. [ ] Join all TSV files on `number` column
+2. [ ] Add `example_ko_audio` column with format `[sound:koreantopik2_{number:04d}.mp3]`
+3. [ ] Validate: 3873 entries (+ header = 3874 lines)
+4. [ ] Verify all audio file references exist
+
+**Quality checks**:
+- All rows must have matching number across all source files
+- No missing columns (empty strings are OK)
+- Audio file path format must be exact: `[sound:koreantopik2_NNNN.mp3]`
 
 #### 3.3 Manual Review & Google Sheets
 - [ ] Upload to Google Drive
@@ -180,8 +207,11 @@ number	korean	notes
 
 **Master file** (8 columns):
 ```
-number	korean	etymology	english	example_ko	example_en	notes	audio
+number	korean	english	etymology	example_ko	example_en	notes	example_ko_audio
 ```
+
+Audio field format:
+- `example_ko_audio`: `[sound:koreantopik2_0001.mp3]`
 
 ## Key Differences from TOPIK 1
 

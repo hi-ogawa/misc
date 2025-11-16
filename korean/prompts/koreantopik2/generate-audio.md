@@ -77,14 +77,3 @@ cp output/koreantopik2/audio/koreantopik2_*.mp3 ~/.local/share/Anki2/"User 1"/co
 ```
 
 This copies all 3,873 audio files to Anki's media folder so they can be referenced in cards.
-
-### 4. Prepare Anki import file
-
-Create consolidated TSV with all fields for Anki import:
-- Columns: `number`, `korean`, `english`, `etymology`, `example_ko`, `example_en`, `notes`, `example_ko_audio`
-- Audio field format: `[sound:koreantopik2_NNNN.mp3]`
-
-Import in Anki:
-- File → Import → Select consolidated TSV
-- Verify field mapping
-- Import into "Korean TOPIK 2" deck
