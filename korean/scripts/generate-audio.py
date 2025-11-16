@@ -40,8 +40,9 @@ async def generate_audio(number: int, text: str, voice: str, output_dir: Path, s
 
         # Wrap subprocess execution with timeout
         async def run_tts():
+            # Use --text=value format to avoid issues with text starting with hyphens
             process = await asyncio.create_subprocess_exec(
-                "edge-tts", "--voice", voice, "--text", text, "--write-media", str(output_file),
+                "edge-tts", f"--voice={voice}", f"--text={text}", f"--write-media={str(output_file)}",
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE
             )

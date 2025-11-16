@@ -119,9 +119,8 @@ korean/
 - **Example audio** (`example_ko` field): Example sentence pronunciation
 
 **Progress**:
-- [x] Example audio generated (3,873 files as `koreantopik2_NNNN.mp3`)
-- [ ] Rename existing example audio → `koreantopik2_example_ko_*.mp3`
 - [ ] Generate vocabulary audio (3,873 files) → `koreantopik2_korean_*.mp3`
+- [ ] Generate example audio (3,873 files) → `koreantopik2_example_ko_*.mp3`
 
 ### Phase 3: Consolidation & Import
 

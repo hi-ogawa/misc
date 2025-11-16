@@ -12,8 +12,7 @@ Generate two sets of audio files for TOPIK 2 vocabulary:
 - **Anki flexibility**: Use both audio types in flashcards
 
 ## Status
-✅ **Example audio exists** (3,873 files as `koreantopik2_NNNN.mp3` - needs renaming)
-⏳ **Vocabulary audio pending**
+⏳ **PENDING** - Ready to generate after examples are complete
 
 ## Input Files
 - **Vocabulary**: `input/koreantopik2.tsv` (columns: number, korean, english)
@@ -37,35 +36,6 @@ The `scripts/generate-audio.py` script supports:
 
 ## Generation Steps
 
-### Step 0: Rename Existing Example Audio Files
-
-The existing example audio files need to be renamed from `koreantopik2_NNNN.mp3` to `koreantopik2_example_ko_NNNN.mp3`:
-
-```bash
-cd output/koreantopik2/audio
-
-# Rename existing example audio files
-for file in koreantopik2_[0-9][0-9][0-9][0-9].mp3; do
-  number="${file#koreantopik2_}"
-  number="${number%.mp3}"
-  mv "$file" "koreantopik2_example_ko_${number}.mp3"
-done
-
-cd -
-```
-
-**Result**: 3,873 files renamed from `koreantopik2_NNNN.mp3` to `koreantopik2_example_ko_NNNN.mp3`
-
-**Verification**:
-```bash
-ls output/koreantopik2/audio/koreantopik2_example_ko_*.mp3 | wc -l
-# Expected: 3873
-
-# Verify no old files remain
-ls output/koreantopik2/audio/koreantopik2_[0-9][0-9][0-9][0-9].mp3 2>/dev/null | wc -l
-# Expected: 0
-```
-
 ### Step 1: Generate Vocabulary Audio
 
 ```bash
@@ -88,9 +58,7 @@ python scripts/generate-audio.py \
 
 **Result**: `koreantopik2_korean_0001.mp3` to `koreantopik2_korean_3873.mp3` in `output/koreantopik2/audio/`
 
-### Step 2: Generate Example Audio (Optional - Already Completed)
-
-**Note**: Example audio files already exist (renamed in Step 0). This step is only needed if you want to regenerate them.
+### Step 2: Generate Example Audio
 
 ```bash
 python scripts/generate-audio.py \
@@ -98,7 +66,6 @@ python scripts/generate-audio.py \
   --field example_ko \
   --prefix koreantopik2_example_ko_ \
   --output output/koreantopik2/audio \
-  --force \
   --concurrency 5
 ```
 
@@ -107,7 +74,6 @@ python scripts/generate-audio.py \
 - `--field example_ko`: Read from `example_ko` column
 - `--prefix koreantopik2_example_ko_`: Generate files as `koreantopik2_example_ko_NNNN.mp3`
 - `--output`: Same audio directory (flat structure)
-- `--force`: Overwrite existing files
 
 **Duration**: ~1-2 hours for 3,873 files at concurrency=5
 
