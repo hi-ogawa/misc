@@ -91,6 +91,13 @@ ls ~/.local/share/Anki2/"사용자 1"/collection.media/koreantopik1_korean_*.mp3
 # Expected: 1847
 ```
 
+**Export/Import file for Anki**:
+- Based on `output/koreantopik1/koreantopik1_anki_updated.txt` (existing fields).
+- Generated `output/koreantopik1/koreantopik1_anki_import.tsv` with audio fields updated to the new filenames:
+  - example audio: `[sound:koreantopik1_example_ko_NNNN.mp3]`
+  - vocab audio: `[sound:koreantopik1_korean_NNNN.mp3]`
+  - Rows: 1,847
+
 ### Phase 4: Update Anki Card Template
 
 **Current card structure** (assumed):
