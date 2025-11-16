@@ -72,99 +72,49 @@ korean/
 ### Phase 1: Preparation & Setup
 
 #### 1.1 Create TOPIK 2 Prompts Directory
-- [x] Create `prompts/koreantopik2/` directory
-- [x] Create `prompts/koreantopik2/generate-etymology.md`
-  - References: `prompts/requirements-etymology.md` (shared)
-  - Input: `input/koreantopik2-batch-N.tsv` (39 batches)
-  - Output: `output/koreantopik2/etymology-N.tsv`
-  - Strategy: Subagent-based parallel execution
-- [x] Create `prompts/koreantopik2/generate-examples.md`
-  - References: `prompts/requirements-example.md` (shared)
-  - Input: `input/koreantopik2-batch-N.tsv` (39 batches)
-  - Output: `output/koreantopik2/examples-N.tsv`
-  - Strategy: Subagent-based parallel execution
-- [x] Create `prompts/koreantopik2/generate-notes.md`
-  - References: `prompts/requirements-notes.md` (shared)
-  - Input 1: `input/korean.tsv` (5720 words for cross-referencing)
-  - Input 2: `input/koreantopik2-batch-N.tsv` (batch files)
-  - Output: `output/koreantopik2/notes-N.tsv`
-  - Strategy: Two-step input (vocab reference + explicit batch)
-- [x] Create `prompts/koreantopik2/generate-audio.md`
-  - Input: `output/koreantopik2/examples-all.tsv`
-  - Output: `output/koreantopik2/audio/koreantopik2_NNNN.mp3`
-  - Uses: `scripts/generate-audio.py`
+- [x] Create `prompts/koreantopik2/` directory with generation prompts:
+  - [x] `generate-etymology.md` (references `requirements-etymology.md`)
+  - [x] `generate-examples.md` (references `requirements-example.md`)
+  - [x] `generate-notes.md` (references `requirements-notes.md`)
+  - [x] `generate-audio.md` (uses `scripts/generate-audio.py`)
 
 #### 1.2 Pre-split Input File
-- [x] Vocabulary reference: `input/korean.tsv` (already exists)
-  - Contains: 5720 Korean words (TOPIK 1 + TOPIK 2)
-  - Format: Single column, one word per line, no header
-  - Used by notes generation for cross-referencing
+- [x] Vocabulary reference: `input/korean.tsv` (5720 words: TOPIK 1+2)
 - [x] Create `output/koreantopik2/` directory
-- [x] Split `input/koreantopik2.tsv` into batches:
-  - [x] `input/koreantopik2-batch-1.tsv` through `input/koreantopik2-batch-39.tsv`
-  - Batches 1-38: 100 entries each (+ header)
-  - Batch 39: 73 entries (entries 3801-3873, + header)
-  - Total: 3873 entries verified
+- [x] Split into 39 batches: `input/koreantopik2-batch-{1..39}.tsv` (3873 entries verified)
 
 ### Phase 2: Enhancement Generation
 
 #### 2.1 Etymology Enhancement
-Generate Hanja and Japanese cognates for Sino-Korean words.
 
-**Format**: `number, korean, etymology`
-- Example: `32	가정	假定 / 仮定`
+**Prompt**: `prompts/koreantopik2/generate-etymology.md`
 
 **Progress** (39 batches):
-- [ ] `output/koreantopik2/etymology-1.tsv` (words 1-100)
-- [ ] `output/koreantopik2/etymology-2.tsv` (words 101-200)
-- [ ] ... (batches 3-38)
-- [ ] `output/koreantopik2/etymology-39.tsv` (words 3801-3873)
+- [ ] Batches 1-39 → `output/koreantopik2/etymology-N.tsv`
 - [ ] Consolidate → `output/koreantopik2/etymology-all.tsv`
 
 #### 2.2 Example Sentences
-Natural Korean example sentences with English translations.
 
-**Format**: `number, korean, example_ko, example_en`
-
-**Strategy**: Use subagents for parallel processing (39 independent batches)
+**Prompt**: `prompts/koreantopik2/generate-examples.md`
 
 **Progress** (39 batches):
-- [ ] `output/koreantopik2/examples-1.tsv` (words 1-100)
-- [ ] `output/koreantopik2/examples-2.tsv` (words 101-200)
-- [ ] ... (batches 3-38)
-- [ ] `output/koreantopik2/examples-39.tsv` (words 3801-3873)
+- [ ] Batches 1-39 → `output/koreantopik2/examples-N.tsv`
 - [ ] Consolidate → `output/koreantopik2/examples-all.tsv`
 
 #### 2.3 Study Notes
-Related words, antonyms, honorific pairs, etc.
 
-**Format**: `number, korean, notes`
-
-**Strategy**: Two-step input for better cross-referencing
-- Input 1: Vocabulary reference (`input/korean.tsv` - 5720 words: TOPIK 1+2)
-- Input 2: Batch file (`input/koreantopik2-batch-N.tsv` - 100 entries)
-- Output: Only entries from batch file
-- Rationale: Vocab reference enables finding antonyms/pairs across all TOPIK vocabulary
+**Prompt**: `prompts/koreantopik2/generate-notes.md`
 
 **Progress** (39 batches):
-- [ ] `output/koreantopik2/notes-1.tsv` (words 1-100)
-- [ ] `output/koreantopik2/notes-2.tsv` (words 101-200)
-- [ ] ... (batches 3-38)
-- [ ] `output/koreantopik2/notes-39.tsv` (words 3801-3873)
+- [ ] Batches 1-39 → `output/koreantopik2/notes-N.tsv`
 - [ ] Consolidate → `output/koreantopik2/notes-all.tsv`
 
 #### 2.4 Audio Generation
-Korean pronunciation audio using edge-tts.
 
-**Naming**: `koreantopik2_0001.mp3` through `koreantopik2_3873.mp3`
-
-**Strategy**: Generate in chunks to avoid timeouts (e.g., 10 batches = 1000 files at a time)
+**Prompt**: `prompts/koreantopik2/generate-audio.md`
 
 **Progress**:
-- [ ] Batches 1-10 (files 0001-1000)
-- [ ] Batches 11-20 (files 1001-2000)
-- [ ] Batches 21-30 (files 2001-3000)
-- [ ] Batches 31-39 (files 3001-3873)
+- [ ] Generate all 3873 audio files → `output/koreantopik2/audio/`
 
 ### Phase 3: Consolidation & Import
 
