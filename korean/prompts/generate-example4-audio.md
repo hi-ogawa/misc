@@ -33,6 +33,7 @@ python scripts/generate-audio.py \
 ```
 
 ## Verify generation
+
 ```bash
 # Count generated files
 ls output/audio-v2/*.mp3 | wc -l
@@ -45,6 +46,25 @@ python scripts/generate-audio-verify.py --output output/audio-v2
 
 # Verify specific range
 python scripts/generate-audio-verify.py --output output/audio-v2 --start 1 --end 100
+
+# Analyze audio duration statistics
+python scripts/generate-audio-stats.py --output output/audio-v2
+============================================================
+AUDIO DURATION STATISTICS
+============================================================
+Files analyzed:  1847/1847
+Total duration:  5471.83s (91.20 minutes)
+Average:         2.96s
+Median:          2.93s
+Min:             1.73s
+Max:             5.59s
+Std Dev:         0.40s
+
+Percentiles:
+  10th: 2.50s
+  25th: 2.69s
+  75th: 3.22s
+  90th: 3.46s
 ```
 
 **Verification Strategy**:
@@ -55,6 +75,15 @@ python scripts/generate-audio-verify.py --output output/audio-v2 --start 1 --end
 - Script: `scripts/generate-audio-verify.py` (see `--help` for options)
 - Supports range filtering (`--start`, `--end`)
 - All files should pass validation for successful generation
+
+**Statistics Analysis**:
+- Script: `scripts/generate-audio-stats.py` (see `--help` for options)
+- Provides: total duration, average, median, min, max, std dev, percentiles
+- Identifies outliers (files >10s or <1s)
+- Expected stats for 1847 files:
+  - Average: ~3s per file
+  - Total duration: ~90 minutes
+  - Range: 1.5s - 6s (typical Korean sentence lengths)
 
 ## Post-Processing Steps
 
