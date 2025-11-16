@@ -63,6 +63,10 @@ Source: `output/koreantopik1/koreantopik1_v2_audio.zip` (files `koreantopik1_v2_
 - Unzipped to `output/koreantopik1/audio/`.
 - Renamed all v2 files to `koreantopik1_example_ko_NNNN.mp3` (1,847 files) in `output/koreantopik1/audio/`.
 
+**Verification (done):** `python scripts/generate-audio-verify.py --output output/koreantopik1/audio --concurrency 12` — all 3,694 MP3s (example + vocab) passed `ffprobe`.
+**Duration stats:** `python scripts/generate-audio-stats.py --output output/koreantopik1/audio --concurrency 12`
+- Files analyzed: 3,694; Avg 2.31s; Median 2.11s; Min 1.18s; Max 5.59s; Std Dev 0.72s; Total 142.11 minutes. (Covers both example and vocab sets.)
+
 **Apply to Anki media (overwrite old example audio names):**
 ```bash
 cp output/koreantopik1/audio/koreantopik1_example_ko_*.mp3 ~/.local/share/Anki2/"사용자 1"/collection.media/
