@@ -131,12 +131,15 @@ def main():
                 number = int(fields[0])
             except ValueError:
                 print(f"Warning: Could not parse number from: {fields[0]}", file=sys.stderr)
-                outfile.write(line + "\n")
+                continue
+
+            # Skip rows outside the range
+            if not (start <= number <= end):
                 rows_unchanged += 1
                 continue
 
-            # Update fields if we have new data for this number AND it's in range
-            if number in new_examples and start <= number <= end:
+            # Update fields if we have new data for this number
+            if number in new_examples:
                 # Update column indices (0-based):
                 # 0: number, 1: korean, 2: english, 3: example_ko, 4: example_en, 5: etymology, 6: notes, 7: example_ko_audio
                 fields[3] = new_examples[number]["example_ko"]  # example_ko
@@ -146,7 +149,7 @@ def main():
             else:
                 rows_unchanged += 1
 
-            # Write updated line
+            # Write updated line (only rows in range)
             outfile.write("\t".join(fields) + "\n")
 
     print()
@@ -156,13 +159,6 @@ def main():
     print(f"  Unchanged:      {rows_unchanged}")
     print()
     print(f"Output written to: {output_file}")
-    print()
-    print("Next steps:")
-    if rows_updated > 0:
-        print(f"1. Copy audio files: cp output/audio-v2/{args.audio_prefix}_*.mp3 ~/.local/share/Anki2/\"User 1\"/collection.media/")
-        print(f"2. Import {output_file} in Anki (File → Import)")
-    else:
-        print("No rows were updated. Check your range settings or input data.")
 
     return 0
 

@@ -161,7 +161,9 @@ This script:
 - Reads existing Anki export (preserves all columns + tags)
 - Updates 3 columns: `example_ko`, `example_en`, `example_ko_audio` from v2 data
 - Preserves all other columns: `korean`, `english`, `etymology`, `notes`, tags, review history
-- Supports range filtering with `--start` and `--end`
+- Supports range filtering with `--start` and `--end`:
+  - Without range: outputs all 1847 cards with updates
+  - With range: outputs ONLY the specified range (e.g., `--start 1 --end 100` outputs 100 rows)
 - Outputs complete Anki import file with updated examples
 
 3. Import merged file in Anki:
