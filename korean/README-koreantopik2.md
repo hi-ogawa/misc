@@ -200,6 +200,12 @@ number	korean	etymology	english	example_ko	example_en	notes	audio
 
 ## Strategy & Recommendations
 
+### Subagent Architecture
+
+All enhancement generation uses isolated subagents for clean, parallel processing.
+
+**See `prompts/subagent-management.md` for complete guidelines.**
+
 ### Processing Strategy
 1. **Start small**: Process batches 1-2 end-to-end to validate workflow
 2. **Parallel processing**: Use subagents for all enhancement types (39 agents in parallel)
