@@ -55,39 +55,23 @@ du -sh output/koreantopik1/audio/
 # Expected: ~50M
 ```
 
-### Phase 2: Rename Existing Example Audio in Anki
+### Phase 2: Use latest example audio (v2) and rename
 
-The existing `koreantopik1_NNNN.mp3` files in Anki need to be renamed to `koreantopik1_example_ko_NNNN.mp3` to match the new convention.
+Source: `output/koreantopik1/koreantopik1_v2_audio.zip` (files `koreantopik1_v2_NNNN.mp3`).
 
-**Anki media directory**: `~/.local/share/Anki2/"사용자 1"/collection.media/`
+**Done (staging):**
+- Unzipped to `output/koreantopik1/audio/`.
+- Renamed all v2 files to `koreantopik1_example_ko_NNNN.mp3` (1,847 files) in `output/koreantopik1/audio/`.
 
-#### Step 1: Rename existing example audio files
-
+**Apply to Anki media (overwrite old example audio names):**
 ```bash
-cd ~/.local/share/Anki2/"사용자 1"/collection.media/
-
-# Rename existing example audio files
-for file in koreantopik1_[0-9][0-9][0-9][0-9].mp3; do
-  number="${file#koreantopik1_}"
-  number="${number%.mp3}"
-  mv "$file" "koreantopik1_example_ko_${number}.mp3"
-done
-
-cd -
+cp output/koreantopik1/audio/koreantopik1_example_ko_*.mp3 ~/.local/share/Anki2/"사용자 1"/collection.media/
 ```
 
-**Result**: 1,847 files renamed from `koreantopik1_NNNN.mp3` to `koreantopik1_example_ko_NNNN.mp3`
-
-#### Step 2: Verify rename
-
+**Verification** (after copying):
 ```bash
-# Count renamed files
-ls ~/.local/share/Anki2/"사용자 1"/collection.media/koreantopik1_example_ko_*.mp3 | wc -l
-# Expected: 1847
-
-# Verify no old files remain
-ls ~/.local/share/Anki2/"사용자 1"/collection.media/koreantopik1_[0-9][0-9][0-9][0-9].mp3 2>/dev/null | wc -l
-# Expected: 0
+ls ~/.local/share/Anki2/"사용자 1"/collection.media/koreantopik1_example_ko_*.mp3 | wc -l   # expect 1847
+ls ~/.local/share/Anki2/"사용자 1"/collection.media/koreantopik1_[0-9][0-9][0-9][0-9].mp3 2>/dev/null | wc -l  # expect 0 (if old names removed)
 ```
 
 ### Phase 3: Copy New Vocabulary Audio to Anki
