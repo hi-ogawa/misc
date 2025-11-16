@@ -7,6 +7,7 @@ import argparse
 import asyncio
 import csv
 import sys
+import time
 from pathlib import Path
 
 # Global counters (safe in single-threaded async)
@@ -14,7 +15,7 @@ completed = 0
 success_count = 0
 
 
-async def generate_audio(number: int, text: str, voice: str, output_dir: Path, skip_existing: bool, total: int) -> tuple[int, bool, str]:
+async def generate_audio(number: int, text: str, voice: str, output_dir: Path, skip_existing: bool, total: int, timeout: float, concurrency: int) -> tuple[int, bool, str]:
     """Generate audio file for a single text entry using edge-tts CLI.
 
     Returns:
@@ -31,29 +32,44 @@ async def generate_audio(number: int, text: str, voice: str, output_dir: Path, s
         return (number, True, message)
 
     try:
-        process = await asyncio.create_subprocess_exec(
-            "edge-tts", "--voice", voice, "--text", text, "--write-media", str(output_file),
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
+        start_time = time.perf_counter()
 
-        stdout, stderr = await process.communicate()
+        # Wrap subprocess execution with timeout
+        async def run_tts():
+            process = await asyncio.create_subprocess_exec(
+                "edge-tts", "--voice", voice, "--text", text, "--write-media", str(output_file),
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
+            stdout, stderr = await process.communicate()
+            return process.returncode, stdout, stderr
 
+        returncode, stdout, stderr = await asyncio.wait_for(run_tts(), timeout=timeout)
+
+        duration = time.perf_counter() - start_time
         completed += 1
 
-        if process.returncode == 0:
+        if returncode == 0:
             success_count += 1
-            message = f"Generated {number:04d}: {text}"
+            message = f"Generated {number:04d} ({duration:.2f}s): {text}"
             print(f"  [{completed}/{total}] {message}")
             return (number, True, message)
         else:
-            message = f"ERROR {number:04d}: {stderr.decode()}"
+            message = f"ERROR {number:04d} ({duration:.2f}s): {stderr.decode()}"
             print(f"  [{completed}/{total}] {message}")
             return (number, False, message)
 
+    except asyncio.TimeoutError:
+        completed += 1
+        duration = time.perf_counter() - start_time
+        message = f"ERROR {number:04d} ({duration:.2f}s): Timeout after {timeout}s"
+        print(f"  [{completed}/{total}] {message}")
+        return (number, False, message)
+
     except Exception as e:
         completed += 1
-        message = f"ERROR {number:04d}: {e}"
+        duration = time.perf_counter() - start_time
+        message = f"ERROR {number:04d} ({duration:.2f}s): {e}"
         print(f"  [{completed}/{total}] {message}")
         return (number, False, message)
 
@@ -74,7 +90,9 @@ async def generate_all(filtered_rows, args, output_dir, total):
                 args.voice,
                 output_dir,
                 not args.force,
-                total
+                total,
+                args.timeout,
+                concurrency
             )
             for row in batch
         ]
@@ -127,6 +145,12 @@ def main():
         type=int,
         default=1,
         help="Number of concurrent tasks (default: 1)"
+    )
+    parser.add_argument(
+        "--timeout",
+        type=float,
+        default=10.0,
+        help="Timeout in seconds for each generation (default: 30)"
     )
 
     args = parser.parse_args()
