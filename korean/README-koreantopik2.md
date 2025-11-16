@@ -20,8 +20,11 @@ Following the successful completion of TOPIK 1 (1847 words), this document outli
 - [x] Consolidated file: `topik2/data/csv-extra/all.csv` (documented in [topik2/readme.md](topik2/readme.md))
 - [x] Converted to TSV format: `input/koreantopik2.tsv` (3873 entries)
 
+### Completed
+- [x] Prompts directory created (`prompts/koreantopik2/`)
+- [x] Batch splitting (39 batches of ~100 words)
+
 ### Pending
-- [ ] Batch splitting (39 batches of ~100 words)
 - [ ] Etymology enhancement
 - [ ] Example sentences generation
 - [ ] Study notes generation
@@ -96,12 +99,12 @@ korean/
   - Contains: 5720 Korean words (TOPIK 1 + TOPIK 2)
   - Format: Single column, one word per line, no header
   - Used by notes generation for cross-referencing
-- [ ] Create `output/koreantopik2/` directory
-- [ ] Split `input/koreantopik2.tsv` into batches:
-  - [ ] `input/koreantopik2-batch-1.tsv` (entries 1-100)
-  - [ ] `input/koreantopik2-batch-2.tsv` (entries 101-200)
-  - [ ] ... (batches 3-38, 100 entries each)
-  - [ ] `input/koreantopik2-batch-39.tsv` (entries 3801-3873, 73 entries)
+- [x] Create `output/koreantopik2/` directory
+- [x] Split `input/koreantopik2.tsv` into batches:
+  - [x] `input/koreantopik2-batch-1.tsv` through `input/koreantopik2-batch-39.tsv`
+  - Batches 1-38: 100 entries each (+ header)
+  - Batch 39: 73 entries (entries 3801-3873, + header)
+  - Total: 3873 entries verified
 
 ### Phase 2: Enhancement Generation
 
