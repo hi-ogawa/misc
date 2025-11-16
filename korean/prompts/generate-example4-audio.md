@@ -41,14 +41,19 @@ ls output/audio-v2/*.mp3 | wc -l
 du -sh output/audio-v2/
 
 # Verify MP3 integrity using ffprobe
-python scripts/generate-audio-verify.py
+python scripts/generate-audio-verify.py --output output/audio-v2
+
+# Verify specific range
+python scripts/generate-audio-verify.py --output output/audio-v2 --start 1 --end 100
 ```
 
 **Verification Strategy**:
 - Uses `ffprobe` (from ffmpeg) to validate each MP3 file
 - Checks: valid format, audio streams, duration > 0
+- Shows progress for each file verified (✓ for valid, ✗ for broken)
 - Reports broken/corrupted files with error details
-- Script: `scripts/generate-audio-verify.py`
+- Script: `scripts/generate-audio-verify.py` (see `--help` for options)
+- Supports range filtering (`--start`, `--end`)
 - All files should pass validation for successful generation
 
 ## Post-Processing Steps

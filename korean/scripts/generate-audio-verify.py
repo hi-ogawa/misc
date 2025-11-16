@@ -3,6 +3,7 @@
 Verify MP3 files using ffprobe to detect broken or corrupted audio files.
 """
 
+import argparse
 import subprocess
 import json
 from pathlib import Path
@@ -70,14 +71,57 @@ def verify_mp3(mp3_path: Path) -> tuple[bool, str]:
 
 
 def main():
-    # Find all MP3 files in the current directory and subdirectories
-    mp3_files = sorted(Path('.').rglob('*.mp3'))
+    parser = argparse.ArgumentParser(description="Verify MP3 files using ffprobe")
+    parser.add_argument(
+        "--output",
+        type=str,
+        required=True,
+        help="Output directory containing MP3 files"
+    )
+    parser.add_argument(
+        "--start",
+        type=int,
+        default=None,
+        help="Start from this file number (inclusive, e.g., 1 for 0001.mp3)"
+    )
+    parser.add_argument(
+        "--end",
+        type=int,
+        default=None,
+        help="End at this file number (inclusive, e.g., 100 for 0100.mp3)"
+    )
+
+    args = parser.parse_args()
+
+    # Find all MP3 files in the output directory
+    output_dir = Path(args.output)
+    if not output_dir.exists():
+        print(f"Error: Output directory not found: {output_dir}", file=sys.stderr)
+        return 1
+
+    mp3_files = sorted(output_dir.glob('*.mp3'))
+
+    # Filter by range if specified
+    if args.start is not None or args.end is not None:
+        start = args.start if args.start is not None else 1
+        end = args.end if args.end is not None else 9999
+
+        mp3_files = [
+            f for f in mp3_files
+            if f.stem.isdigit() and start <= int(f.stem) <= end
+        ]
 
     if not mp3_files:
-        print("No MP3 files found in the current directory.")
+        print(f"No MP3 files found in {output_dir}")
+        if args.start or args.end:
+            print(f"Range: {args.start or 1} to {args.end or 'end'}")
         return 0
 
-    print(f"Found {len(mp3_files)} MP3 file(s). Verifying...\n")
+    range_info = ""
+    if args.start or args.end:
+        range_info = f" (range: {args.start or 1}-{args.end or 'end'})"
+    print(f"Found {len(mp3_files)} MP3 file(s) in {output_dir}{range_info}")
+    print(f"Verifying...\n")
 
     broken_files = []
     valid_count = 0
@@ -87,10 +131,10 @@ def main():
 
         if is_valid:
             valid_count += 1
-            print(f"✓ {mp3_path}")
+            print(f"✓ {mp3_path.name}")
         else:
             broken_files.append((mp3_path, message))
-            print(f"✗ {mp3_path}: {message}")
+            print(f"✗ {mp3_path.name}: {message}")
 
     # Print summary
     print(f"\n{'='*60}")
@@ -102,7 +146,7 @@ def main():
         print(f"\n{'='*60}")
         print("Broken files:")
         for path, error in broken_files:
-            print(f"  - {path}")
+            print(f"  - {path.name}")
             print(f"    Error: {error}")
         return 1
     else:
