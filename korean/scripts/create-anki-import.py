@@ -91,8 +91,11 @@ def main():
         korean_audio = f"[sound:{dataset}_korean_{int(num):04d}.mp3]"
         example_ko_audio = f"[sound:{dataset}_example_ko_{int(num):04d}.mp3]"
 
+        # Use prefixed number for unique identification across datasets
+        prefixed_number = f"{dataset}_{num}"
+
         merged_row = {
-            'number': num,
+            'number': prefixed_number,
             'korean': base['korean'],
             'english': base['english'],
             'example_ko': examples.get('example_ko', ''),

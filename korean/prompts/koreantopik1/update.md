@@ -192,6 +192,35 @@ cp output/koreantopik1/audio/koreantopik1_korean_*.mp3 ~/.local/share/Anki2/사�
 
 **Import completed successfully**: 1,847 notes updated with dual audio (vocabulary + example).
 
+### Post-Import: Sync Conflict Warning
+
+**⚠️ Expected behavior after making card template changes:**
+
+When you sync to AnkiWeb after modifying note types (adding fields, updating templates), you'll see a conflict prompt:
+
+```
+There is a conflict between decks on this device and AnkiWeb.
+You must choose which version to keep:
+- Download from AnkiWeb: Replace local with AnkiWeb (LOSE local changes)
+- Upload to AnkiWeb: Replace AnkiWeb with local (KEEP local changes)
+```
+
+**What to do:**
+- ✅ **Select "Upload to AnkiWeb"** - This keeps your new changes (added `korean_audio` field and template updates)
+- ❌ **Don't select "Download"** - This would lose all your work!
+
+**Why this happens:**
+- Anki detects schema changes (new fields, template modifications)
+- This is a one-time prompt after structural changes
+- Normal syncing resumes after resolving the conflict once
+
+**When you'll see this:**
+- After adding the `korean_audio` field (Phase 5)
+- After updating the card template
+- After importing the TSV file with new data structure
+
+This is normal and expected! Just choose "Upload to AnkiWeb" to preserve your changes.
+
 ## File Naming Summary
 
 ```

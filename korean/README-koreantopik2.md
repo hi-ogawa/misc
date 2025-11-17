@@ -147,10 +147,13 @@ number	korean	english	example_ko	example_en	etymology	notes	korean_audio	example
 
 **Sample row**:
 ```
-1	-가	professional	친구가 의사가 됐어요	My friend became a doctor	-家 / -家	-사, -자, -인	[sound:koreantopik2_korean_0001.mp3]	[sound:koreantopik2_example_ko_0001.mp3]
+koreantopik2_1	-가	professional	친구가 의사가 됐어요	My friend became a doctor	-家 / -家	-사, -자, -인	[sound:koreantopik2_korean_0001.mp3]	[sound:koreantopik2_example_ko_0001.mp3]
 ```
 
-**Note**: This TSV column order matches Anki field order for direct import.
+**Note**:
+- This TSV column order matches Anki field order for direct import
+- **Number field uses `koreantopik2_` prefix** to avoid conflicts with TOPIK 1 (which uses unprefixed numbers 1, 2, 3...)
+- **Duplicate Korean words**: 105 words appear in both TOPIK 1 and TOPIK 2 (homophones or repeated vocabulary), making unique number fields essential
 
 **Audio field formats**:
 - `korean_audio`: `[sound:koreantopik2_korean_0001.mp3]` (isolated word pronunciation)
@@ -165,10 +168,21 @@ python scripts/create-anki-import.py koreantopik2
 
 **Goal**: Import 3,873 TOPIK 2 vocabulary entries into Anki with dual audio support.
 
-**⚠️ ACTION REQUIRED: Deck Organization Decision** (UNDECIDED - choose before import):
-- **Option A**: Single deck - merge with TOPIK 1 (e.g., "Korean Vocabulary")
-- **Option B**: Separate deck - keep TOPIK 2 separate (e.g., "Korean TOPIK 2")
-- **Option C**: Hierarchical - use deck hierarchy (e.g., "Korean::TOPIK 2")
+**Deck Organization** (using hierarchical structure):
+- **TOPIK 1**: Import to deck `Korean::TOPIK 1` (if not already done)
+- **TOPIK 2**: Import to deck `Korean::TOPIK 2`
+- **Parent deck**: `Korean` (shows combined stats)
+
+**Benefits**:
+- Organized by level with clear separation
+- Study individually: Click `Korean::TOPIK 1` or `Korean::TOPIK 2`
+- Study combined: Click `Korean` (draws from both)
+- Stats aggregate upward: Child deck activity updates parent deck stats
+
+**Learning plan** (sequential):
+1. Continue TOPIK 1 until all NEW cards completed
+2. Set TOPIK 2 daily new cards to 0 (import but don't activate yet)
+3. Once TOPIK 1 NEW = 0, activate TOPIK 2 (set new cards to 20/day or preferred pace)
 
 **Prerequisites**:
 1. Anki note type "Korean Vocabulary" with fields:
@@ -200,7 +214,7 @@ python scripts/create-anki-import.py koreantopik2
    - File → Import
    - Select: `output/koreantopik2/koreantopik2_anki_import.tsv`
    - **Type**: Korean Vocabulary
-   - **Deck**: (Select the deck you chose above)
+   - **Deck**: `Korean::TOPIK 2` (use `::` for hierarchy)
    - **Update existing notes when first field matches**: ✅ CHECKED (if updating)
    - **Allow HTML in fields**: ✅ CHECKED
    - **Fields separated by**: Tab
@@ -239,9 +253,11 @@ python scripts/create-anki-import.py koreantopik2
 - [ ] Backup Anki collection
 - [ ] Copy 7,746 audio files to Anki media folder
 - [ ] Verify audio files copied (3,873 × 2 = 7,746)
-- [ ] Import TSV file with correct field mapping
+- [ ] Import TSV file to deck `Korean::TOPIK 2` with correct field mapping
+- [ ] Set TOPIK 2 daily new cards to 0 (don't activate until TOPIK 1 is finished)
 - [ ] Test sample cards for audio playback
-- [ ] Begin studying!
+- [ ] Continue studying TOPIK 1 until NEW cards = 0
+- [ ] Activate TOPIK 2 when ready (adjust new cards/day setting)
 
 ### Phase 4: Maintenance
 
@@ -282,17 +298,19 @@ number	korean	notes
 5	가능	불가능
 ```
 
-**Master file** (9 columns):
+**Anki import file** (9 columns):
 ```
 number	korean	english	example_ko	example_en	etymology	notes	korean_audio	example_ko_audio
 ```
 
 **Sample row**:
 ```
-1	-가	professional	친구가 의사가 됐어요	My friend became a doctor	-家 / -家	-사, -자, -인	[sound:koreantopik2_korean_0001.mp3]	[sound:koreantopik2_example_ko_0001.mp3]
+koreantopik2_1	-가	professional	친구가 의사가 됐어요	My friend became a doctor	-家 / -家	-사, -자, -인	[sound:koreantopik2_korean_0001.mp3]	[sound:koreantopik2_example_ko_0001.mp3]
 ```
 
-**Note**: Column order matches Anki field order for direct import.
+**Note**:
+- Column order matches Anki field order for direct import
+- Number field uses `koreantopik2_` prefix to prevent conflicts with TOPIK 1
 
 Audio field formats:
 - `korean_audio`: `[sound:koreantopik2_korean_0001.mp3]`
