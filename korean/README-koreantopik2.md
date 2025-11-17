@@ -144,8 +144,10 @@ korean/
 
 **Columns** (9 total):
 ```
-number	korean	english	etymology	example_ko	example_en	notes	korean_audio	example_ko_audio
+number	korean	english	example_ko	example_en	etymology	notes	korean_audio	example_ko_audio
 ```
+
+**Note**: This TSV column order matches Anki field order for direct import.
 
 **Audio field formats**:
 - `korean_audio`: `[sound:koreantopik2_korean_0001.mp3]` (isolated word pronunciation)
@@ -217,8 +219,10 @@ number	korean	notes
 
 **Master file** (9 columns):
 ```
-number	korean	english	etymology	example_ko	example_en	notes	korean_audio	example_ko_audio
+number	korean	english	example_ko	example_en	etymology	notes	korean_audio	example_ko_audio
 ```
+
+**Note**: Column order matches Anki field order for direct import.
 
 Audio field formats:
 - `korean_audio`: `[sound:koreantopik2_korean_0001.mp3]`
