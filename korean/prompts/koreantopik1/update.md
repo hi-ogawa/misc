@@ -25,9 +25,10 @@ Following the TOPIK 2 dual-audio pattern:
 
 - [x] Phase 1: Audio prep
 - [x] Phase 2: Anki import file
-- [ ] Phase 3: Copy audio into Anki media
-- [ ] Phase 4: Update Anki Card Template
-- [ ] Phase 5: Import deck
+- [x] Phase 3: Backup Anki collection
+- [x] Phase 4: Copy audio into Anki media
+- [x] Phase 5: Update Anki Card Template
+- [ ] Phase 6: Import deck
 
 ### Phase 1: Audio prep
 
@@ -42,49 +43,152 @@ Following the TOPIK 2 dual-audio pattern:
 - vocab audio: `[sound:koreantopik1_korean_NNNN.mp3]`
 - Column order matches master TSV: number, korean, english, etymology, example_ko, example_en, notes, korean_audio, example_ko_audio.
 
-### Phase 3: Copy audio into Anki media
+### Phase 3: Backup Anki collection
+
+Created full backup before making any changes:
+- File: `koreantopik1_v1_backup.apkg`
+- Export settings: Full deck with media and scheduling information
+- Date: 2025-11-17
+
+### Phase 4: Copy audio into Anki media
+
+Copied all audio files to Anki media folder:
 
 ```bash
-# Example audio (overwrite old names)
-cp output/koreantopik1/audio/koreantopik1_example_ko_*.mp3 ~/.local/share/Anki2/"사용자 1"/collection.media/
+# Example audio
+cp output/koreantopik1/audio/koreantopik1_example_ko_*.mp3 ~/.local/share/Anki2/사용자\ 1/collection.media/
 
 # Vocab audio
-cp output/koreantopik1/audio/koreantopik1_korean_*.mp3 ~/.local/share/Anki2/"사용자 1"/collection.media/
+cp output/koreantopik1/audio/koreantopik1_korean_*.mp3 ~/.local/share/Anki2/사용자\ 1/collection.media/
 ```
 
-**Verification:**
-```bash
-ls ~/.local/share/Anki2/"사용자 1"/collection.media/koreantopik1_example_ko_*.mp3 | wc -l   # expect 1847
-ls ~/.local/share/Anki2/"사용자 1"/collection.media/koreantopik1_korean_*.mp3 | wc -l       # expect 1847
-```
+**Verification completed:**
+- Example audio files: 1,847 ✅
+- Vocabulary audio files: 1,847 ✅
 
-### Phase 4: Update Anki Card Template
+### Phase 5: Update Anki Card Template
 
-**Current card structure** (assumed):
-- Front: Korean word
-- Back: English, example sentence, example audio (`[sound:koreantopik1_NNNN.mp3]`)
+**Note Type**: Korean Vocabulary
 
-**New card structure**:
-- Front: Korean word (optionally with vocabulary audio button)
-- Back: English, vocabulary audio, example sentence, example audio
+**Goal**: Add vocabulary audio field and update card template to display both audio types (vocabulary + example).
 
-#### Required Changes in Anki:
+#### Step-by-Step Instructions:
 
-1. **Add new field to note type**:
+1. **Open Anki and go to Tools → Manage Note Types**
+
+2. **Select "Korean Vocabulary" note type → Click "Fields..."**
+
+   **Current fields** (expected):
+   - number
+   - korean
+   - english
+   - example_ko
+   - example_en
+   - etymology
+   - notes
+   - example_ko_audio (or similar name for example audio)
+
+   **Action**: Add a new field:
+   - Click "Add" button
    - Field name: `korean_audio`
-   - Populate with: `[sound:koreantopik1_korean_{{number}}.mp3]`
+   - Position: Add it before `example_ko_audio` (so it appears as the 8th field)
+   - Click "OK"
 
-2. **Update existing example audio field**:
-   - Old reference: `[sound:koreantopik1_{{number}}.mp3]`
-   - New reference: `[sound:koreantopik1_example_ko_{{number}}.mp3]`
+3. **Update the Card Template (Tools → Manage Note Types → Korean Vocabulary → Cards...)**
 
-3. **Update card template** to display both audio types
+   **Current Front Template**:
+   ```html
+   <h2>{{korean}}</h2>
+   ```
 
-### Phase 5: Import deck
+   **Updated Front Template** (Option B - with vocabulary audio):
+   ```html
+   <h2>{{korean}}</h2>
+   {{korean_audio}}
+   ```
 
-1. Backup Anki collection.
-2. Ensure both audio sets are present in media (Phase 2).
-3. Import `output/koreantopik1/koreantopik1_anki_import.tsv` (tab-delimited). Map fields to the note type, including new `korean_audio` and updated `example_ko_audio`.
+   **Back Template** (no changes needed):
+   - Vocabulary audio already inherited from FrontSide
+   - Example audio already present in current template
+
+4. **Field Mapping** (to verify for Phase 6 import):
+
+   **TSV column order** (in file):
+   1. number
+   2. korean
+   3. english
+   4. etymology
+   5. example_ko
+   6. example_en
+   7. notes
+   8. korean_audio
+   9. example_ko_audio
+
+   **Anki field order** (in note type):
+   1. number
+   2. korean
+   3. english
+   4. example_ko
+   5. example_en
+   6. etymology
+   7. notes
+   8. korean_audio (NEW - to be added)
+   9. example_ko_audio
+
+### Phase 6: Import deck
+
+**Goal**: Import the TSV file to update all 1,847 cards with the new audio fields.
+
+#### Step-by-Step Instructions:
+
+1. **Open Anki and go to File → Import**
+
+2. **Select the import file**:
+   - Navigate to: `output/koreantopik1/koreantopik1_anki_import.tsv`
+   - Click "Open"
+
+3. **Configure Import Settings**:
+
+   **Type**: Korean Vocabulary
+
+   **Deck**: (Select your TOPIK 1 deck)
+
+   **Update existing notes when first field matches**: ✅ CHECKED
+   - This is crucial! It will update existing cards instead of creating duplicates
+
+   **Allow HTML in fields**: ✅ CHECKED
+
+   **Fields separated by**: Tab
+
+4. **Map Fields** (verify the mapping):
+
+   **IMPORTANT**: TSV column order ≠ Anki field order!
+
+   During import, map each Anki field to the correct TSV column:
+
+   Anki Field → TSV Column:
+   ```
+   number         → Field 1
+   korean         → Field 2
+   english        → Field 3
+   example_ko     → Field 5 (NOT Field 4!)
+   example_en     → Field 6 (NOT Field 5!)
+   etymology      → Field 4 (NOT Field 6!)
+   notes          → Field 7
+   korean_audio   → Field 8
+   example_ko_audio → Field 9
+   ```
+
+5. **Verify Import Preview**:
+   - Check that a few sample cards look correct
+   - Verify audio fields show `[sound:koreantopik1_korean_NNNN.mp3]` format
+   - Make sure "Update existing notes" shows 1,847 cards will be updated
+
+6. **Click "Import"**
+
+7. **Verify Results**:
+   - Should show: "1847 notes updated"
+   - Open a few random cards and test both audio buttons work correctly
 
 ## File Naming Summary
 
@@ -99,17 +203,17 @@ koreantopik1_example_ko_0001.mp3 (example audio - renamed)
 If exporting/re-importing the full deck:
 
 ```
-number  korean  english  etymology  example_ko  example_en  notes  korean_audio  example_ko_audio
+number  korean  english  example_ko  example_en  etymology  notes  korean_audio  example_ko_audio
 ```
 
 **Audio field formats**:
 - `korean_audio`: `[sound:koreantopik1_korean_0001.mp3]`
-- `example_ko_audio`: `[sound:koreantopik1_example_ko_0001.mp3]` (or `[sound:koreantopik1_0001.mp3]` if not renamed)
+- `example_ko_audio`: `[sound:koreantopik1_example_ko_0001.mp3]`
 
 ## Next Steps
 
-1. **Anki setup**: Add `korean_audio` field; update example audio field and templates.
-2. **Copy files**: Move example + vocab audio to Anki media (Phase 3).
+1. **Copy files**: Move example + vocab audio to Anki media (Phase 4).
+2. **Anki setup**: Add `korean_audio` field; update example audio field and templates.
 3. **Import**: Re-import `koreantopik1_anki_import.tsv`.
 4. **Test**: Verify audio plays correctly on a few cards
 
