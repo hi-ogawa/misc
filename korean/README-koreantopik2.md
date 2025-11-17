@@ -161,30 +161,87 @@ number	korean	english	example_ko	example_en	etymology	notes	korean_audio	example
 python scripts/create-anki-import.py koreantopik2
 ```
 
-**Steps** (completed):
-- [x] Join all TSV files on `number` column
-- [x] Add `korean_audio` column with format `[sound:koreantopik2_korean_{number:04d}.mp3]`
-- [x] Add `example_ko_audio` column with format `[sound:koreantopik2_example_ko_{number:04d}.mp3]`
-- [x] Validate: 3,873 entries (+ header = 3,874 lines)
-- [x] Output: `output/koreantopik2/koreantopik2_anki_import.tsv`
+#### 3.3 Anki Import
 
-**Quality checks**:
-- All rows must have matching number across all source files
-- No missing columns (empty strings are OK)
-- Audio file path formats must be exact:
-  - Vocabulary: `[sound:koreantopik2_korean_NNNN.mp3]`
-  - Example: `[sound:koreantopik2_example_ko_NNNN.mp3]`
+**Goal**: Import 3,873 TOPIK 2 vocabulary entries into Anki with dual audio support.
 
-#### 3.3 Manual Review & Google Sheets
-- [ ] Upload to Google Drive
-- [ ] Manual review and corrections
-- [ ] Final export for Anki
+**⚠️ ACTION REQUIRED: Deck Organization Decision** (UNDECIDED - choose before import):
+- **Option A**: Single deck - merge with TOPIK 1 (e.g., "Korean Vocabulary")
+- **Option B**: Separate deck - keep TOPIK 2 separate (e.g., "Korean TOPIK 2")
+- **Option C**: Hierarchical - use deck hierarchy (e.g., "Korean::TOPIK 2")
 
-#### 3.4 Anki Import
-- [ ] Create Anki deck: "Korean TOPIK 2"
-- [ ] Import vocabulary with all enhancements
-- [ ] Verify audio files work
-- [ ] Begin studying
+**Prerequisites**:
+1. Anki note type "Korean Vocabulary" with fields:
+   - number
+   - korean
+   - english
+   - example_ko
+   - example_en
+   - etymology
+   - notes
+   - korean_audio
+   - example_ko_audio
+
+2. Audio files copied to Anki media folder:
+   ```bash
+   cp output/koreantopik2/audio/koreantopik2_korean_*.mp3 ~/.local/share/Anki2/사용자\ 1/collection.media/
+   cp output/koreantopik2/audio/koreantopik2_example_ko_*.mp3 ~/.local/share/Anki2/사용자\ 1/collection.media/
+   ```
+
+**Import Steps**:
+
+1. **Backup Anki collection first!**
+   - File → Export → Full deck with media
+   - Save as: `koreantopik2_backup_YYYY-MM-DD.apkg`
+
+2. **Copy audio files to Anki media** (see Prerequisites above)
+
+3. **Import TSV file**:
+   - File → Import
+   - Select: `output/koreantopik2/koreantopik2_anki_import.tsv`
+   - **Type**: Korean Vocabulary
+   - **Deck**: (Select the deck you chose above)
+   - **Update existing notes when first field matches**: ✅ CHECKED (if updating)
+   - **Allow HTML in fields**: ✅ CHECKED
+   - **Fields separated by**: Tab
+
+4. **Map Fields** (verify the mapping):
+
+   **IMPORTANT**: TSV column order ≠ Anki field order!
+
+   Anki Field → TSV Column:
+   ```
+   number         → Field 1
+   korean         → Field 2
+   english        → Field 3
+   example_ko     → Field 4
+   example_en     → Field 5
+   etymology      → Field 6
+   notes          → Field 7
+   korean_audio   → Field 8
+   example_ko_audio → Field 9
+   ```
+
+5. **Verify Import Preview**:
+   - Check that a few sample cards look correct
+   - Verify audio fields show `[sound:koreantopik2_korean_NNNN.mp3]` format
+   - Should show: 3,873 cards to be added/updated
+
+6. **Click "Import"**
+
+7. **Verify Results**:
+   - Should show: "3873 notes added" (or updated)
+   - Open a few random cards and test both audio buttons work correctly
+   - Front: Korean word + vocabulary audio
+   - Back: Translation + both audio buttons (vocabulary + example)
+
+**Checklist**:
+- [ ] Backup Anki collection
+- [ ] Copy 7,746 audio files to Anki media folder
+- [ ] Verify audio files copied (3,873 × 2 = 7,746)
+- [ ] Import TSV file with correct field mapping
+- [ ] Test sample cards for audio playback
+- [ ] Begin studying!
 
 ### Phase 4: Maintenance
 
@@ -247,59 +304,10 @@ Audio field formats:
 |--------|---------|---------|
 | Total words | 1,847 | 3,873 |
 | Batches | 19 | 39 |
-| Last batch size | 47 entries | 73 entries |
-| Processing time | ~X hours | ~2X hours (est.) |
-| Audio files | 1,847 MP3s | 7,746 MP3s (korean + example_ko) |
-| Audio structure | Single audio | Dual audio (korean + example_ko) |
+| Audio files | 3,694 MP3s (korean + example_ko) | 7,746 MP3s (korean + example_ko) |
 | Vocabulary level | Beginner | Intermediate-Advanced |
-| File naming | `koreantopik1_NNNN.mp3` | `koreantopik2_korean_NNNN.mp3`<br>`koreantopik2_example_ko_NNNN.mp3` |
-| Output directory | `output/` | `output/koreantopik2/` |
-| Prompts directory | `prompts/` | `prompts/koreantopik2/` |
-| Requirements | `prompts/requirements-*.md` | Same (shared) |
-
-## Strategy & Recommendations
-
-### Subagent Architecture
-
-All enhancement generation uses isolated subagents for clean, parallel processing.
-
-**See `prompts/subagent-management.md` for complete guidelines.**
-
-### Processing Strategy
-1. **Start small**: Process batches 1-2 end-to-end to validate workflow
-2. **Parallel processing**: Use subagents for all enhancement types (39 agents in parallel)
-   - **Etymology**: Each agent reads batch file (100 entries)
-   - **Examples**: Each agent reads batch file (100 entries)
-   - **Notes**: Each agent reads vocab reference (5720 words) + batch file (100 entries)
-3. **Checkpointing**: Commit outputs after completing each enhancement type
-4. **Resource monitoring**: TOPIK 2 is advanced vocabulary, may need more tokens per word
-5. **Requirements reuse**: All prompts reference shared `requirements-*.md` files
-
-### Audio Generation Strategy (Dual Audio)
-- **Two sets**: Vocabulary audio (isolated) + Example audio (contextual)
-- Generate in chunks with concurrency (5-10 concurrent tasks recommended)
-- Verify file creation after each generation
-- Edge TTS is free and reliable, but respect rate limits
-- Total storage: ~100-120MB for 7,746 MP3 files
-
-### Validation Checkpoints
-After each phase:
-- [ ] Verify file count matches expected batch count
-- [ ] Check TSV formatting (proper tabs, no CSV issues)
-- [ ] Spot-check content quality
-- [ ] Validate consolidated files have correct line count (3873 + header = 3874 lines)
-
-## Pilot Run Plan
-
-Before full processing, validate workflow with batches 1-2:
-
-1. [ ] Split batches 1-2 from `input/koreantopik2.tsv`
-2. [ ] Generate etymology for batches 1-2
-3. [ ] Generate examples for batches 1-2
-4. [ ] Generate notes for batches 1-2
-5. [ ] Generate audio for batches 1-2 (200 MP3 files)
-6. [ ] Review quality and adjust prompts if needed
-7. [ ] If successful, proceed with full 39-batch processing
+| File naming | `koreantopik1_korean_NNNN.mp3`<br>`koreantopik1_example_ko_NNNN.mp3` | `koreantopik2_korean_NNNN.mp3`<br>`koreantopik2_example_ko_NNNN.mp3` |
+| Output directory | `output/koreantopik1/` | `output/koreantopik2/` |
 
 ## Reference Links
 
@@ -326,7 +334,3 @@ Before full processing, validate workflow with batches 1-2:
 - Clean reuse of quality requirements
 - Easy to adapt for future datasets
 - Clear separation between quality and execution
-
----
-
-**Next step**: Begin Phase 1.2 - Split `input/koreantopik2.tsv` into 39 batch files
