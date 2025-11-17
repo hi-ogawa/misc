@@ -28,7 +28,7 @@ Following the TOPIK 2 dual-audio pattern:
 - [x] Phase 3: Backup Anki collection
 - [x] Phase 4: Copy audio into Anki media
 - [x] Phase 5: Update Anki Card Template
-- [ ] Phase 6: Import deck
+- [x] Phase 6: Import deck
 
 ### Phase 1: Audio prep
 
@@ -189,6 +189,8 @@ cp output/koreantopik1/audio/koreantopik1_korean_*.mp3 ~/.local/share/Anki2/ì‚¬ì
 7. **Verify Results**:
    - Should show: "1847 notes updated"
    - Open a few random cards and test both audio buttons work correctly
+
+**Import completed successfully**: 1,847 notes updated with dual audio (vocabulary + example).
 
 ## File Naming Summary
 
