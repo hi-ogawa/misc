@@ -19,17 +19,14 @@ Following the successful completion of TOPIK 1 (1847 words), this document outli
 - [x] Hanja and Japanese etymology columns added
 - [x] Consolidated file: `topik2/data/csv-extra/all.csv` (documented in [topik2/readme.md](topik2/readme.md))
 - [x] Converted to TSV format: `input/koreantopik2.tsv` (3873 entries)
-
-### Completed
 - [x] Prompts directory created (`prompts/koreantopik2/`)
 - [x] Batch splitting (39 batches of ~100 words)
+- [x] Etymology enhancement (all batches → `etymology-all.tsv`)
+- [x] Example sentences generation (all batches → `examples-all.tsv`)
+- [x] Study notes generation (all batches → `notes-all.tsv`)
 
 ### Pending
-- [ ] Etymology enhancement
-- [ ] Example sentences generation
-- [ ] Study notes generation
-- [ ] Audio generation
-- [ ] Consolidation and Anki import
+- [ ] Anki import
 
 ## Project Structure
 
@@ -110,7 +107,7 @@ korean/
 - [x] Batches 1-39 → `output/koreantopik2/notes-N.tsv`
 - [x] Consolidate → `output/koreantopik2/notes-all.tsv`
 
-#### 2.4 Audio Generation (Dual Audio)
+#### 2.4 Audio Generation (Dual Audio) ✅
 
 **Prompt**: `prompts/koreantopik2/generate-audio-dual.md`
 
@@ -119,17 +116,18 @@ korean/
 - **Example audio** (`example_ko` field): Example sentence pronunciation
 
 **Progress**:
-- [ ] Generate vocabulary audio (3,873 files) → `koreantopik2_korean_*.mp3`
-- [ ] Generate example audio (3,873 files) → `koreantopik2_example_ko_*.mp3`
+- [x] Generate vocabulary audio (3,873 files) → `koreantopik2_korean_*.mp3`
+- [x] Generate example audio (3,873 files) → `koreantopik2_example_ko_*.mp3`
+- [x] Total: 7,746 MP3 files (~123MB) in `output/koreantopik2/audio/`
 
 ### Phase 3: Consolidation & Import
 
-#### 3.1 Consolidate Outputs
-- [x] Create `output/koreantopik2/etymology-all.tsv` (merge batches 1-39)
-- [x] Create `output/koreantopik2/examples-all.tsv` (merge batches 1-39)
-- [x] Create `output/koreantopik2/notes-all.tsv` (merge batches 1-39)
+#### 3.1 Consolidate Outputs ✅
+- [x] Create `output/koreantopik2/etymology-all.tsv` (merge batches 1-39) - 3,874 lines (3,873 + header)
+- [x] Create `output/koreantopik2/examples-all.tsv` (merge batches 1-39) - 3,874 lines (3,873 + header)
+- [x] Create `output/koreantopik2/notes-all.tsv` (merge batches 1-39) - 3,874 lines (3,873 + header)
 
-#### 3.2 Create Master File
+#### 3.2 Create Anki Import File ✅
 
 **Goal**: Combine all enhancement outputs into a single TSV file ready for Anki import.
 
@@ -140,11 +138,16 @@ korean/
 - `output/koreantopik2/notes-all.tsv` (notes column)
 - Audio files: `output/koreantopik2/audio/koreantopik2_*.mp3`
 
-**Output**: `output/koreantopik2/master-all.tsv`
+**Output**: `output/koreantopik2/koreantopik2_anki_import.tsv`
 
 **Columns** (9 total):
 ```
 number	korean	english	example_ko	example_en	etymology	notes	korean_audio	example_ko_audio
+```
+
+**Sample row**:
+```
+1	-가	professional	친구가 의사가 됐어요	My friend became a doctor	-家 / -家	-사, -자, -인	[sound:koreantopik2_korean_0001.mp3]	[sound:koreantopik2_example_ko_0001.mp3]
 ```
 
 **Note**: This TSV column order matches Anki field order for direct import.
@@ -153,12 +156,17 @@ number	korean	english	example_ko	example_en	etymology	notes	korean_audio	example
 - `korean_audio`: `[sound:koreantopik2_korean_0001.mp3]` (isolated word pronunciation)
 - `example_ko_audio`: `[sound:koreantopik2_example_ko_0001.mp3]` (sentence pronunciation)
 
-**Steps**:
-1. [ ] Join all TSV files on `number` column
-2. [ ] Add `korean_audio` column with format `[sound:koreantopik2_korean_{number:04d}.mp3]`
-3. [ ] Add `example_ko_audio` column with format `[sound:koreantopik2_example_ko_{number:04d}.mp3]`
-4. [ ] Validate: 3873 entries (+ header = 3874 lines)
-5. [ ] Verify all audio file references exist
+**Command**:
+```bash
+python scripts/create-anki-import.py koreantopik2
+```
+
+**Steps** (completed):
+- [x] Join all TSV files on `number` column
+- [x] Add `korean_audio` column with format `[sound:koreantopik2_korean_{number:04d}.mp3]`
+- [x] Add `example_ko_audio` column with format `[sound:koreantopik2_example_ko_{number:04d}.mp3]`
+- [x] Validate: 3,873 entries (+ header = 3,874 lines)
+- [x] Output: `output/koreantopik2/koreantopik2_anki_import.tsv`
 
 **Quality checks**:
 - All rows must have matching number across all source files
@@ -220,6 +228,11 @@ number	korean	notes
 **Master file** (9 columns):
 ```
 number	korean	english	example_ko	example_en	etymology	notes	korean_audio	example_ko_audio
+```
+
+**Sample row**:
+```
+1	-가	professional	친구가 의사가 됐어요	My friend became a doctor	-家 / -家	-사, -자, -인	[sound:koreantopik2_korean_0001.mp3]	[sound:koreantopik2_example_ko_0001.mp3]
 ```
 
 **Note**: Column order matches Anki field order for direct import.
