@@ -43,8 +43,9 @@ The practical requirements developed empirically align strongly with established
 - Show characteristic usage patterns that require learners to evaluate fit
 
 **Connection to Our Requirements**:
-- ✅ "Ask: Does this example show what makes THIS word different from similar words?"
-- ✅ "Show characteristic or typical usage, not just grammatically correct patterns"
+- ✅ "Core principle: Force evaluation through distinctive context"
+- ✅ **Key test**: "To understand this sentence, must I grasp what makes THIS word unique?"
+- ✅ "If sentence works equally well with 5 other words, it's too generic" (substitution test)
 - ✅ Avoiding generic patterns (주세요, 있어요) → forces evaluation of specific usage
 
 ---
@@ -75,9 +76,9 @@ The practical requirements developed empirically align strongly with established
 
 **Connection to Our Requirements**:
 - ✅ "Use concrete, specific nouns (not pronouns/demonstratives or generic words)"
-  - ❌ "이거 주세요" → ✅ "목이 말라서 물 한 잔 주세요"
+  - ❌ "이거 주세요" → ✅ "목이 마르니까 물 한 잔 주세요" (-(으)니까: cause)
 - ✅ "Add concrete context elements (location/time/manner/specific object)"
-  - ❌ "나비가 날아다녀요" → ✅ "봄에 나비가 꽃 사이를 날아다녀요"
+  - ❌ "나비가 날아다녀요" → ✅ "봄에 나비가 꽃 사이를 날아다녀요" (time + location)
 - ✅ "Create content-rich, memorable examples by adding concrete details"
 
 **Innovation in Our Approach**:
@@ -177,10 +178,10 @@ Balance specificity and generalizability:
 - Stabilizes semantic representation
 
 **Connection to Our Requirements**:
-- ✅ "Core principle: Example must help conceptualize the word through distinctive context"
-- ✅ "Ask: Does this example show what makes THIS word different from similar words?"
-- ✅ "Show characteristic or typical usage, not just grammatically correct patterns"
-- ✅ Avoiding generic patterns that could apply to many words
+- ✅ "Core principle: Force evaluation through distinctive context"
+- ✅ **Key test**: "To understand this sentence, must I grasp what makes THIS word unique?"
+- ✅ "Show typical usage patterns, not just any grammatically valid sentence"
+- ✅ Avoiding generic patterns that could apply to many words (substitution test)
 
 **Examples of Distinctive vs. Generic Contexts**:
 - ❌ Generic: "고등학생이 공부해요" (could be any student, any subject)
@@ -239,11 +240,13 @@ Use corpus linguistics principles:
 - Balance naturalness with appropriate complexity level
 
 **Connection to Our Requirements**:
-- ✅ "Connectives and clauses are ENCOURAGED when they add learning value"
-  - Shows natural language patterns (-서, -을 때, -고, -을지)
-- ✅ Shift from "bare minimum" to "connectives that add context"
-  - ❌ Bare: "박물관 입장이 무료예요"
-  - ✅ Natural: "우리 고양이가 너무 뚱뚱해서 뛰지 못해요"
+- ✅ "STRONGLY PREFER multi-clause sentences (2+ clauses)"
+  - Shows natural language patterns with variety of connectives:
+  - **-서** (cause/reason), **-을 때** (time), **-고** (sequence)
+  - **-(으)니까** (cause/reason), **-을지** (uncertainty), **-지만** (contrast), **-려고** (purpose)
+- ✅ Shift from "bare minimum" to "multi-clause with connectives"
+  - ❌ Bare: "박물관 입장이 무료예요" (single clause, minimal)
+  - ✅ Multi-clause: "우리 고양이가 너무 뚱뚱해서 뛰지 못해요" (-서: reason → consequence)
 - ✅ "Use natural, conversational structures - don't artificially restrict complexity"
 
 **Collocation Awareness**:
@@ -292,16 +295,19 @@ Every contextual detail forces deeper processing:
    - Creates episodic memory associations
    - Easier retrieval through context cues
 
-4. **Causal/temporal connectives (-서, -을 때)**:
-   - Requires causal reasoning
-   - Shows word in relationship to other concepts
-   - Deepest level of semantic processing
+4. **Semantic connectives** (variety of types):
+   - **Causal** (-서, -(으)니까): Requires understanding cause-effect relationships
+   - **Temporal** (-을 때): Anchors word in time context
+   - **Sequential** (-고): Shows action sequences and natural flow
+   - **Contrastive** (-지만): Highlights oppositions and differences
+   - **Purpose** (-려고): Shows intentionality and goals
+   - Deepest level of semantic processing through relational understanding
 
 **Connection to Our Requirements**:
 - ✅ "ALWAYS include particles explicitly for learning purposes"
 - ✅ "For pedagogical purposes, prefer explicit subjects/objects over natural ellipsis"
   - ❌ "고장이 났어요" (subject dropped, shallow processing)
-  - ✅ "자전거가 고장 나서 수리점에 갔어요" (explicit subject + consequence, deep processing)
+  - ✅ "자전거가 고장 났지만 직접 고쳤어요" (explicit subject + contrast, deep processing with -지만)
 - ✅ "Add enough detail to make the scene CONCRETE and VISUALIZABLE"
 - ✅ "Add concrete context elements (location/time/manner/specific object)"
 
@@ -325,7 +331,7 @@ Each added element increases processing depth:
 | "Avoid generic patterns (주세요, 있어요)" | Distinctive contexts, contextual diversity | ⭐⭐⭐ Very Strong |
 | "Use specific nouns, not pronouns" | Concreteness effect, context availability | ⭐⭐⭐ Very Strong |
 | "Add time/location/manner context" | Context availability, memorable encoding | ⭐⭐⭐ Very Strong |
-| "Connectives encouraged (-서, -을 때)" | Depth of processing, involvement load | ⭐⭐⭐ Very Strong |
+| "STRONGLY PREFER multi-clause sentences" | Depth of processing, involvement load | ⭐⭐⭐ Very Strong |
 | "Balance simplicity with distinctiveness" | Context constraint research | ⭐⭐⭐ Very Strong |
 | "Never drop subjects/objects" | Pedagogical clarity, depth of processing | ⭐⭐ Strong (pedagogical choice) |
 | "Create visualizable scenes" | Dual coding, episodic memory | ⭐⭐⭐ Very Strong |
@@ -500,29 +506,36 @@ Synthesizing all research findings into a single actionable principle:
 The empirically-derived requirements already embody most research-supported principles:
 
 ✅ **High involvement through evaluation**
-- "Does this show what makes THIS word different?"
+- **Key test**: "To understand this sentence, must I grasp what makes THIS word unique?"
+- Substitution test forces distinctive contexts
 
 ✅ **Concreteness through multiple layers**
 - Specific nouns, time, location, manner
 - Explicit subjects/objects
+- Sensory details (e.g., 바삭바삭)
 
 ✅ **Distinctive contexts**
 - Avoiding generic patterns
 - Showing characteristic usage
+- Examples integrated into core principle
 
 ✅ **Corpus-informed naturalness**
-- Natural connectives
+- Variety of connectives (-서, -(으)니까, -고, -지만, -을 때, -려고, -을지)
 - Authentic grammatical structures
+- Strong preference for multi-clause sentences
 
 ✅ **Appropriate constraint level**
 - Balance of simplicity and distinctiveness
+- Medium constraint with memorable features
 
 ### Potential Enhancements
 
 Based on research not yet fully incorporated:
 
 #### 1. Collocation Tracking
+
 **What**: Systematically track and use high-frequency collocations
+
 **How**:
 - Use Korean corpus data (세종 말뭉치, 고려대 한국어 대사전)
 - Prioritize frequent patterns in examples
@@ -532,7 +545,9 @@ Based on research not yet fully incorporated:
 - 가볍다: Common collocations: 가벼운 가방, 가벼운 마음, 가벼운 운동
 
 #### 2. Semantic Contrast Documentation
+
 **What**: Explicitly show how word differs from synonyms/related words
+
 **How**:
 - Add semantic contrast notes for commonly confused words
 - Show typical context differences
@@ -543,7 +558,9 @@ Based on research not yet fully incorporated:
 - Notes field could include: "고장 나다: repairable malfunction (vs. 망가지다: broken beyond repair)"
 
 #### 3. Two-Stage Example Strategy
+
 **What**: Recognize different needs for initial learning vs. consolidation
+
 **How**:
 - Current approach: Distinctive contexts (perfect for initial learning)
 - Future fix workflow: Could add redundant contexts for difficult words
@@ -555,7 +572,9 @@ Based on research not yet fully incorporated:
 - Builds both breadth (distinctive) and depth (redundant)
 
 #### 4. Involvement Load Scoring
+
 **What**: Rate examples by involvement load to ensure high evaluation
+
 **How**:
 - Quick self-check: Does this example require evaluation?
 - Does learner need to think about word meaning to understand context?
@@ -629,7 +648,17 @@ The "golden rule" provides a unified framework that synthesizes all research fin
 
 ---
 
-**Document Status**: Initial research synthesis
+## Document History
+
+**2025-11-21 (Initial)**: Research synthesis documenting theoretical foundations
+**2025-11-21 (Update)**: Refined based on empirical feedback
+- Core principle sharpened: "Force evaluation through distinctive context"
+- Added explicit substitution test: "If sentence works equally well with 5 other words, it's too generic"
+- Expanded connective variety beyond -서 bias: -(으)니까, -고, -지만, -을지, -려고
+- Strengthened multi-clause preference with diverse examples
+- Updated all examples to reflect balanced connective distribution
+
+**Document Status**: Updated to reflect current requirements
 **Next Steps**:
 - Potential integration of corpus data for collocation validation
 - Development of semantic contrast documentation for confusable words
