@@ -1,0 +1,80 @@
+Generate related vocabulary words for the "notes" field (TOPIK 2).
+
+## Requirements
+
+**All generation requirements are in `prompts/requirements-notes.md`**
+
+Read and follow all requirements before generating notes.
+
+## Input/Output Format
+
+**Input**: Two-step approach for cross-referencing
+1. **Vocabulary reference** (read first): `input/korean.tsv`
+   - Contains: All Korean vocabulary (5720 words: TOPIK 1 + TOPIK 2)
+   - Format: Single column, one word per line, no header
+   - Purpose: Bring full vocabulary into context for cross-referencing
+
+2. **Batch file** (read second): `input/koreantopik2-batch-N.tsv`
+   - Contains: Assigned batch only (100 entries + header)
+   - Columns: number, korean, english
+   - Purpose: Explicit list of entries to generate notes for
+
+**Rationale**:
+- Reading vocab reference first enables finding related words across all vocabulary
+- Antonyms may be far apart (e.g., 높다 in TOPIK 1, 낮다 in TOPIK 2)
+- Honorific pairs span across TOPIK levels
+- Confusables benefit from seeing all similar words
+- Batch file makes it explicit which entries to process
+
+**Output**: TSV files (tab-separated) - ONLY for assigned batch
+- Columns: number, korean, notes
+- Relationship types: related meanings, antonyms, family pairs, honorific pairs, Hanja-순우리말 pairs, confusables
+- Leave blank if no meaningful related words
+- Output files:
+  - `output/koreantopik2/notes-1.tsv` (entries 1-100 ONLY)
+  - `output/koreantopik2/notes-2.tsv` (entries 101-200 ONLY)
+  - ...
+  - `output/koreantopik2/notes-39.tsv` (entries 3801-3873 ONLY)
+
+## Process
+
+1. Read `prompts/requirements-notes.md` for complete generation requirements
+2. Read `input/korean.tsv` (all vocabulary for cross-referencing)
+3. Read `input/koreantopik2-batch-N.tsv` (assigned batch of 100 entries)
+4. Generate related words ONLY for entries in the batch file
+5. Write output to corresponding batch file
+6. Process directly using Korean language understanding (no script-based automation)
+
+## Execution Strategy
+
+**Use subagents for isolated context generation:**
+
+See `prompts/subagent-management.md` for complete guidelines on:
+- Why use subagents (fresh context, parallel execution, isolation)
+- Context contamination prevention (DO NOT read output files)
+- What to read (requirements + vocab reference + assigned batch)
+- Independence and quality assurance
+
+**Per-batch agent task:**
+1. Read `prompts/requirements-notes.md` (quality requirements)
+2. Read `input/korean.tsv` (vocabulary reference - 5720 words)
+3. Read `input/koreantopik2-batch-N.tsv` (assigned batch file)
+4. Generate related words ONLY for entries in batch file
+5. Write `output/koreantopik2/notes-N.tsv`
+
+**CRITICAL for subagents:**
+- DO NOT read any existing output files
+- Generate from scratch based ONLY on requirements
+
+**Benefits of vocabulary reference approach:**
+- Agents can find related words across ALL vocabulary (TOPIK 1 + TOPIK 2)
+- Better quality cross-referencing (antonyms, honorific pairs, confusables)
+- Vocabulary reference is lightweight (just Korean words, no metadata)
+- Can find relationships across TOPIK levels (e.g., TOPIK 1 word related to TOPIK 2 word)
+- Batch file makes it explicit which entries to process
+- Each agent outputs ONLY their assigned batch (100 words)
+
+**Launch agents:**
+- Can run sequentially (1-39) or in parallel batches
+- Each agent receives identical instructions but different batch files
+- No shared state between agents
