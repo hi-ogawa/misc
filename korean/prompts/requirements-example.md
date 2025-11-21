@@ -18,7 +18,7 @@ REQUIREMENTS:
       - ✅ "생선을 기름에 튀겨서 바삭바삭해졌어요" (shows what you DO with oil - concept: cooking medium, multi-clause with result)
     - ❌ Generic requests/filler words (좀, 너무) without meaningful context:
       - ❌ "계산을 해 주세요" (generic request - works for any action)
-      - ✅ "이번 계산이 복잡해서 계산기를 썼어요" (shows characteristic: complexity requires tool)
+      - ✅ "이번 계산이 복잡하니까 계산기를 썼어요" (shows characteristic: complexity requires tool, -(으)니까)
     - ❌ Too generic contexts that could apply to anything:
       - ❌ "고등학생이 공부해요" (Where? What subject? Too generic)
       - ✅ "고등학생이 도서관에서 수학을 공부해요" (Location + specific subject matter)
@@ -41,10 +41,11 @@ REQUIREMENTS:
   - **Balance simplicity with memorable context**
     - Goal: Simple enough for TOPIK 1, but rich enough to be distinctive and memorable
     - ✅✅ **IDEAL: Multi-clause with connectives** (strongly preferred):
-      - "우리 고양이가 너무 뚱뚱해서 뛰지 못해요" (2 clauses with -서: reason → consequence)
-      - "소풍 갈 때 엄마가 김밥을 싸 주셨어요" (2 clauses with -을 때: time context)
-      - "비가 와서 바깥에 나가지 못했어요" (2 clauses with -서: cause → result)
-      - "시험이 있어서 학생이 도서관에서 공부해요" (2 clauses + enriched context)
+      - "우리 고양이가 너무 뚱뚱해서 뛰지 못해요" (-서: reason → consequence)
+      - "소풍 갈 때 엄마가 김밥을 싸 주셨어요" (-을 때: temporal context)
+      - "아침에 운동하고 샤워했어요" (-고: sequential actions)
+      - "날씨가 좋으니까 공원에서 산책해요" (-(으)니까: cause → suggestion)
+      - "내일 비가 올지 몰라서 우산을 챙겼어요" (-을지: uncertainty within larger context)
     - ✅ **ACCEPTABLE: Single clause but enriched with concrete details**:
       - "동생이 그저께 서울에서 돌아왔어요" (time + location - concrete and memorable)
       - "고등학생이 도서관에서 수학을 공부해요" (location + specific object)
@@ -58,19 +59,19 @@ REQUIREMENTS:
     - Goal: Create concrete mental images and word associations
     - **NEVER drop the subject (주어) - ALWAYS include it explicitly**
       - ❌ "고장이 났어요" (What broke? Subject missing! Not visualizable)
-      - ✅ "자전거가 고장 나서 수리점에 갔어요" (Specific object + consequence)
+      - ✅ "자전거가 고장 났지만 직접 고쳤어요" (Specific object + contrast, -지만)
       - ❌ 갑자기 나타났어요 (Who appeared? Subject dropped)
-      - ✅ 친구가 갑자기 나타나서 깜짝 놀랐어요 (Subject + reaction)
+      - ✅ "친구가 갑자기 나타나서 깜짝 놀랐어요" (Subject + reaction, -서)
     - **NEVER drop objects when they're essential for understanding**
       - ❌ 구워 먹었어요 (What did you grill? Too vague)
-      - ✅ 아침에 김을 구워서 밥이랑 먹었어요 (Time + object + accompaniment)
+      - ✅ "아침에 김을 굽고 밥을 먹었어요" (Time + object + sequence, -고)
 
 - **Create content-rich, memorable examples by adding concrete details:**
   - **Use concrete, specific nouns** (not pronouns/demonstratives or generic words)
     - ❌ "이거 주세요" (What is "this"? No concrete context)
-    - ✅ "목이 말라서 물 한 잔 주세요" (Concrete object + reason)
+    - ✅ "목이 마르니까 물 한 잔 주세요" (Concrete object + reason, -(으)니까)
     - ❌ "그것이 필요해요" (What is "that"? Too abstract)
-    - ✅ "회의 준비하려고 자료가 필요해요" (Specific noun + purpose)
+    - ✅ "회의 준비하려고 자료가 필요해요" (Specific noun + purpose, -려고)
     - ❌ "사람이 왔어요" (Which person? Not specific enough)
     - ✅ "친구가 어제 집에 놀러 왔어요" (Specific relationship + time + purpose)
   - **Add concrete context elements** (location/time/manner/specific object)
@@ -80,9 +81,9 @@ REQUIREMENTS:
     - ✅ "동생이 운동장에서 공을 높이 던져요" (Subject + location + manner)
   - **Show characteristic actions** that demonstrate word's typical usage
     - ❌ "내일 가져올게요" (What will you bring? Too vague)
-    - ✅ "비가 올 것 같아서 내일 우산을 가져올게요" (Reason + specific object)
+    - ✅ "비가 올 것 같으니까 내일 우산을 가져올게요" (Reason + specific object, -(으)니까)
     - ❌ "기자를 만났어요" (Could be anyone, too bare)
-    - ✅ "기자가 여러 질문을 했어요" (Shows what journalists DO, visualizable)
+    - ✅ "기자가 여러 질문을 하고 사진을 찍었어요" (Shows what journalists DO, sequential, -고)
   - **Use semantic relationships and contrasts** when relevant
     - ❌ "겉과 속이 달라요" (Too bare - what is different about what?)
     - ✅ "이 과자는 겉과 속 맛이 달라요" (Specific object + what aspect differs)
@@ -91,11 +92,11 @@ REQUIREMENTS:
 
 - **Word type specific guidelines:**
   - **Adjectives**: Often better with modifying form + noun + verb
-    - Example: 가볍다 → "가벼운 가방을 사서 여행에 가져갔어요" (Modifying form + practical use)
+    - Example: 가볍다 → "가벼운 가방을 샀지만 물건을 많이 넣었어요" (Modifying form + contrast, -지만)
   - **Verbs**: Use with objects/locations that show characteristic usage
     - Example: 가르치다 → "주말마다 친구한테 영어를 가르쳐요" (Time + recipient + object)
   - **Nouns**: Show typical actions or environments (how people interact with them)
     - Not just "X exists" but "what you DO with/to X in real life"
     - Example: 가족 → "방학 때 가족이랑 제주도에 갔어요" (Time + typical activity)
   - **Adverbs**: Use in natural sentences with specific context
-    - Example: 꼭 → "약속이 있어서 친구가 내일 꼭 와야 해요" (Reason + necessity)
+    - Example: 꼭 → "약속이 있으니까 친구가 내일 꼭 와야 해요" (Reason + necessity, -(으)니까)
