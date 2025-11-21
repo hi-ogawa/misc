@@ -1,7 +1,7 @@
 # Research: Example Sentence Complexity and Learning Progression
 
 **Created**: 2025-11-21
-**Status**: Investigation in progress
+**Status**: Research complete, pending decision on implementation
 **Related**: `requirements-example.md`, `research-example-sentences.md`, `analysis-example.md`
 
 ---
@@ -219,52 +219,156 @@ If examples are well-designed for vocabulary learning (not grammar), the same ex
 
 ## Findings
 
-*(To be populated during research)*
+### Finding 1: Comprehensible Input Must Be 95-98% Known
 
-### Finding 1: [Title]
+**Source**: Krashen's i+1 hypothesis, supported by subsequent research
 
-**Source**:
-**Key insight**:
+**Key insights**:
+- Input should be 95-98% comprehensible for optimal acquisition
+- The "distance" between i and i+1 cannot be too great
+- If input is too far beyond (i+2, i+3), acquisition stalls
+- Cognitive load becomes too high when <90% comprehensible
+
 **Implication for our approach**:
+- Multi-clause sentences with unfamiliar connectives (-서, -(으)니까) may push beginners below 95% comprehension
+- For early learners: simpler structures ensure the vocabulary item is the "+1", not the grammar
+- As grammar knowledge grows, complex structures become comprehensible, freeing capacity for vocabulary
+
+### Finding 2: CEFR Progression Shows Clear Complexity Scaling
+
+**Source**: CEFR level descriptors, text complexity research
+
+**Key insights**:
+- **A1**: Very short sentences, present tense only, few hundred words
+- **A2**: Subordinate clauses introduced, 600-1000 words
+- **B1**: Embedded clauses, conditional statements, ~2000 words
+- **A2→B1 transition is significant**: requires comfort with embedded clauses and nuanced conditions
+- Sentence length alone is not a good discriminator; clause complexity matters more
+
+**Implication for our approach**:
+- TOPIK 1 (≈A1-A2) learners may not be ready for embedded clauses
+- Multi-clause examples (current v3) may be more appropriate for TOPIK 2 (≈B1+)
+- The original "3-4 words" approach aligns with A1-A2 expectations
+
+### Finding 3: Graded Readers Use Frequency + Structural Complexity Together
+
+**Source**: Fountas & Pinnell, Lexile, graded reader research
+
+**Key insights**:
+- Leveling considers BOTH vocabulary frequency AND sentence complexity
+- "Simpler, more natural sentences are easier to process"
+- "Embedded and conjoined clauses make text more difficult"
+- Vocabulary limited by frequency headword counts:
+  - Level 1: 200 headwords
+  - Level 6: 1200 headwords
+- Higher levels permit more complex clause structures
+
+**Implication for our approach**:
+- Supports the frequency-complexity alignment hypothesis
+- Early vocabulary (high frequency) → simple structures
+- Later vocabulary (lower frequency) → more complex structures permitted
+- Complexity should scale with vocabulary frequency, not be uniform
+
+### Finding 4: High-Constraining Context Benefits Vocabulary Learning
+
+**Source**: L2 vocabulary acquisition research
+
+**Key insights**:
+- "High-constraining contexts generate more robust learning than low-constraining contexts"
+- Low-frequency words benefit from contextual clues in text
+- Word frequency correlates strongly with perceived difficulty
+- Prior knowledge affects contextual learning effectiveness
+
+**Implication for our approach**:
+- Richer context (multi-clause) IS beneficial for vocabulary learning
+- BUT the learner must be able to comprehend the context (95%+ known)
+- For beginners: context richness limited by grammar knowledge
+- For intermediate+: richer context becomes accessible and beneficial
+
+### Finding 5: Syntactic Complexity Adds Processing Load
+
+**Source**: L2 reading comprehension research
+
+**Key insights**:
+- "Syntactically complex texts present greater difficulty in both L1 and L2 reading"
+- L2 learners rely more on lexical/semantic cues than syntactic cues (shallow-structure hypothesis)
+- Clause complexity significantly affects paragraph comprehension
+
+**Implication for our approach**:
+- Complex structures add cognitive load beyond vocabulary
+- If learner is still processing grammar, less capacity for vocabulary acquisition
+- Simpler structures for beginners = more capacity for vocabulary focus
 
 ---
 
 ## Implications for Requirements
 
-*(To be updated based on findings)*
+### Research-Based Conclusions
 
-### Current Approach (v2)
-- Target: ~5.7 words, multi-clause with connectives
-- Applied uniformly regardless of learner stage
-- Justification: Qualitative preference for richer context
+**The frequency-complexity alignment hypothesis is supported by research:**
 
-### Questions for Requirements
-1. Should `requirements-example.md` have proficiency-specific variants?
-2. Should we define complexity tiers (beginner/intermediate/advanced)?
-3. Or is one "rich enough" level appropriate for all stages?
+1. **CEFR/graded readers confirm**: Complexity should scale with proficiency
+2. **i+1 principle**: Input must be 95-98% comprehensible; grammar counts toward this
+3. **Cognitive load**: Complex structures consume processing capacity needed for vocabulary
+4. **Rich context helps**: BUT only when the context itself is comprehensible
 
-### Potential Strategies
-- **Static**: One well-designed example serves all stages (current approach)
-- **Tiered**: Different complexity targets per proficiency level
-- **Dynamic**: Regenerate examples as learner advances
-- **Layered**: Same card, multiple examples of increasing complexity
+### Revised Understanding
+
+| Stage | Vocab Frequency | Grammar Knowledge | Appropriate Structure |
+|-------|-----------------|-------------------|----------------------|
+| Early (TOPIK 1 초급) | High frequency | Basic (-요 endings) | Simple: 3-4 words, single clause |
+| Mid (TOPIK 1 중급) | Medium frequency | Some connectives | Moderate: 4-5 words, simple connectives |
+| Later (TOPIK 2) | Lower frequency | Connectives fluent | Rich: 5-6+ words, multi-clause |
+
+**Key insight**: The original "3-4 words" wasn't wrong—it was appropriate for early stages. The current "multi-clause" isn't wrong either—it's appropriate for intermediate+ stages. Both are valid at different points.
+
+### Recommended Strategy
+
+**Tiered approach based on vocabulary position/frequency:**
+
+1. **For TOPIK 1 (beginner vocabulary)**:
+   - Return to simpler structures (v1/v2 style)
+   - Single clause, 3-5 words
+   - Avoid connectives learner hasn't acquired yet
+   - Focus: vocabulary is the "+1", not grammar
+
+2. **For TOPIK 2 (intermediate vocabulary)**:
+   - Use current rich approach (v3 style)
+   - Multi-clause with connectives
+   - 5-6+ words
+   - Focus: richer context aids retention of harder words
+
+3. **Alternative: Vocabulary-frequency-based complexity**
+   - Rather than TOPIK level, base complexity on word frequency
+   - High-frequency words → simpler examples
+   - Low-frequency words → richer context for scaffolding
+
+### Questions Resolved
+
+| Question | Answer |
+|----------|--------|
+| Should complexity scale with proficiency? | **Yes** - supported by CEFR, graded readers, i+1 |
+| Was original "3-4 words" appropriate? | **Yes, for beginners** - aligns with A1-A2 expectations |
+| Is current "multi-clause" appropriate? | **Yes, for intermediate+** - aligns with B1+ expectations |
+| Should TOPIK 2 use different strategy? | **Yes** - research supports different complexity levels |
 
 ---
 
-## Open Questions
+## Remaining Open Questions
 
-1. Is there research specifically on vocabulary flashcard example complexity?
-2. Do other Anki/SRS practitioners address complexity progression?
-3. How do commercial apps (Duolingo, Memrise) handle this?
-4. Is the "one example per word" model limiting, or sufficient?
+1. How to operationalize "connectives the learner knows" in prompt requirements?
+2. Should TOPIK 1 v2 examples (5.71 words) be regenerated with simpler approach?
+3. What specific connectives are appropriate at each TOPIK sub-level?
+4. How do commercial apps (Duolingo, Memrise) handle complexity progression?
 
 ---
 
 ## Next Steps
 
-- [ ] Search academic literature on complexity progression in L2
-- [ ] Review Krashen's i+1 for specific guidance on calibration
-- [ ] Examine CEFR complexity descriptors by level
-- [ ] Look at graded reader leveling methodologies
-- [ ] Check if Anki/SRS research addresses complexity
-- [ ] Synthesize findings into progression model
+- [x] Search academic literature on complexity progression in L2
+- [x] Review Krashen's i+1 for specific guidance on calibration
+- [x] Examine CEFR complexity descriptors by level
+- [x] Look at graded reader leveling methodologies
+- [ ] Define specific requirements for TOPIK 1 vs TOPIK 2 example generation
+- [ ] Decide: regenerate TOPIK 1 with simpler approach, or keep current v2?
+- [ ] Create `requirements-example-topik1.md` and `requirements-example-topik2.md` if tiered approach adopted
