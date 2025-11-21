@@ -31,49 +31,50 @@ This is not about finding a single "optimal" complexity, but understanding the r
 
 Example sentence requirements have evolved through empirical iteration:
 
-| Generation | Words | Chars | Style | Learning Stage |
-|------------|-------|-------|-------|----------------|
-| Original dataset | ~2 | - | Word pairs, not sentences | Pre-study reference |
-| Gen 1 | ~3 | - | Full sentences, no quality criteria | First ~100 vocab |
-| Gen 2 | ~3.5 | - | Avoiding generic terms, pronouns | Next ~500 vocab |
-| Gen 3 (v1) | 3.81 | 11.98 | Systematic requirements | Full dataset |
-| **Gen 4 (v2)** | **5.71** | **17.02** | Rich multi-clause | Current |
+| Version | Applied To | Words | Style |
+|---------|------------|-------|-------|
+| v1 | First ~400 vocab | ~3-4 | "3-4 words ideal", natural usage |
+| v2 | Next ~300 vocab | 3.81 avg | "SIMPLE and MINIMAL" + quality constraints |
+| **v3** | **Planned (not yet applied)** | **5.71 avg** | **Rich multi-clause** |
 
-### Requirements Evolution (3 major versions)
+### Requirements Evolution (3 versions)
 
 Archived versions for reference:
 - `requirements-example-v1.md` - Original
 - `requirements-example-v2.md` - "SIMPLE and MINIMAL"
-- `requirements-example.md` - Current
+- `requirements-example.md` - Current (v3)
 
 **Version 1 (Original)**:
 - "Keep sentences minimal: 3-4 words is ideal"
 - Focus on natural, common usage
 - Examples: "학교에 먼저 가요", "가벼운 가방을 샀어요"
 - No explicit guidance on connectives or multi-clause
+- Applied to: first ~400 vocabulary items
 
 **Version 2 (1b8d66a - "improve vocabulary prompts")**:
-- "Keep sentences SIMPLE and MINIMAL - one main idea only"
+- Added quality checklist, concrete context, distinctive usage requirements
+- BUT also added: "Keep sentences SIMPLE and MINIMAL - one main idea only"
 - ❌ Explicitly avoided compound sentences and clauses
-- ❌ "Avoid clauses: 소풍 갈 때 엄마가 김밥을 싸 주셨어요"
-- Added quality checklist, concrete context requirements
-- Batch 7 (3.04 words) was generated under this guidance
+- Applied to: next ~300 vocabulary items
+- **Anomaly**: Most batches still produced rich sentences (due to other constraints pushing detail)
+- **Batch 7 was the true "minimal" outlier** (3.04 words) - followed the "SIMPLE and MINIMAL" guidance too literally
+- In retrospect: the "SIMPLE and MINIMAL" constraint was unnecessary and counterproductive
 
-**Version 3 (Current - multiple iterations)**:
+**Version 3 (Current - not yet applied)**:
+- Removed "SIMPLE and MINIMAL" constraint
 - "STRONGLY PREFER multi-clause sentences (2+ clauses)"
 - Connectives ENCOURAGED: -서, -(으)니까, -고, -지만, -을 때
 - "Force evaluation through distinctive context" as core principle
-- v2 examples: 5.71 words average
+- Test results: 5.71 words average
+- **Status**: Planned for regeneration after this research
 
-**Key insight**: The requirements shifted 180° from "3-4 words ideal" → "strongly prefer multi-clause". This was driven by empirical observation that richer context aids vocabulary retention—but raises the question of whether the original simpler approach was actually appropriate for earlier learning stages.
+**Key insight**: The "SIMPLE and MINIMAL" constraint in v2 was an overcorrection. The other v2 requirements (distinctive context, concrete details) naturally produced richer sentences—Batch 7's minimal style was the anomaly, not the norm. Removing the constraint and explicitly encouraging multi-clause (v3) codifies what most batches were already doing.
 
-**Historical note**: The shift was not planned. Originally, minimal sentences were believed to be more effective. When LLM agents generated longer multi-clause sentences, they were initially considered "anomalies" or errors. However, upon review, these "anomalies" turned out to be more helpful at the current learning stage—leading to the requirements update.
-
-This suggests: what's "correct" depends on where the learner is. The original minimal approach may have been right for earlier stages; the multi-clause approach became better as proficiency grew.
+**Historical note**: The shift was discovered through anomaly. When reviewing v2 output, Batch 7's minimal examples seemed "correct per spec" but felt less helpful for learning than Batches 3/6's richer examples. This led to questioning whether "SIMPLE and MINIMAL" was the right approach—and ultimately removing it in v3.
 
 **Methodological note**:
-- First generation processed all entries without subagent batching—quality may have degraded due to context window limitations
-- Later generations introduced subagent batching (100 entries per batch, parallel processing)
+- First generation (v1) processed all entries without subagent batching—quality may have degraded due to context window limitations
+- v2 introduced subagent batching (100 entries per batch, parallel processing)
 - Inter-subagent variation in prompt interpretation led to different batch styles (e.g., Batch 7 minimal vs. Batch 3/6 richer)
 - This variation, initially seen as inconsistency, actually enabled discovery: comparing batch styles revealed which approach worked better at current learning stage
 
