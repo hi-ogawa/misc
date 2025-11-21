@@ -246,10 +246,28 @@ If examples are well-designed for vocabulary learning (not grammar), the same ex
 - **A2→B1 transition is significant**: requires comfort with embedded clauses and nuanced conditions
 - Sentence length alone is not a good discriminator; clause complexity matters more
 
+**Korean-specific note on subordinate vs. embedded clauses:**
+
+| Type | CEFR | Korean Structure | Example |
+|------|------|------------------|---------|
+| Subordinate (linear) | A2 | Connectives: -서, -고, -을 때 | 비가 와**서** 우산을 썼어요 |
+| Adjective modifier | A2 | Adjective modifying form | 가벼**운** 가방 |
+| Embedded (relative) | B1 | Verb modifying form | 내가 어제 **산** 책 |
+| Complex embedded | B1+ | Nested clauses | 친구가 **만든** 음식을 **먹으면서** 이야기했어요 |
+
+**Current v3 requirements use:**
+- ✅ Connectives (-서, -고, -(으)니까, -지만, -을 때) - A2 level
+- ✅ Adjective modifying forms (가벼운 가방) - A2 level
+- ❌ Verb modifying forms (내가 산 책) - B1 level, NOT included
+
+**For future TOPIK 2 requirements, consider adding:**
+- Verb modifying forms: -은/ㄴ (past), -는 (present), -을/ㄹ (future)
+- Example: "어제 **본** 영화가 재미있었어요" (The movie I watched yesterday was interesting)
+- This adds true embedded clause complexity appropriate for intermediate learners
+
 **Implication for our approach**:
-- TOPIK 1 (≈A1-A2) learners may not be ready for embedded clauses
-- Multi-clause examples (current v3) may be more appropriate for TOPIK 2 (≈B1+)
-- The original "3-4 words" approach aligns with A1-A2 expectations
+- TOPIK 1 (≈A1-A2): Current v3 is appropriate (connectives + adjective modifiers)
+- TOPIK 2 (≈B1+): Could add verb modifying forms as additional complexity dimension
 
 ### Finding 3: Graded Readers Use Frequency + Structural Complexity Together
 
@@ -355,21 +373,41 @@ If examples are well-designed for vocabulary learning (not grammar), the same ex
 
 ---
 
-## Remaining Open Questions
+## Action Items
 
-1. How to operationalize "connectives the learner knows" in prompt requirements?
-2. Should TOPIK 1 v2 examples (5.71 words) be regenerated with simpler approach?
-3. What specific connectives are appropriate at each TOPIK sub-level?
-4. How do commercial apps (Duolingo, Memrise) handle complexity progression?
+### Decisions Needed
 
----
+| Decision | Options | Research Recommendation |
+|----------|---------|------------------------|
+| **TOPIK 1 strategy** | A) Keep v3 (5.71 words)<br>B) Revert to simpler (3-4 words) | B for early vocab, A for later vocab |
+| **TOPIK 2 strategy** | A) Same as TOPIK 1<br>B) Richer than TOPIK 1 (add verb modifiers) | B - research supports higher complexity |
+| **Complexity basis** | A) By TOPIK level<br>B) By vocabulary frequency | Either works; B is more granular |
 
-## Next Steps
+### Concrete Next Actions
 
-- [x] Search academic literature on complexity progression in L2
-- [x] Review Krashen's i+1 for specific guidance on calibration
-- [x] Examine CEFR complexity descriptors by level
-- [x] Look at graded reader leveling methodologies
-- [ ] Define specific requirements for TOPIK 1 vs TOPIK 2 example generation
-- [ ] Decide: regenerate TOPIK 1 with simpler approach, or keep current v2?
-- [ ] Create `requirements-example-topik1.md` and `requirements-example-topik2.md` if tiered approach adopted
+**Immediate (before next regeneration):**
+- [ ] Decide: Apply v3 uniformly to TOPIK 1, or create tiered approach?
+- [ ] If tiered: Create `requirements-example-topik1.md` (simpler, A2 level)
+- [ ] If tiered: Create `requirements-example-topik2.md` (richer, B1 level with verb modifiers)
+
+**For TOPIK 2 requirements (when ready):**
+- [ ] Add verb modifying forms (-은/ㄴ, -는, -을/ㄹ) as allowed structures
+- [ ] Example: "어제 **본** 영화가 재미있었어요"
+- [ ] Consider more complex connectives (-(으)면서, -더니, etc.)
+
+**Future considerations:**
+- [ ] Investigate frequency-based complexity (per-word, not per-dataset)
+- [ ] Consider layered examples (simple + rich for same word)
+
+### Research Completed
+
+- [x] Krashen's i+1 and comprehensible input
+- [x] CEFR complexity descriptors by level
+- [x] Graded reader leveling methodology
+- [x] Vocabulary frequency and sentence complexity relationship
+
+### Open Questions (lower priority)
+
+1. How do commercial apps (Duolingo, Memrise) handle complexity progression?
+2. What specific connectives are taught at each TOPIK sub-level?
+3. Is there Korean-specific readability research?
