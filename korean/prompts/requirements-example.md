@@ -26,12 +26,23 @@ REQUIREMENTS:
 - **Sentence structure requirements:**
   - Must include at least one noun (명사) AND one verb (동사)
   - Prefer complete sentences over noun phrases
-  - **Keep sentences SIMPLE and MINIMAL - one main idea only**
-    - ❌ Avoid compound sentences: "엄마가 프라이팬에 기름을 두르고 계란을 부쳤어요" (Too long - two actions)
-    - ✅ Simple sentence: "엄마가 계란을 기름에 부쳤어요" (One clear action)
-    - ❌ Avoid clauses: "소풍 갈 때 엄마가 김밥을 싸 주셨어요" (Time clause + main clause)
-    - ✅ Simple: "엄마가 소풍 도시락에 김밥을 쌌어요" (One statement)
-  - Add enough detail to make the scene CONCRETE and VISUALIZABLE, but no more
+  - **Balance simplicity with memorable context**
+    - Goal: Simple enough for TOPIK 1, but rich enough to be distinctive and memorable
+    - ✅ **PREFERRED: Connectives and clauses that add context** (aim for this style):
+      - "우리 고양이가 너무 뚱뚱해서 뛰지 못해요" (-서 shows reason - aids understanding)
+      - "동생이 그저께 서울에서 돌아왔어요" (time + location - concrete and memorable)
+      - "소풍 갈 때 엄마가 김밥을 싸 주셨어요" (-을 때 temporal clause - natural context)
+      - "글쎄, 내일 시간이 있을지 몰라요" (-을지 shows uncertainty - natural usage)
+    - ⚠️ **BARE MINIMUM: Technically correct but less memorable** (avoid this style):
+      - "무궁화가 여름에 피어요" (Too bare - lacks distinctive context)
+      - "박물관 입장이 무료예요" (Minimal but forgettable)
+  - **Connectives and clauses are ENCOURAGED when they add learning value:**
+    - -서 (reason/cause): helps understand why something happens
+    - -을 때 (time): adds temporal context
+    - -고 (sequential actions): shows natural action sequences
+    - -을지 (uncertainty): shows natural usage patterns
+    - Use natural, conversational structures - don't artificially restrict complexity
+  - Add enough detail to make the scene CONCRETE and VISUALIZABLE
   - **ALWAYS include particles (가/이, 는/은, 를/을, etc.) explicitly for learning purposes**
   - **NEVER drop the subject (주어) - ALWAYS include it explicitly**
     - ❌ "고장이 났어요" (What broke? Subject missing! Not visualizable)

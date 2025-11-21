@@ -94,8 +94,9 @@ Both with overall stats and per-batch breakdown.
 
 **Interpretation**:
 - Different subagents interpret "appropriate sentence length" differently
-- This is **not** a quality problem (all follow requirements-example.md)
-- This **is** a consistency/calibration problem across batches
+- Root cause identified: Batch 7 over-optimized for "SIMPLE and MINIMAL" guidance in requirements
+- Batch 3/6 used connectives (-서, -을 때) which violated requirements but produced better learning outcomes
+- **Action taken**: Updated `requirements-example.md` to encourage batch 3/6 style and discourage batch 7's bare minimum approach
 
 ### 3. Appropriate Difficulty Progression
 
@@ -132,9 +133,18 @@ As a learner progresses through batches, they will encounter:
 
 This creates **inconsistent cognitive load** across study sessions.
 
-### Current Study Progress
+### Current Study Progress & User Feedback
 
-User is around batch 7 (one of the most minimal batches), so will experience complexity increase in later batches (especially batches 11-12).
+User is around batch 7 (one of the most minimal batches).
+
+**From actual Anki practice experience:**
+- **Preferred style**: Batch 3/6 examples with connectives and richer context
+  - Batch 3 (4.22 words): "동생이 그저께 서울에서 돌아왔어요" (time + location)
+  - Batch 6 (4.30 words): "우리 고양이가 너무 뚱뚱해서 뛰지 못해요" (-서 connective)
+- **Less preferred**: Batch 7's minimal style
+  - Batch 7 (3.04 words): "무궁화가 여름에 피어요" (bare minimum)
+
+**Learning insight**: Richer context with connectives (-서, -을 때, -을지) aids memorization and understanding, even if sentences are longer.
 
 ## Understanding Statistics
 
@@ -156,17 +166,20 @@ Example: TOPIK 1 overall IQR = [3, 4]
 
 ## Open Questions
 
-1. **Is this variation acceptable?**
-   - Pro: Provides natural diversity in example styles
-   - Con: Inconsistent learning experience across batches
+1. **~~Should requirements-example.md be more specific?~~** ✅ **RESOLVED**
+   - User feedback confirmed batch 3/6 style (with connectives) is preferred over batch 7's minimal style
+   - Updated requirements to encourage connectives (-서, -을 때, -을지) that add learning value
+   - Batch 7 examples now explicitly shown as "BARE MINIMUM" to avoid
 
-2. **Should requirements-example.md be more specific?**
-   - Could add explicit target: "3-4 words for TOPIK 1, 4-5 words for TOPIK 2"
-   - Trade-off: Less flexibility for subagents to adapt to vocabulary complexity
+2. **Is variation still acceptable with updated requirements?**
+   - Some variation (3.5-4.5 words) may still occur and could be beneficial for diversity
+   - Extreme minimalism (batch 7 style) now discouraged by updated requirements
+   - Future batches should converge toward batch 3/6 style
 
 3. **Does vocabulary difficulty correlate with sentence length?**
-   - Need to investigate: Do harder words naturally require longer contextual examples?
-   - Check: Are high-mean batches teaching inherently more complex vocabulary?
+   - Batch 7 vocabulary was equally basic as other batches (무겁다, 무릎, 문 vs 어리다, 어머니, 얼굴)
+   - Variation is in example generation style, not vocabulary complexity
+   - No correlation found between vocabulary difficulty and sentence length
 
 ## Visualization
 
@@ -185,8 +198,9 @@ Example: TOPIK 1 overall IQR = [3, 4]
 - [x] Implement character count analysis in `scripts/analyze-examples.py`
 - [x] Run analysis on both TOPIK 1 and TOPIK 2
 - [x] Update this document with character count findings
-- [ ] Sample actual examples from low vs high complexity batches (e.g., batch 7 vs batch 12)
-- [ ] Evaluate if sentence length differences affect learning quality in practice
-- [ ] Consider whether to add explicit length guidance to requirements-example.md
-- [ ] Investigate correlation between vocabulary difficulty and sentence length
+- [x] Sample actual examples from low vs high complexity batches (batches 3, 6, 7)
+- [x] Evaluate if sentence length differences affect learning quality (user feedback: batch 3/6 preferred)
+- [x] Update requirements-example.md based on findings (encourage connectives, discourage bare minimum)
+- [x] Investigate correlation between vocabulary difficulty and sentence length (no correlation found)
 - [ ] Calculate chars/word ratio per batch to identify batches with unusually simple/complex vocabulary
+- [ ] Consider if batch 7 should be regenerated with updated requirements (low priority - examples are functional)
