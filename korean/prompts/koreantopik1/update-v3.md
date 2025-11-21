@@ -24,6 +24,8 @@ Regenerate all 1,847 example sentences using updated `requirements-example.md` t
 **Output file**:
 - `output/koreantopik1/koreantopik1_anki_import_v3.tsv`
 
+**Note**: Header line is commented with `#` for Anki import compatibility.
+
 ## Anki Import Format
 
 **Columns** (9 total, matches TOPIK 2 structure):
@@ -90,15 +92,60 @@ python scripts/generate-audio-verify.py --output output/koreantopik1/audio
 python scripts/generate-audio-stats.py --output output/koreantopik1/audio
 ```
 
-### Phase 6: Copy audio to Anki
+### Phase 6: Backup & Copy audio to Anki
+
+**Backup Anki collection first:**
+1. Open Anki
+2. File -> Export
+3. Export format: "Anki Collection Package (.colpkg)" or deck as `.apkg`
+4. Include media and scheduling information
+5. Save as `koreantopik1_v2_backup.apkg` (before v3 update)
+
+**Copy v3 example audio to Anki media folder:**
 
 ```bash
 cp output/koreantopik1/audio/koreantopik1_example_ko_*.mp3 ~/.local/share/Anki2/사용자\ 1/collection.media/
 ```
 
+**Verification:**
+```bash
+ls ~/.local/share/Anki2/사용자\ 1/collection.media/koreantopik1_example_ko_*.mp3 | wc -l
+# Expected: 1847
+```
+
 ### Phase 7: Import into Anki
 
-1. Open Anki
-2. File -> Import -> select `output/koreantopik1/koreantopik1_anki_import.tsv`
-3. Ensure "Update existing notes when first field matches" is checked
-4. Import
+**Goal**: Update all 1,847 cards with new v3 example sentences and audio.
+
+1. **Open Anki** and go to File -> Import
+
+2. **Select the import file**:
+   - Navigate to: `output/koreantopik1/koreantopik1_anki_import_v3.tsv`
+   - Click "Open"
+
+3. **Configure Import Settings**:
+   - **Type**: Korean Vocabulary
+   - **Deck**: (Select your TOPIK 1 deck)
+   - **Update existing notes when first field matches**: ✅ CHECKED (crucial!)
+   - **Allow HTML in fields**: ✅ CHECKED
+   - **Fields separated by**: Tab
+
+4. **Verify Field Mapping** (should auto-detect):
+   ```
+   Field 1 → number
+   Field 2 → korean
+   Field 3 → english
+   Field 4 → example_ko
+   Field 5 → example_en
+   Field 6 → etymology
+   Field 7 → notes
+   Field 8 → korean_audio
+   Field 9 → example_ko_audio
+   ```
+
+5. **Click "Import"**
+
+6. **Verify Results**:
+   - Should show: "1847 notes updated"
+   - Open a few random cards and test audio plays correctly
+
