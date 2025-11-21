@@ -103,6 +103,25 @@ If learner doesn't know -서, then:
 
 **Implication**: Example sentence complexity has dependencies on grammar knowledge, not just vocabulary size. Multi-clause examples assume grammatical readiness.
 
+### Pedagogical Benefit of Simple Structures for Beginners
+
+For beginner vocabulary, simple -요 endings serve double purpose:
+
+1. **Keep grammar comprehensible** - grammar isn't the "+1", vocabulary is
+2. **Teach conjugation patterns** - learner sees stem→conjugated mapping:
+   - Vocab card shows: stem form (가다, 듣다, 만들다)
+   - Example shows: conjugated form (가요, 들어요, 만들어요)
+
+**Especially valuable for irregular verbs:**
+| Type | Stem | Conjugated | Pattern |
+|------|------|------------|---------|
+| ㄷ irregular | 듣다 | 들어요 | ㄷ→ㄹ before vowel |
+| ㅂ irregular | 춥다 | 추워요 | ㅂ→우 before vowel |
+| 르 irregular | 부르다 | 불러요 | 르→ㄹㄹ |
+| ㅎ irregular | 그렇다 | 그래요 | ㅎ drops |
+
+**Implication**: Simpler examples aren't just "easier"—they actively teach stem→conjugation mapping that learners need to internalize. This is lost when examples use complex connective forms (e.g., 들어서, 추우니까) that obscure the basic conjugation pattern.
+
 ### Hypothesis: Natural Frequency-Complexity Alignment
 
 There may be a natural alignment between vocabulary frequency and appropriate sentence complexity:
@@ -406,8 +425,38 @@ If examples are well-designed for vocabulary learning (not grammar), the same ex
 - [x] Graded reader leveling methodology
 - [x] Vocabulary frequency and sentence complexity relationship
 
+### Scope Consideration: Vocabulary vs. Grammar
+
+**Primary goal**: This deck is for systematic vocabulary learning. Grammar is technically out of scope.
+
+**Applying i+1 principle to grammar in examples:**
+
+If grammar is **already known** (not the "+1"):
+- ✅ Use it freely in examples - no cognitive load added
+- ✅ Reinforces grammar through repeated exposure
+- ✅ Creates richer context for vocabulary (which IS the "+1")
+- This is **exploitation**, not piggybacking
+
+If grammar is **unknown** (would become the "+1"):
+- ❌ Competes with vocabulary for learning capacity
+- ❌ Example becomes grammar puzzle, not vocab learning
+- Should use simpler structures instead
+
+**Implication**: The question isn't "should we include grammar?" but "does the learner already know this grammar?"
+- Known grammar → exploit it for richer examples
+- Unknown grammar → avoid it to keep vocabulary as the "+1"
+
+**For learners ahead of their vocab level** (grammar > vocabulary position):
+- Richer examples are appropriate (v3 style)
+- Grammar structures reinforce rather than distract
+
+**For true beginners** (grammar ≈ vocabulary position):
+- Simpler examples needed (v1 style)
+- New grammar would compete with new vocabulary
+
 ### Open Questions (lower priority)
 
 1. How do commercial apps (Duolingo, Memrise) handle complexity progression?
 2. What specific connectives are taught at each TOPIK sub-level?
 3. Is there Korean-specific readability research?
+4. Would a dedicated grammar pattern deck complement vocab learning?
