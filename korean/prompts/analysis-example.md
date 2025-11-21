@@ -14,11 +14,17 @@ python scripts/analyze-examples.py --input output/koreantopik1_anki_import.tsv
 python scripts/analyze-examples.py --input output/koreantopik2/koreantopik2_anki_import.tsv
 ```
 
-**Output**: Korean word count statistics with per-batch breakdown
+**Output**: Two separate tables
+1. Word count statistics (Korean words)
+2. Character count statistics (Korean characters)
+
+Both with overall stats and per-batch breakdown.
 
 ## Overall Results
 
-### TOPIK 1 (1,847 entries, 19 batches)
+### Word Count Analysis
+
+**TOPIK 1** (1,847 entries, 19 batches)
 - **Mean**: 3.81 words
 - **Median**: 4.0 words
 - **Standard deviation**: 0.83
@@ -26,13 +32,38 @@ python scripts/analyze-examples.py --input output/koreantopik2/koreantopik2_anki
 - **Range**: 2-8 words
 - **Per-batch mean σ**: 0.73
 
-### TOPIK 2 (3,873 entries, 39 batches)
+**TOPIK 2** (3,873 entries, 39 batches)
 - **Mean**: 3.93 words
 - **Median**: 4.0 words
 - **Standard deviation**: 0.80
 - **IQR**: [3, 4] words (middle 50% of sentences)
 - **Range**: 2-9 words
 - **Per-batch mean σ**: 0.74
+
+### Character Count Analysis
+
+**Why character count matters**:
+- Word count can be misleading: "학생" (1 word, 2 chars) vs "대학생" (1 word, 3 chars)
+- A 3-word sentence could be 6-15 characters depending on word complexity
+- Character count may correlate better with actual reading difficulty and visual complexity
+
+**TOPIK 1** (1,847 entries, 19 batches)
+- **Mean**: 11.98 characters
+- **Median**: 12.0 characters
+- **Standard deviation**: 2.45
+- **IQR**: [10, 14] characters (middle 50% of sentences)
+- **Range**: 4-23 characters
+- **Per-batch mean σ**: 2.08
+- **Chars/word ratio**: ~3.14 chars/word average
+
+**TOPIK 2** (3,873 entries, 39 batches)
+- **Mean**: 12.96 characters
+- **Median**: 13.0 characters
+- **Standard deviation**: 2.30
+- **IQR**: [11, 14] characters (middle 50% of sentences)
+- **Range**: 6-25 characters
+- **Per-batch mean σ**: 2.00
+- **Chars/word ratio**: ~3.30 chars/word average
 
 ## Key Findings
 
@@ -73,6 +104,23 @@ python scripts/analyze-examples.py --input output/koreantopik2/koreantopik2_anki
 **Interpretation**:
 - Matches expected difficulty level (beginner → intermediate/advanced)
 - Natural progression in vocabulary complexity
+
+### 4. Character Count Reveals Word Complexity
+
+**Finding**: TOPIK 2 uses more complex words (higher chars/word ratio: 3.30 vs 3.14)
+
+**Insights**:
+- Character count variance (σ ~2.0-2.5) is higher than word count variance (σ ~0.7-0.8), showing that word complexity adds another dimension beyond sentence length
+- TOPIK 2 sentences are both longer (3.93 vs 3.81 words) AND use longer words (12.96 vs 11.98 chars)
+- Batch 7 in both datasets shows minimal complexity in BOTH metrics:
+  - TOPIK 1 Batch 7: 3.04 words, 9.18 chars (lowest in both)
+  - TOPIK 2 Batch 7: 3.02 words, 10.39 chars (lowest/near-lowest in both)
+- This confirms batch 7 prefers short sentences with simple vocabulary
+
+**Interpretation**:
+- Character count is a valuable complementary metric to word count
+- Some batches consistently prefer simpler vocabulary (lower chars/word), not just shorter sentences
+- Reading difficulty is multi-dimensional: sentence length + word complexity
 
 ## Implications for Learning
 
@@ -120,9 +168,25 @@ Example: TOPIK 1 overall IQR = [3, 4]
    - Need to investigate: Do harder words naturally require longer contextual examples?
    - Check: Are high-mean batches teaching inherently more complex vocabulary?
 
+## Visualization
+
+**Current approach**: Markdown tables (readable in terminal, easy to generate)
+
+**Future consideration**: Proper visualization tools
+- Line charts for batch-to-batch trends
+- Histograms for distribution analysis
+- Box plots for comparing batches
+- Tools: matplotlib, plotly, or export to CSV for external tools
+
+**Decision**: Deferred until need is clear. Tables are sufficient for initial analysis.
+
 ## Next Steps
 
-- [ ] Sample actual examples from low vs high complexity batches
-- [ ] Evaluate if sentence length differences affect learning quality
+- [x] Implement character count analysis in `scripts/analyze-examples.py`
+- [x] Run analysis on both TOPIK 1 and TOPIK 2
+- [x] Update this document with character count findings
+- [ ] Sample actual examples from low vs high complexity batches (e.g., batch 7 vs batch 12)
+- [ ] Evaluate if sentence length differences affect learning quality in practice
 - [ ] Consider whether to add explicit length guidance to requirements-example.md
 - [ ] Investigate correlation between vocabulary difficulty and sentence length
+- [ ] Calculate chars/word ratio per batch to identify batches with unusually simple/complex vocabulary

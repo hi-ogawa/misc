@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Analyze Korean example sentence word count statistics.
+Analyze Korean example sentence statistics (word count and character count).
 """
 
 import argparse
@@ -12,9 +12,9 @@ from collections import defaultdict
 
 
 def main():
-    """Analyze Korean example sentence word counts."""
+    """Analyze Korean example sentence statistics."""
     parser = argparse.ArgumentParser(
-        description="Analyze Korean example sentence word count statistics"
+        description="Analyze Korean example sentence statistics (word count and character count)"
     )
     parser.add_argument(
         "--input",
@@ -50,9 +50,11 @@ def main():
         for row in reader:
             example_ko = row['example_ko']
             word_count = len(example_ko.strip().split()) if example_ko.strip() else 0
+            char_count = len(example_ko.strip().replace(' ', '')) if example_ko.strip() else 0
             entries.append({
                 'number': int(row.get('number', len(entries) + 1)),
-                'word_count': word_count
+                'word_count': word_count,
+                'char_count': char_count
             })
 
     print(f"Loaded {len(entries)} entries")
@@ -61,7 +63,7 @@ def main():
         print("Error: No entries found", file=sys.stderr)
         return 1
 
-    # Calculate overall stats
+    # Calculate overall stats - words
     word_counts = [e['word_count'] for e in entries]
     total_entries = len(entries)
     mean_words = statistics.mean(word_counts)
@@ -70,23 +72,41 @@ def main():
     min_words = min(word_counts)
     max_words = max(word_counts)
 
-    # Calculate overall percentiles
+    # Calculate overall percentiles - words
     sorted_word_counts = sorted(word_counts)
     n = len(sorted_word_counts)
-    overall_p10 = sorted_word_counts[int(n * 0.10)]
-    overall_p25 = sorted_word_counts[int(n * 0.25)]
-    overall_p75 = sorted_word_counts[int(n * 0.75)]
-    overall_p90 = sorted_word_counts[int(n * 0.90)]
+    overall_words_p10 = sorted_word_counts[int(n * 0.10)]
+    overall_words_p25 = sorted_word_counts[int(n * 0.25)]
+    overall_words_p75 = sorted_word_counts[int(n * 0.75)]
+    overall_words_p90 = sorted_word_counts[int(n * 0.90)]
+
+    # Calculate overall stats - characters
+    char_counts = [e['char_count'] for e in entries]
+    mean_chars = statistics.mean(char_counts)
+    median_chars = statistics.median(char_counts)
+    stdev_chars = statistics.stdev(char_counts) if len(char_counts) > 1 else 0
+    min_chars = min(char_counts)
+    max_chars = max(char_counts)
+
+    # Calculate overall percentiles - characters
+    sorted_char_counts = sorted(char_counts)
+    n = len(sorted_char_counts)
+    overall_chars_p10 = sorted_char_counts[int(n * 0.10)]
+    overall_chars_p25 = sorted_char_counts[int(n * 0.25)]
+    overall_chars_p75 = sorted_char_counts[int(n * 0.75)]
+    overall_chars_p90 = sorted_char_counts[int(n * 0.90)]
 
     # Calculate per-batch stats
-    batches = defaultdict(list)
+    batches_words = defaultdict(list)
+    batches_chars = defaultdict(list)
     for entry in entries:
         batch_num = (entry['number'] - 1) // args.batch_size + 1
-        batches[batch_num].append(entry['word_count'])
+        batches_words[batch_num].append(entry['word_count'])
+        batches_chars[batch_num].append(entry['char_count'])
 
-    batch_stats = []
-    for batch_num in sorted(batches.keys()):
-        batch_counts = batches[batch_num]
+    batch_stats_words = []
+    for batch_num in sorted(batches_words.keys()):
+        batch_counts = batches_words[batch_num]
         sorted_counts = sorted(batch_counts)
 
         # Calculate percentiles
@@ -97,7 +117,7 @@ def main():
         p75 = sorted_counts[int(n * 0.75)]
         p90 = sorted_counts[int(n * 0.90)] if n >= 10 else sorted_counts[-1]
 
-        batch_stats.append({
+        batch_stats_words.append({
             'batch': batch_num,
             'entries': len(batch_counts),
             'mean': statistics.mean(batch_counts),
@@ -111,28 +131,78 @@ def main():
             'p90': p90
         })
 
-    mean_variance = statistics.mean([b['stdev'] for b in batch_stats])
-    outliers = [b for b in batch_stats if b['stdev'] > mean_variance * 1.5]
+    batch_stats_chars = []
+    for batch_num in sorted(batches_chars.keys()):
+        batch_counts = batches_chars[batch_num]
+        sorted_counts = sorted(batch_counts)
+
+        # Calculate percentiles
+        n = len(sorted_counts)
+        p10 = sorted_counts[int(n * 0.10)] if n >= 10 else sorted_counts[0]
+        p25 = sorted_counts[int(n * 0.25)]
+        p50 = statistics.median(batch_counts)
+        p75 = sorted_counts[int(n * 0.75)]
+        p90 = sorted_counts[int(n * 0.90)] if n >= 10 else sorted_counts[-1]
+
+        batch_stats_chars.append({
+            'batch': batch_num,
+            'entries': len(batch_counts),
+            'mean': statistics.mean(batch_counts),
+            'median': p50,
+            'stdev': statistics.stdev(batch_counts) if len(batch_counts) > 1 else 0,
+            'min': min(batch_counts),
+            'max': max(batch_counts),
+            'p10': p10,
+            'p25': p25,
+            'p75': p75,
+            'p90': p90
+        })
+
+    mean_variance_words = statistics.mean([b['stdev'] for b in batch_stats_words])
+    mean_variance_chars = statistics.mean([b['stdev'] for b in batch_stats_chars])
+    outliers_words = [b for b in batch_stats_words if b['stdev'] > mean_variance_words * 1.5]
+    outliers_chars = [b for b in batch_stats_chars if b['stdev'] > mean_variance_chars * 1.5]
 
     # Generate report content (used for both stdout and markdown)
     output = f"""\
 # Example Sentence Statistics
 
 Total entries: {total_entries}
-Total batches: {len(batch_stats)}
-Per-batch mean σ: {mean_variance:.2f}
+Total batches: {len(batch_stats_words)}
+
+## Word Count Analysis
+
+Per-batch mean σ: {mean_variance_words:.2f}
 
 | Batch   | Entries |  Mean | Median |    σ |  p25 |  p75 | Range |
 |---------|---------|-------|--------|------|------|------|-------|
-| Overall | {total_entries:7d} | {mean_words:5.2f} | {median_words:6.1f} | {stdev_words:4.2f} | {overall_p25:4d} | {overall_p75:4d} | {min_words}-{max_words:<3} |
+| Overall | {total_entries:7d} | {mean_words:5.2f} | {median_words:6.1f} | {stdev_words:4.2f} | {overall_words_p25:4d} | {overall_words_p75:4d} | {min_words}-{max_words:<3} |
 """
-    for batch in batch_stats:
+    for batch in batch_stats_words:
         output += f"| {batch['batch']:7d} | {batch['entries']:7d} | {batch['mean']:5.2f} | {batch['median']:6.1f} | {batch['stdev']:4.2f} | {batch['p25']:4d} | {batch['p75']:4d} | {batch['min']}-{batch['max']:<3} |\n"
 
-    if outliers:
-        output += f"\nHigh variance batches (>{mean_variance * 1.5:.2f}σ):\n"
-        for batch in outliers:
+    if outliers_words:
+        output += f"\nHigh variance batches (>{mean_variance_words * 1.5:.2f}σ):\n"
+        for batch in outliers_words:
             output += f"- Batch {batch['batch']}: σ={batch['stdev']:.2f} (range: {batch['min']}-{batch['max']} words)\n"
+
+    output += f"""
+
+## Character Count Analysis
+
+Per-batch mean σ: {mean_variance_chars:.2f}
+
+| Batch   | Entries |  Mean | Median |    σ |  p25 |  p75 | Range  |
+|---------|---------|-------|--------|------|------|------|--------|
+| Overall | {total_entries:7d} | {mean_chars:5.2f} | {median_chars:6.1f} | {stdev_chars:4.2f} | {overall_chars_p25:4d} | {overall_chars_p75:4d} | {min_chars}-{max_chars:<4} |
+"""
+    for batch in batch_stats_chars:
+        output += f"| {batch['batch']:7d} | {batch['entries']:7d} | {batch['mean']:5.2f} | {batch['median']:6.1f} | {batch['stdev']:4.2f} | {batch['p25']:4d} | {batch['p75']:4d} | {batch['min']}-{batch['max']:<4} |\n"
+
+    if outliers_chars:
+        output += f"\nHigh variance batches (>{mean_variance_chars * 1.5:.2f}σ):\n"
+        for batch in outliers_chars:
+            output += f"- Batch {batch['batch']}: σ={batch['stdev']:.2f} (range: {batch['min']}-{batch['max']} chars)\n"
 
     # Print to stdout
     print()
