@@ -1,16 +1,5 @@
 Goal: Generate example sentences for each vocabulary item.
 
-**QUALITY CHECKLIST - Every example must pass ALL checks:**
-1. ✓ Contains the vocabulary word (verb conjugated, noun exact, adjective natural form)
-2. ✓ Has explicit subject (주어) - WHO or WHAT is doing the action?
-3. ✓ Subject/object must be CONCRETE, SPECIFIC nouns (not 이거, 그거, 저거, 그것, 이것, 사람)
-4. ✓ Has at least one verb AND one noun
-5. ✓ Includes particles (을/를, 이/가, 에서, 에, 한테, etc.)
-6. ✓ Has at least ONE concrete context element (time/place/manner/specific object)
-7. ✓ Is VISUALIZABLE - can you picture a concrete scene from the sentence?
-8. ✓ NOT using generic patterns (주세요, 있어요, 만났어요 alone)
-9. ✓ Shows distinctive/characteristic usage of the word
-
 REQUIREMENTS:
 - **CRITICAL: The example sentence MUST contain the vocabulary word from the "korean" column**
   - For verbs: use the verb stem in conjugated form (e.g., 가지다 → 가져요, 가지고, 가진)
@@ -24,8 +13,7 @@ REQUIREMENTS:
   - Example should enable visualizing a concrete situation even without knowing the target word
 
 - **Sentence structure requirements:**
-  - Must include at least one noun (명사) AND one verb (동사)
-  - Prefer complete sentences over noun phrases
+  - Use complete sentences (not noun phrases)
   - **Balance simplicity with memorable context**
     - Goal: Simple enough for TOPIK 1, but rich enough to be distinctive and memorable
     - ✅ **PREFERRED: Connectives and clauses that add context** (aim for this style):
@@ -44,9 +32,16 @@ REQUIREMENTS:
     - Use natural, conversational structures - don't artificially restrict complexity
   - Add enough detail to make the scene CONCRETE and VISUALIZABLE
   - **ALWAYS include particles (가/이, 는/은, 를/을, etc.) explicitly for learning purposes**
-  - **NEVER drop the subject (주어) - ALWAYS include it explicitly**
-    - ❌ "고장이 났어요" (What broke? Subject missing! Not visualizable)
-    - ✅ "자전거가 고장 나서 수리점에 갔어요" (Specific object + consequence)
+  - **For pedagogical purposes, prefer explicit subjects/objects over natural ellipsis**
+    - Goal: Create concrete mental images and word associations
+    - **NEVER drop the subject (주어) - ALWAYS include it explicitly**
+      - ❌ "고장이 났어요" (What broke? Subject missing! Not visualizable)
+      - ✅ "자전거가 고장 나서 수리점에 갔어요" (Specific object + consequence)
+      - ❌ 갑자기 나타났어요 (Who appeared? Subject dropped)
+      - ✅ 친구가 갑자기 나타나서 깜짝 놀랐어요 (Subject + reaction)
+    - **NEVER drop objects when they're essential for understanding**
+      - ❌ 구워 먹었어요 (What did you grill? Too vague)
+      - ✅ 아침에 김을 구워서 밥이랑 먹었어요 (Time + object + accompaniment)
 
 - **Avoid generic/overused patterns:**
   - ❌ Generic verbs like 주세요, 있어요, 만났어요, 오세요 (unless specifically characteristic)
@@ -60,26 +55,27 @@ REQUIREMENTS:
     - ✅ "고등학생이 도서관에서 수학을 공부해요" (Location + specific subject matter)
   - Test: Can this sentence work with many different nouns/verbs? If yes, make it more specific
 
-- **Prefer distinctive, concrete elements:**
-  - ✅ Concrete nouns instead of pronouns/demonstratives
+- **Create content-rich, memorable examples by adding concrete details:**
+  - **Use concrete, specific nouns** (not pronouns/demonstratives or generic words)
     - ❌ "이거 주세요" (What is "this"? No concrete context)
     - ✅ "목이 말라서 물 한 잔 주세요" (Concrete object + reason)
     - ❌ "그것이 필요해요" (What is "that"? Too abstract)
     - ✅ "회의 준비하려고 자료가 필요해요" (Specific noun + purpose)
-  - ✅ Specific nouns instead of generic ones
     - ❌ "사람이 왔어요" (Which person? Not specific enough)
-    - ✅ "친구가 집에 왔어요" (Specific relationship + location)
-    - ❌ "기자를 만났어요" (Could be anyone, too bare)
-    - ✅ "기자가 여러 질문을 했어요" (Shows what journalists DO, visualizable)
-  - ✅ Characteristic actions that show word's typical usage
+    - ✅ "친구가 어제 집에 놀러 왔어요" (Specific relationship + time + purpose)
+  - **Add concrete context elements** (location/time/manner/specific object)
+    - ❌ "나비가 날아다녀요" (Too bare - where? when? how?)
+    - ✅ "봄에 나비가 꽃 사이를 날아다녀요" (Time + location)
+    - ❌ "공을 던져요" (Too bare - who? where? Not visualizable)
+    - ✅ "동생이 운동장에서 공을 높이 던져요" (Subject + location + manner)
+  - **Show characteristic actions** that demonstrate word's typical usage
     - ❌ "내일 가져올게요" (What will you bring? Too vague)
     - ✅ "비가 올 것 같아서 내일 우산을 가져올게요" (Reason + specific object)
-  - ✅ Concrete spatial/temporal/situational context
-    - ❌ "가운데에 앉으세요" (Middle of what? No context)
-    - ✅ "방 가운데에 테이블이 있어요" (Specific location, visualizable scene)
-  - ✅ Semantic relationships and contrasts
-    - Okay: "과일 겉은 딱딱해요" (Shows literal "outer surface")
-    - Better: "겉과 속이 달라요" (Shows surface vs inside contrast)
+    - ❌ "기자를 만났어요" (Could be anyone, too bare)
+    - ✅ "기자가 여러 질문을 했어요" (Shows what journalists DO, visualizable)
+  - **Use semantic relationships and contrasts** when relevant
+    - ❌ "겉과 속이 달라요" (Too bare - what is different about what?)
+    - ✅ "이 과자는 겉과 속 맛이 달라요" (Specific object + what aspect differs)
   - Exception: When the vocabulary word itself IS a pronoun/demonstrative (이거, 그거, etc.), use it but add maximum concrete context:
     - For 이거: "이거는 제가 어제 산 책이에요" (Adds concrete noun "책" + time)
 
@@ -92,16 +88,3 @@ REQUIREMENTS:
     - Example: 가족 → "방학 때 가족이랑 제주도에 갔어요" (Time + typical activity)
   - **Adverbs**: Use in natural sentences with specific context
     - Example: 꼭 → "약속이 있어서 친구가 내일 꼭 와야 해요" (Reason + necessity)
-
-- **Must include at least ONE concrete context element** (location/time/manner/specific object)
-  - ❌ "나비가 날아다녀요" (Too bare - where? when? how?)
-  - ✅ "봄에 나비가 꽃 사이를 날아다녀요" (Time + location)
-  - ❌ "공을 던져요" (Too bare - who? where? Not visualizable)
-  - ✅ "동생이 운동장에서 공을 높이 던져요" (Subject + location + manner)
-
-- **For pedagogical purposes, prefer explicit subjects/objects over natural ellipsis**
-  - Goal: Create concrete mental images and word associations
-  - ❌ 갑자기 나타났어요 (grammatically fine, but lacks learning context)
-  - ✅ 친구가 갑자기 나타나서 깜짝 놀랐어요 (Subject + reaction)
-  - ❌ 구워 먹었어요 (too vague for vocabulary learning)
-  - ✅ 아침에 김을 구워서 밥이랑 먹었어요 (Time + object + accompaniment)
