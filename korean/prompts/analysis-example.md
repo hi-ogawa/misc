@@ -164,6 +164,88 @@ Example: TOPIK 1 overall IQR = [3, 4]
 - 50% of sentences have 3-4 words
 - 25% of sentences have ≥4 words
 
+## Testing Updated Requirements
+
+**Goal**: Validate that updated requirements fix batch 7's minimal style and measure subagent variance
+
+**Method**: Generate fresh examples for batch 7 (entries 601-700) using isolated subagent contexts
+
+**Test runs**:
+- **Original batch 7**: 3.04 words, 9.18 chars (baseline - bare minimum style)
+- **Test v1**: 4.23 words, 12.92 chars (first update with checklist)
+- **Test v2**: 5.35 words, 15.97 chars (after removing checklist)
+- **Test v3**: 5.57 words, 16.57 chars (parallel variance test)
+- **Test v4**: 4.83 words, 14.27 chars (parallel variance test)
+
+**Reference (user preferred)**:
+- **Batch 3**: 4.22 words, 13.06 chars
+- **Batch 6**: 4.30 words, 13.21 chars
+
+### Key Findings
+
+1. **Updated requirements successfully prevent extreme minimalism**
+   - All tests (v1-v4) show 39-83% improvement over original batch 7
+   - No test fell below 4.2 words (the target range)
+
+2. **Significant subagent variance detected**
+   - Range across 4 tests: 4.23-5.57 words (32% variation)
+   - Mean: 4.75 words
+   - v4 (4.83 words) closest to preferred batches 3/6 (4.2-4.3 words)
+   - v2 and v3 (5.35, 5.57 words) richer than target
+
+3. **Variance interpretation**
+   - Intra-batch consistency remains excellent (σ ~0.8-1.1)
+   - Inter-subagent variance higher than expected
+   - Different subagents interpret "balance simplicity with memorable context" differently
+   - Some generate batch 3/6 style (v1, v4), others more elaborate (v2, v3)
+
+4. **Character count correlation**
+   - Test results maintain healthy chars/word ratio (~2.95-2.97)
+   - Similar to batch 3/6 ratio (~3.1), not overly complex vocabulary
+   - Variance is primarily in sentence length/structure, not word complexity
+
+### LLM Characteristics and Limitations
+
+**Why qualitative guidance is the only viable approach:**
+
+LLMs cannot reliably count during generation, which eliminates quantitative targets:
+
+1. **Korean word count is ambiguous to LLMs**
+   - "친구한테 물어봤어요" - Is this 2 words, 4 morphemes, or 2 semantic units?
+   - Space-separated tokens (what we measure) ≠ linguistic "words"
+   - Unlike English where spaces clearly define words
+   - LLM lacks clear mental model of what "5 Korean words" means
+
+2. **Character counting is computationally hard for LLMs**
+   - LLMs work on tokens, not characters
+   - Classic failure case: "How many 'r's in strawberry?"
+   - Cannot count characters during generation
+
+3. **Implication: Only structural/qualitative guidance is viable**
+   - ✅ "Use connectives like -서, -을 때" - structural, unambiguous
+   - ✅ "Add concrete context (time/location)" - semantic, clear
+   - ✅ "Show PREFERRED vs BARE MINIMUM examples" - demonstrates quality
+   - ❌ "Aim for 5 words" - ambiguous definition + uncountable
+   - ❌ "Aim for 15 characters" - uncountable
+
+4. **Consequence: Variance is unavoidable**
+   - Different subagents interpret qualitative guidance differently
+   - 4.2-5.6 word variance is natural outcome, not a fixable problem
+   - Can only measure post-hoc with scripts, not enforce during generation
+   - Quality principles prevent extreme cases but allow natural variation
+
+### Recommendation
+
+**Status**: Requirements are effective but not fully consistent across subagents
+
+**Options**:
+1. **Accept variance (4.2-5.6 words)** - diversity may benefit learning, unavoidable given LLM limitations
+2. **Further tune requirements** - adjust qualitative guidance (connective usage, context richness)
+3. **Cherry-pick best examples** - manually select from multiple test runs
+4. **Shift PREFERRED examples to richer range** - update example sentences to demonstrate 5-6 word style
+
+**Current decision**: Deferred pending user preference. Requirements successfully prevent extreme minimalism, which was the primary issue. Note that quantitative targets (word/character count) are not viable due to LLM limitations.
+
 ## Open Questions
 
 1. **~~Should requirements-example.md be more specific?~~** ✅ **RESOLVED**
@@ -171,15 +253,17 @@ Example: TOPIK 1 overall IQR = [3, 4]
    - Updated requirements to encourage connectives (-서, -을 때, -을지) that add learning value
    - Batch 7 examples now explicitly shown as "BARE MINIMUM" to avoid
 
-2. **Is variation still acceptable with updated requirements?**
-   - Some variation (3.5-4.5 words) may still occur and could be beneficial for diversity
-   - Extreme minimalism (batch 7 style) now discouraged by updated requirements
-   - Future batches should converge toward batch 3/6 style
+2. **~~Is variation still acceptable with updated requirements?~~** ⚠️ **PARTIALLY RESOLVED**
+   - Testing shows variance of 4.2-5.6 words across subagents
+   - Extreme minimalism (batch 7 style) successfully eliminated
+   - Some subagents generate richer examples than target (5.35-5.57 vs 4.2 words)
+   - Pending: User evaluation of whether 4.8-5.6 word range is acceptable
 
-3. **Does vocabulary difficulty correlate with sentence length?**
+3. **~~Does vocabulary difficulty correlate with sentence length?~~** ✅ **RESOLVED**
    - Batch 7 vocabulary was equally basic as other batches (무겁다, 무릎, 문 vs 어리다, 어머니, 얼굴)
    - Variation is in example generation style, not vocabulary complexity
    - No correlation found between vocabulary difficulty and sentence length
+   - Test results confirm: chars/word ratio remains consistent (~3.0) despite word count variance
 
 ## Visualization
 
@@ -202,5 +286,9 @@ Example: TOPIK 1 overall IQR = [3, 4]
 - [x] Evaluate if sentence length differences affect learning quality (user feedback: batch 3/6 preferred)
 - [x] Update requirements-example.md based on findings (encourage connectives, discourage bare minimum)
 - [x] Investigate correlation between vocabulary difficulty and sentence length (no correlation found)
+- [x] Test updated requirements with fresh subagent contexts (4 test runs completed)
+- [x] Measure subagent variance across independent test runs (32% variance detected)
+- [x] Validate that requirements prevent extreme minimalism (confirmed - all tests ≥4.2 words)
 - [ ] Calculate chars/word ratio per batch to identify batches with unusually simple/complex vocabulary
-- [ ] Consider if batch 7 should be regenerated with updated requirements (low priority - examples are functional)
+- [ ] User evaluation: Is variance of 4.2-5.6 words acceptable, or should requirements be tuned further?
+- [ ] Consider if batch 7 should be regenerated with updated requirements (test results available: v1-v4)

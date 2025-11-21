@@ -7,29 +7,40 @@ REQUIREMENTS:
   - For nouns: use the exact noun (e.g., 가족 → 가족이랑)
   - NEVER substitute with synonyms or different words
 
-- **Core principle: Example must help conceptualize the word through distinctive context**
-  - Ask: "Does this example show what makes THIS word different from similar words?"
-  - Show characteristic or typical usage, not just grammatically correct patterns
+- **Core principle: Force evaluation through distinctive context**
+  - **Critical test**: "To understand this sentence, must I know what makes THIS word unique?"
+    - Not just grammatically correct - must show characteristic, differentiating usage
+    - If sentence works equally well with 5 other words, it's too generic
+  - Show typical usage patterns, not just any grammatically valid sentence
   - Example should enable visualizing a concrete situation even without knowing the target word
 
 - **Sentence structure requirements:**
   - Use complete sentences (not noun phrases)
+  - **STRONGLY PREFER multi-clause sentences (2+ clauses)**
+    - Multi-clause sentences create richer, more memorable learning contexts
+    - Connect clauses with connectives that add semantic value:
+      - **-서** (reason/cause): shows why something happens
+      - **-을 때** (time): adds temporal context
+      - **-고** (sequential actions): shows natural action sequences
+      - **-(으)니까** (cause/reason): emphasizes causation
+      - **-을지** (uncertainty): shows natural usage patterns
+      - **-지만** (contrast): shows opposition or contrast
+    - Multi-clause examples naturally include concrete context (time, location, reason, consequence)
+
   - **Balance simplicity with memorable context**
     - Goal: Simple enough for TOPIK 1, but rich enough to be distinctive and memorable
-    - ✅ **PREFERRED: Connectives and clauses that add context** (aim for this style):
-      - "우리 고양이가 너무 뚱뚱해서 뛰지 못해요" (-서 shows reason - aids understanding)
+    - ✅✅ **IDEAL: Multi-clause with connectives** (strongly preferred):
+      - "우리 고양이가 너무 뚱뚱해서 뛰지 못해요" (2 clauses with -서: reason → consequence)
+      - "소풍 갈 때 엄마가 김밥을 싸 주셨어요" (2 clauses with -을 때: time context)
+      - "비가 와서 바깥에 나가지 못했어요" (2 clauses with -서: cause → result)
+      - "시험이 있어서 학생이 도서관에서 공부해요" (2 clauses + enriched context)
+    - ✅ **ACCEPTABLE: Single clause but enriched with concrete details**:
       - "동생이 그저께 서울에서 돌아왔어요" (time + location - concrete and memorable)
-      - "소풍 갈 때 엄마가 김밥을 싸 주셨어요" (-을 때 temporal clause - natural context)
-      - "글쎄, 내일 시간이 있을지 몰라요" (-을지 shows uncertainty - natural usage)
-    - ⚠️ **BARE MINIMUM: Technically correct but less memorable** (avoid this style):
+      - "고등학생이 도서관에서 수학을 공부해요" (location + specific object)
+    - ⚠️ **BARE MINIMUM: Single clause, minimal context** (avoid this style):
       - "무궁화가 여름에 피어요" (Too bare - lacks distinctive context)
       - "박물관 입장이 무료예요" (Minimal but forgettable)
-  - **Connectives and clauses are ENCOURAGED when they add learning value:**
-    - -서 (reason/cause): helps understand why something happens
-    - -을 때 (time): adds temporal context
-    - -고 (sequential actions): shows natural action sequences
-    - -을지 (uncertainty): shows natural usage patterns
-    - Use natural, conversational structures - don't artificially restrict complexity
+
   - Add enough detail to make the scene CONCRETE and VISUALIZABLE
   - **ALWAYS include particles (가/이, 는/은, 를/을, etc.) explicitly for learning purposes**
   - **For pedagogical purposes, prefer explicit subjects/objects over natural ellipsis**
@@ -53,7 +64,6 @@ REQUIREMENTS:
   - ❌ Too generic contexts that could apply to anything
     - ❌ "고등학생이 공부해요" (Where? What subject? Too generic)
     - ✅ "고등학생이 도서관에서 수학을 공부해요" (Location + specific subject matter)
-  - Test: Can this sentence work with many different nouns/verbs? If yes, make it more specific
 
 - **Create content-rich, memorable examples by adding concrete details:**
   - **Use concrete, specific nouns** (not pronouns/demonstratives or generic words)
@@ -84,7 +94,8 @@ REQUIREMENTS:
     - Example: 가볍다 → "가벼운 가방을 사서 여행에 가져갔어요" (Modifying form + practical use)
   - **Verbs**: Use with objects/locations that show characteristic usage
     - Example: 가르치다 → "주말마다 친구한테 영어를 가르쳐요" (Time + recipient + object)
-  - **Nouns**: Show what you DO with them or where they typically appear
+  - **Nouns**: Show typical actions or environments (how people interact with them)
+    - Not just "X exists" but "what you DO with/to X in real life"
     - Example: 가족 → "방학 때 가족이랑 제주도에 갔어요" (Time + typical activity)
   - **Adverbs**: Use in natural sentences with specific context
     - Example: 꼭 → "약속이 있어서 친구가 내일 꼭 와야 해요" (Reason + necessity)
