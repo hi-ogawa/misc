@@ -8,9 +8,20 @@ REQUIREMENTS:
   - NEVER substitute with synonyms or different words
 
 - **Core principle: Force evaluation through distinctive context**
-  - **Critical test**: "To understand this sentence, must I know what makes THIS word unique?"
+  - **Key test**: "To understand this sentence, must I grasp what makes THIS word unique?"
+    - Example helps learner understand the concept/principle behind the word
     - Not just grammatically correct - must show characteristic, differentiating usage
     - If sentence works equally well with 5 other words, it's too generic
+  - **Examples of forcing evaluation (avoid generic patterns)**:
+    - ❌ Generic verbs like 주세요, 있어요, 만났어요, 오세요 (unless specifically characteristic):
+      - ❌ "기름을 주세요" (works for any noun: 물, 소금, 설탕...)
+      - ✅ "생선을 기름에 튀겨서 바삭바삭해졌어요" (shows what you DO with oil - concept: cooking medium, multi-clause with result)
+    - ❌ Generic requests/filler words (좀, 너무) without meaningful context:
+      - ❌ "계산을 해 주세요" (generic request - works for any action)
+      - ✅ "이번 계산이 복잡해서 계산기를 썼어요" (shows characteristic: complexity requires tool)
+    - ❌ Too generic contexts that could apply to anything:
+      - ❌ "고등학생이 공부해요" (Where? What subject? Too generic)
+      - ✅ "고등학생이 도서관에서 수학을 공부해요" (Location + specific subject matter)
   - Show typical usage patterns, not just any grammatically valid sentence
   - Example should enable visualizing a concrete situation even without knowing the target word
 
@@ -53,17 +64,6 @@ REQUIREMENTS:
     - **NEVER drop objects when they're essential for understanding**
       - ❌ 구워 먹었어요 (What did you grill? Too vague)
       - ✅ 아침에 김을 구워서 밥이랑 먹었어요 (Time + object + accompaniment)
-
-- **Avoid generic/overused patterns:**
-  - ❌ Generic verbs like 주세요, 있어요, 만났어요, 오세요 (unless specifically characteristic)
-    - ❌ 기름을 좀 주세요 (could be any noun, subject dropped)
-    - ✅ 생선을 기름에 튀겼어요 (shows what you DO with oil, explicit object)
-  - ❌ Filler words like 좀, 너무 (unless they add meaningful context)
-    - ❌ 계산을 좀 해 주세요 (generic request, subject dropped)
-    - ✅ 이번 계산이 복잡해서 계산기를 썼어요 (Shows characteristic + solution)
-  - ❌ Too generic contexts that could apply to anything
-    - ❌ "고등학생이 공부해요" (Where? What subject? Too generic)
-    - ✅ "고등학생이 도서관에서 수학을 공부해요" (Location + specific subject matter)
 
 - **Create content-rich, memorable examples by adding concrete details:**
   - **Use concrete, specific nouns** (not pronouns/demonstratives or generic words)
