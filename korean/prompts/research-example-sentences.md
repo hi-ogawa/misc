@@ -226,10 +226,35 @@ Balance specificity and generalizability:
 - Pure simplification can be unnatural or misleading
 - Modern approach: Corpus-informed + pedagogically adapted
 
-**Finding 3 - Recent LLM research** (2024):
-- LLM-generated examples preferred to Oxford Dictionary examples 83.9% of the time
-- Suggests traditional approaches can be improved
-- Combination of corpus data + generation flexibility
+**Finding 3 - Recent LLM research** (Cai et al., 2024):
+
+**Key insight: The "replaceability" test for sentence quality**
+- A good example sentence makes the target word **hard to replace** with other words
+- They measure this using masked language models: mask the target word, measure how uniquely the context predicts it
+- High score = context distinctively exemplifies THIS word
+- Low score = generic context where many words could fit
+
+**Concrete examples from the paper**:
+- ❌ LOW score (0.031): "There was a dull pain in his lower jaw"
+  - "dull" could easily be replaced with other adjectives
+- ✅ HIGH score (0.973): "While the headache had been throbbing and sharp earlier, now it was just a dull ache"
+  - Context clues (contrast with "throbbing and sharp") hint at word meaning
+  - Target word is hard to substitute
+
+**This validates our "substitution test"**: "If sentence works equally well with 5 other words, it's too generic"
+
+**Limitation for L2 learning context**:
+- Paper focuses on native-speaker dictionary use, not L2 pedagogy
+- Their "good" example is complex: past perfect, temporal clause, multiple contrasts
+- For early-stage L2 learners (TOPIK 1-2), this would be overwhelming
+- **Our approach must balance**: distinctiveness (substitution test) + appropriate complexity
+- Challenge: achieve high "non-replaceability" with simpler structures
+
+**Results**: FM-MLM achieved 85.1% win rate against Oxford Dictionary sentences
+- Human evaluation criteria: fluency, semantic accuracy, appropriateness for learners
+- 89.2% inter-annotator agreement on quality judgments
+
+**Reference**: Cai, B., Ng, C.B.L., Tan, D., & Hotama, S. (2024). "Low-Cost Generation and Evaluation of Dictionary Example Sentences." https://arxiv.org/abs/2404.06224
 
 **Application to Example Sentences**:
 
@@ -612,6 +637,7 @@ Based on research not yet fully incorporated:
 **Corpus Linguistics & Lexicography**:
 - Sinclair, J. (1991). *Corpus, Concordance, Collocation*. Oxford: Oxford University Press.
 - Hanks, P. (2012). The corpus revolution in lexicography. *International Journal of Lexicography, 25*(4), 398-436.
+- Cai, B., Ng, C.B.L., Tan, D., & Hotama, S. (2024). Low-Cost Generation and Evaluation of Dictionary Example Sentences. https://arxiv.org/abs/2404.06224
 
 **Depth of Processing**:
 - Craik, F. I., & Lockhart, R. S. (1972). Levels of processing: A framework for memory research. *Journal of Verbal Learning and Verbal Behavior, 11*(6), 671-684.
