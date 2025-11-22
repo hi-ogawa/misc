@@ -105,10 +105,10 @@ python scripts/analyze-examples.py \
 ### Phase 2: Generate Audio for New Examples
 
 **IMPORTANT: Audio filename versioning**
-- When updating example sentences, audio filenames MUST include version suffix
+- When updating example sentences, audio filenames MUST include version identifier
 - This forces Anki to recognize them as new media files
-- Without version suffix, Anki keeps playing old audio even when text changes
-- Format: `koreantopik1_example_ko_NNNN_v3.mp3` (note the `_v3` suffix)
+- Without version identifier, Anki keeps playing old audio even when text changes
+- Format: `koreantopik1_example_ko_v3_NNNN.mp3` (note the `_v3` before the number)
 
 **Step 1: Generate audio files**
 
@@ -118,14 +118,13 @@ Regenerate only example audio (vocabulary audio unchanged).
 python scripts/generate-audio.py \
   --input output/koreantopik1/koreantopik1_anki_import_v3.tsv \
   --field example_ko \
-  --prefix koreantopik1_example_ko_ \
-  --suffix _v3 \
+  --prefix koreantopik1_example_ko_v3_ \
   --output output/koreantopik1/audio \
   --concurrency 5 \
   --force
 ```
 
-**Output**: 1,847 files `koreantopik1_example_ko_0001_v3.mp3` to `koreantopik1_example_ko_1847_v3.mp3`
+**Output**: 1,847 files `koreantopik1_example_ko_v3_0001.mp3` to `koreantopik1_example_ko_v3_1847.mp3`
 **Duration**: ~30-60 min at concurrency=5
 **Size**: ~35-45MB
 
@@ -133,60 +132,56 @@ python scripts/generate-audio.py \
 
 ```bash
 # Count files
-ls output/koreantopik1/audio/koreantopik1_example_ko_*_v3.mp3 | wc -l
+ls output/koreantopik1/audio/koreantopik1_example_ko_v3_*.mp3 | wc -l
 # Expected: 1847
 
 # Verify MP3 integrity
 python scripts/generate-audio-verify.py \
-  --input output/koreantopik1/audio
+  --output output/koreantopik1/audio
 
 # Check duration stats
 python scripts/generate-audio-stats.py \
-  --input output/koreantopik1/audio \
-  --pattern "koreantopik1_example_ko_*_v3.mp3"
+  --output output/koreantopik1/audio
 ```
 
 **Step 3: Create zip archive**
 
 ```bash
-cd output/koreantopik1/audio
-zip -r ../koreantopik1_example_ko_v3_audio.zip koreantopik1_example_ko_*_v3.mp3
-cd -
+zip -r output/koreantopik1/koreantopik1_example_ko_v3_audio.zip output/koreantopik1/audio/koreantopik1_example_ko_v3_*.mp3
 ```
 
 **Result**: `output/koreantopik1/koreantopik1_example_ko_v3_audio.zip`
+
+### Phase 3: Merge into Anki Import File
+
+- Export latest deck data from Anki as "koreantopik1_latest.txt" to preserve existing (potentially edited) fields.
+- Then merge new examples to that list to update `example_ko, example_en, example_ko_audio` fields.
+
+```bash
+python scripts/merge-examples.py \
+  --base output/koreantopik1/koreantopik1_latest.txt \
+  --examples output/koreantopik1/examples-all.tsv \
+  --output output/koreantopik1/koreantopik1_anki_import_v3.tsv
+```
+
+**IMPORTANT**: After merging, update audio references in the TSV file:
+- Find: `[sound:koreantopik1_example_ko_NNNN.mp3]`
+- Replace: `[sound:koreantopik1_example_ko_v3_NNNN.mp3]`
+
+This ensures Anki recognizes the new audio files.
 
 ---
 
 ## Anki Import (Manual)
 
-### Phase 3: Merge into Anki Import File
-
-Merge new examples with existing deck data (preserving etymology, notes, vocabulary audio):
-
-```bash
-python scripts/merge-examples.py \
-  --base output/koreantopik1/koreantopik1_anki_import_v2.tsv \
-  --examples output/koreantopik1/examples-all.tsv \
-  --output output/koreantopik1/koreantopik1_anki_import_v3.tsv
-```
-
-**Note**: Uses v2 as base to preserve all current deck edits (etymology, notes, audio references).
-
-**IMPORTANT**: After merging, update audio references in the TSV file:
-- Find: `[sound:koreantopik1_example_ko_NNNN.mp3]`
-- Replace: `[sound:koreantopik1_example_ko_NNNN_v3.mp3]`
-
-This ensures Anki recognizes the new audio files.
-
 ### Phase 4: Import into Anki
 
 1. Backup current deck (export as .apkg or .txt)
-2. Copy audio files to Anki media folder (use `*_v3.mp3` pattern)
+2. Copy audio files to Anki media folder (use `koreantopik1_example_ko_v3_*.mp3` pattern)
 3. Import `koreantopik1_anki_import_v3.tsv` into Anki
 4. Verify examples and audio playback
 
-**Note**: The TSV file must reference the versioned audio filenames in the `example_ko_audio` column (e.g., `[sound:koreantopik1_example_ko_0001_v3.mp3]`)
+**Note**: The TSV file must reference the versioned audio filenames in the `example_ko_audio` column (e.g., `[sound:koreantopik1_example_ko_v3_0001.mp3]`)
 
 ---
 
