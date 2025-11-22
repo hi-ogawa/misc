@@ -1,7 +1,7 @@
 Goal: Generate example sentences for each vocabulary item.
 
 REQUIREMENTS:
-- **CRITICAL: The example sentence MUST contain the vocabulary word from the "korean" column**
+- **The example sentence MUST contain the vocabulary word from the "korean" column**
   - For verbs: use the verb stem in conjugated form (e.g., 가지다 → 가져요, 가지고, 가진)
   - For adjectives: use the stem in any natural form (e.g., 가볍다 → 가벼운, 가벼워요)
   - For nouns: use the exact noun (e.g., 가족 → 가족이랑)
@@ -29,13 +29,15 @@ REQUIREMENTS:
   - Use complete sentences (not noun phrases)
   - **STRONGLY PREFER multi-clause sentences (2+ clauses)**
     - Multi-clause sentences create richer, more memorable learning contexts
-    - Connect clauses with connectives that add semantic value:
-      - **-서** (reason/cause): shows why something happens
-      - **-을 때** (time): adds temporal context
-      - **-고** (sequential actions): shows natural action sequences
-      - **-(으)니까** (cause/reason): emphasizes causation
-      - **-을지** (uncertainty): shows natural usage patterns
-      - **-지만** (contrast): shows opposition or contrast
+    - Connect clauses with connectives that add semantic value **including but not limited to**:
+      - **Reason/Cause**: -서, -(으)니까, -기 때문에, -느라고
+      - **Time/Sequence**: -을 때, -고, -자마자, -다가, -기 전에, -(으)ㄴ 후에
+      - **Purpose/Intention**: -(으)려고, -도록, -게
+      - **Contrast/Concession**: -지만, -는데, -아/어도, -(으)ㄴ/는데도
+      - **Condition**: -면, -거든
+      - **Simultaneity**: -(으)면서
+      - **Alternative**: -거나
+      - Use variety across the dataset - avoid repeating the same connective patterns
     - Multi-clause examples naturally include concrete context (time, location, reason, consequence)
 
   - **Balance simplicity with memorable context**
@@ -45,7 +47,9 @@ REQUIREMENTS:
       - "소풍 갈 때 엄마가 김밥을 싸 주셨어요" (-을 때: temporal context)
       - "아침에 운동하고 샤워했어요" (-고: sequential actions)
       - "날씨가 좋으니까 공원에서 산책해요" (-(으)니까: cause → suggestion)
-      - "내일 비가 올지 몰라서 우산을 챙겼어요" (-을지: uncertainty within larger context)
+      - "피곤하지만 숙제를 끝내야 해요" (-지만: contrast)
+      - "친구를 만나러 가려고 일찍 출발했어요" (-(으)려고: purpose)
+      - "집에 도착하자마자 전화가 왔어요" (-자마자: immediate sequence)
     - ✅ **ACCEPTABLE: Single clause but enriched with concrete details**:
       - "동생이 그저께 서울에서 돌아왔어요" (time + location - concrete and memorable)
       - "고등학생이 도서관에서 수학을 공부해요" (location + specific object)
@@ -59,19 +63,19 @@ REQUIREMENTS:
     - Goal: Create concrete mental images and word associations
     - **NEVER drop the subject (주어) - ALWAYS include it explicitly**
       - ❌ "고장이 났어요" (What broke? Subject missing! Not visualizable)
-      - ✅ "자전거가 고장 났지만 직접 고쳤어요" (Specific object + contrast, -지만)
+      - ✅ "자전거가 고장 나서 버스로 학교에 갔어요" (Specific object + result, -서)
       - ❌ 갑자기 나타났어요 (Who appeared? Subject dropped)
-      - ✅ "친구가 갑자기 나타나서 깜짝 놀랐어요" (Subject + reaction, -서)
+      - ✅ "친구가 갑자기 나타나는 바람에 깜짝 놀랐어요" (Subject + unintended result, -는 바람에)
     - **NEVER drop objects when they're essential for understanding**
       - ❌ 구워 먹었어요 (What did you grill? Too vague)
-      - ✅ "아침에 김을 굽고 밥을 먹었어요" (Time + object + sequence, -고)
+      - ✅ "저녁 먹기 전에 김을 구웠어요" (Time + object, -기 전에)
 
 - **Create content-rich, memorable examples by adding concrete details:**
   - **Use concrete, specific nouns** (not pronouns/demonstratives or generic words)
     - ❌ "이거 주세요" (What is "this"? No concrete context)
-    - ✅ "목이 마르니까 물 한 잔 주세요" (Concrete object + reason, -(으)니까)
+    - ✅ "목이 마르면 물 한 잔 주세요" (Concrete object + condition, -면)
     - ❌ "그것이 필요해요" (What is "that"? Too abstract)
-    - ✅ "회의 준비하려고 자료가 필요해요" (Specific noun + purpose, -려고)
+    - ✅ "회의 준비하려고 자료가 필요해요" (Specific noun + purpose, -(으)려고)
     - ❌ "사람이 왔어요" (Which person? Not specific enough)
     - ✅ "친구가 어제 집에 놀러 왔어요" (Specific relationship + time + purpose)
   - **Add concrete context elements** (location/time/manner/specific object)
@@ -81,9 +85,9 @@ REQUIREMENTS:
     - ✅ "동생이 운동장에서 공을 높이 던져요" (Subject + location + manner)
   - **Show characteristic actions** that demonstrate word's typical usage
     - ❌ "내일 가져올게요" (What will you bring? Too vague)
-    - ✅ "비가 올 것 같으니까 내일 우산을 가져올게요" (Reason + specific object, -(으)니까)
+    - ✅ "운동하려고 내일 운동복을 가져올게요" (Purpose + specific object, -(으)려고)
     - ❌ "기자를 만났어요" (Could be anyone, too bare)
-    - ✅ "기자가 여러 질문을 하고 사진을 찍었어요" (Shows what journalists DO, sequential, -고)
+    - ✅ "기자가 인터뷰하면서 사진을 찍었어요" (Shows what journalists DO, simultaneity, -(으)면서)
   - **Use semantic relationships and contrasts** when relevant
     - ❌ "겉과 속이 달라요" (Too bare - what is different about what?)
     - ✅ "이 과자는 겉과 속 맛이 달라요" (Specific object + what aspect differs)
@@ -92,11 +96,11 @@ REQUIREMENTS:
 
 - **Word type specific guidelines:**
   - **Adjectives**: Often better with modifying form + noun + verb
-    - Example: 가볍다 → "가벼운 가방을 샀지만 물건을 많이 넣었어요" (Modifying form + contrast, -지만)
+    - Example: 가볍다 → "가벼운 가방을 샀는데도 어깨가 아파요" (Modifying form + concession, -(으)ㄴ/는데도)
   - **Verbs**: Use with objects/locations that show characteristic usage
     - Example: 가르치다 → "주말마다 친구한테 영어를 가르쳐요" (Time + recipient + object)
   - **Nouns**: Show typical actions or environments (how people interact with them)
     - Not just "X exists" but "what you DO with/to X in real life"
-    - Example: 가족 → "방학 때 가족이랑 제주도에 갔어요" (Time + typical activity)
+    - Example: 가족 → "방학이 되면 가족이랑 제주도에 가요" (Condition + typical activity, -면)
   - **Adverbs**: Use in natural sentences with specific context
-    - Example: 꼭 → "약속이 있으니까 친구가 내일 꼭 와야 해요" (Reason + necessity, -(으)니까)
+    - Example: 꼭 → "약속 시간에 늦을까 봐 일찍 출발했어요" (Worry + consequence, -(으)ㄹ까 봐)
