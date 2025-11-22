@@ -1,104 +1,210 @@
-# Update TOPIK 1 Deck - Example Sentence Regeneration (v3)
+# Regenerate TOPIK 1 Example Sentences (v3)
 
 ## Goal
 
-Regenerate all 1,847 example sentences using updated `requirements-example.md` that produces richer, multi-clause sentences.
+Regenerate all 1,847 example sentences using the updated `prompts/requirements-example.md` that produces:
+- Multi-clause sentences with diverse connectives (-서, -(으)니까, -고, -을 때, -지만, -(으)려고, etc.)
+- Concrete, visualizable contexts (specific locations, times, objects)
+- Distinctive usage that forces vocabulary evaluation
+- Explicit subjects/objects for pedagogical clarity
 
-## Analysis Results
+## Input/Output Files
 
-**Before (old examples)**:
-- Mean: 3.81 words, 11.98 chars
-- Batch 7 was problematic: 3.04 words (bare minimum style)
+**Input**:
+- Vocabulary: `input/koreantopik1.tsv` (1,847 entries + header = 1,848 lines)
+- Columns: `number`, `korean`, `english`
 
-**After (v3 examples)**:
-- Mean: 5.71 words, 17.02 chars (+50%)
-- Consistent across batches: 5.23-6.09 words
-- Multi-clause sentences with connectives (-서, -(으)니까, -고, etc.)
+**Output**:
+- Batch files: `output/koreantopik1/examples-1.tsv` to `examples-19.tsv`
+  - Batches 1-18: 100 entries each
+  - Batch 19: 47 entries (1,801-1,847)
+- Combined: `output/koreantopik1/examples-all.tsv`
+- Columns: `number`, `korean`, `example_ko`, `example_en`
 
-## Files
+**Final Anki Import**:
+- File: `output/koreantopik1/koreantopik1_anki_import_v3.tsv`
+- Columns (9 total): `number`, `korean`, `english`, `example_ko`, `example_en`, `etymology`, `notes`, `korean_audio`, `example_ko_audio`
 
-**Source files**:
-- Existing anki import: `output/tmp/koreantopik1_anki_import.tsv` (1848 lines)
-- New v3 examples: `output/examples-v3-combined.tsv` (1848 lines)
-
-**Output file**:
-- `output/koreantopik1/koreantopik1_anki_import_v3.tsv`
-
-## Anki Import Format
-
-**Columns** (9 total, matches TOPIK 2 structure):
-```
-number	korean	english	example_ko	example_en	etymology	notes	korean_audio	example_ko_audio
-```
-
-**Sample row**:
-```
-1	가게	store	동네 가게에서 우유를 사고 집에 돌아왔어요	I bought milk at the neighborhood store and came home.	상점	[sound:koreantopik1_korean_0001.mp3]	[sound:koreantopik1_example_ko_0001.mp3]
-```
-
-**Note**: TOPIK 1 uses unprefixed numbers (1, 2, 3...) while TOPIK 2 uses prefixed (`koreantopik2_1`).
+**Note**: Header line commented with `#` for Anki import compatibility.
 
 ## Implementation Plan
 
-- [x] Phase 1: Generate new example sentences (19 batches, parallel)
-- [x] Phase 2: Combine batch files into `examples-v3-combined.tsv`
-- [x] Phase 3: Analyze new examples (confirmed 5.71 avg words)
-- [x] Phase 4: Merge v3 examples into anki import file
-- [x] Phase 5: Generate new audio for v3 examples (1847 files, 116 min total, 44MB)
-- [ ] Phase 6: Copy audio to Anki media folder
-- [ ] Phase 7: Import updated TSV into Anki
+### Phase 0: Pre-split Input File (PREREQUISITE)
 
-### Phase 4: Merge v3 examples into anki import
-
-Merge new `example_ko` and `example_en` columns from v3 into existing anki import (preserving number, korean, english, etymology, notes, audio columns).
+Split `input/koreantopik1.tsv` into 19 batch files for parallel processing.
 
 ```bash
-python scripts/merge-examples.py \
-  --base output/tmp/koreantopik1_anki_import.tsv \
-  --examples output/examples-v3-combined.tsv \
-  --output output/koreantopik1/koreantopik1_anki_import_v3.tsv
+python scripts/split-batches.py \
+  --input input/koreantopik1.tsv \
+  --output-dir input \
+  --prefix koreantopik1-batch- \
+  --batch-size 100
 ```
 
-### Phase 5: Generate new audio for v3 examples
+**Output**:
+- `input/koreantopik1-batch-1.tsv` to `input/koreantopik1-batch-19.tsv`
+- Each with header row + entries (batches 1-18: 100 entries, batch 19: 47 entries)
 
-Since example sentences changed, need to regenerate example audio only (vocabulary audio unchanged).
+### Phase 1: Generate Example Sentences
+
+**Step 1: Generate batches (19 batches)**
+
+Use subagents with fresh context (see `prompts/subagent-management.md`)
+
+**Per-batch task**:
+1. Read `prompts/requirements-example.md` (quality requirements)
+2. Read `input/koreantopik1-batch-N.tsv` (assigned batch ONLY)
+3. Generate examples following ALL requirements
+4. Write `output/koreantopik1/examples-N.tsv`
+
+**Launch agents** (can run in parallel or sequential):
+```
+Launch 19 agents, each processing one batch independently
+```
+
+**Critical**:
+- Each agent reads ONLY requirements + assigned batch
+- DO NOT read existing output files
+- Generate from scratch for consistency
+
+**Step 2: Combine batch files**
+
+```bash
+# Extract header from first batch
+head -1 output/koreantopik1/examples-1.tsv > output/koreantopik1/examples-all.tsv
+
+# Concatenate all batch files (skip headers)
+for i in {1..19}; do
+  tail -n +2 output/koreantopik1/examples-$i.tsv >> output/koreantopik1/examples-all.tsv
+done
+```
+
+**Result**: `examples-all.tsv` with 1,847 entries + header
+
+**Verify**:
+```bash
+wc -l output/koreantopik1/examples-all.tsv
+# Expected: 1848 (1 header + 1847 entries)
+```
+
+**Note**: Consider creating `scripts/combine-batches.py` for cleaner workflow.
+
+**Step 3: Analyze quality**
+
+```bash
+python scripts/analyze-examples.py \
+  --input output/koreantopik1/examples-all.tsv
+```
+
+**Check for**:
+- Average words per sentence (target: 5-7)
+- Connective diversity (not just -서/-(으)니까)
+- Generic pattern detection
+- Subject/object presence
+
+### Phase 2: Generate Audio for New Examples
+
+**IMPORTANT: Audio filename versioning**
+- When updating example sentences, audio filenames MUST include version identifier
+- This forces Anki to recognize them as new media files
+- Without version identifier, Anki keeps playing old audio even when text changes
+- Format: `koreantopik1_example_ko_v3_NNNN.mp3` (note the `_v3` before the number)
+
+**Step 1: Generate audio files**
+
+Regenerate only example audio (vocabulary audio unchanged).
 
 ```bash
 python scripts/generate-audio.py \
   --input output/koreantopik1/koreantopik1_anki_import_v3.tsv \
   --field example_ko \
-  --prefix koreantopik1_example_ko_ \
+  --prefix koreantopik1_example_ko_v3_ \
   --output output/koreantopik1/audio \
   --concurrency 5 \
   --force
 ```
 
-**Expected output**: 1,847 files `koreantopik1_example_ko_0001.mp3` to `koreantopik1_example_ko_1847.mp3`
-
+**Output**: 1,847 files `koreantopik1_example_ko_v3_0001.mp3` to `koreantopik1_example_ko_v3_1847.mp3`
 **Duration**: ~30-60 min at concurrency=5
+**Size**: ~35-45MB
 
-**Verification**:
+**Step 2: Verify audio quality**
+
 ```bash
 # Count files
-ls output/koreantopik1/audio/koreantopik1_example_ko_*.mp3 | wc -l
+ls output/koreantopik1/audio/koreantopik1_example_ko_v3_*.mp3 | wc -l
 # Expected: 1847
 
 # Verify MP3 integrity
-python scripts/generate-audio-verify.py --output output/koreantopik1/audio
+python scripts/generate-audio-verify.py \
+  --output output/koreantopik1/audio
 
 # Check duration stats
-python scripts/generate-audio-stats.py --output output/koreantopik1/audio
+python scripts/generate-audio-stats.py \
+  --output output/koreantopik1/audio
 ```
 
-### Phase 6: Copy audio to Anki
+**Step 3: Create zip archive**
 
 ```bash
-cp output/koreantopik1/audio/koreantopik1_example_ko_*.mp3 ~/.local/share/Anki2/사용자\ 1/collection.media/
+zip -r output/koreantopik1/koreantopik1_example_ko_v3_audio.zip output/koreantopik1/audio/koreantopik1_example_ko_v3_*.mp3
 ```
 
-### Phase 7: Import into Anki
+**Result**: `output/koreantopik1/koreantopik1_example_ko_v3_audio.zip`
 
-1. Open Anki
-2. File -> Import -> select `output/koreantopik1/koreantopik1_anki_import.tsv`
-3. Ensure "Update existing notes when first field matches" is checked
-4. Import
+### Phase 3: Merge into Anki Import File
+
+- Export latest deck data from Anki as "koreantopik1_latest.txt" to preserve existing (potentially edited) fields.
+- Then merge new examples to that list to update `example_ko, example_en, example_ko_audio` fields.
+
+```bash
+python scripts/merge-examples.py \
+  --base output/koreantopik1/koreantopik1_latest.txt \
+  --examples output/koreantopik1/examples-all.tsv \
+  --output output/koreantopik1/koreantopik1_anki_import_v3.tsv
+```
+
+**IMPORTANT - Post-merge steps:**
+
+1. **Update audio references** in the TSV file:
+   - Find: `[sound:koreantopik1_example_ko_NNNN.mp3]`
+   - Replace: `[sound:koreantopik1_example_ko_v3_NNNN.mp3]`
+   - This ensures Anki recognizes the new audio files
+
+2. **Remove `#` from header** (if present):
+   ```bash
+   sed -i '1s/^#//' output/koreantopik1/koreantopik1_anki_import_v3.tsv
+   ```
+   - The `generate-audio.py` script requires header without `#`
+   - Only needed if the header line starts with `#number` instead of `number`
+
+---
+
+## Anki Import (Manual)
+
+### Phase 4: Import into Anki
+
+1. Backup current deck (export as .apkg or .txt)
+2. Copy audio files to Anki media folder (use `koreantopik1_example_ko_v3_*.mp3` pattern)
+3. Import `koreantopik1_anki_import_v3.tsv` into Anki
+4. Verify examples and audio playback
+
+**Note**: The TSV file must reference the versioned audio filenames in the `example_ko_audio` column (e.g., `[sound:koreantopik1_example_ko_v3_0001.mp3]`)
+
+---
+
+## Summary Checklist
+
+- [ ] Phase 0: Pre-split input file into 19 batches
+- [ ] Phase 1: Generate example sentences
+  - [ ] Step 1: Generate batches (19 subagents)
+  - [ ] Step 2: Combine batch files
+  - [ ] Step 3: Analyze quality
+- [ ] Phase 2: Generate audio for new examples
+  - [ ] Step 1: Generate audio files (1,847 MP3s, ~30-60min)
+  - [ ] Step 2: Verify audio quality
+  - [ ] Step 3: Create zip archive
+- [ ] Phase 3: Merge into Anki import file (update audio references)
+- [ ] Phase 4: Import into Anki (manual)
+
+**Estimated Total Time**: 1-2 hours (mostly audio generation)
