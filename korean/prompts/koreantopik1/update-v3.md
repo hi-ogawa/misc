@@ -164,11 +164,19 @@ python scripts/merge-examples.py \
   --output output/koreantopik1/koreantopik1_anki_import_v3.tsv
 ```
 
-**IMPORTANT**: After merging, update audio references in the TSV file:
-- Find: `[sound:koreantopik1_example_ko_NNNN.mp3]`
-- Replace: `[sound:koreantopik1_example_ko_v3_NNNN.mp3]`
+**IMPORTANT - Post-merge steps:**
 
-This ensures Anki recognizes the new audio files.
+1. **Update audio references** in the TSV file:
+   - Find: `[sound:koreantopik1_example_ko_NNNN.mp3]`
+   - Replace: `[sound:koreantopik1_example_ko_v3_NNNN.mp3]`
+   - This ensures Anki recognizes the new audio files
+
+2. **Remove `#` from header** (if present):
+   ```bash
+   sed -i '1s/^#//' output/koreantopik1/koreantopik1_anki_import_v3.tsv
+   ```
+   - The `generate-audio.py` script requires header without `#`
+   - Only needed if the header line starts with `#number` instead of `number`
 
 ---
 
