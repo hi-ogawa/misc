@@ -184,3 +184,4 @@ When writing new scripts, reference these examples:
 - ❌ Adding features "just in case"
 - ❌ Writing to files by default
 - ❌ Using external libraries when stdlib suffices
+- ❌ Using `chmod +x` - always run scripts with `python scripts/foo.py`

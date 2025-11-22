@@ -47,8 +47,10 @@ number	korean	english	example_ko	example_en	etymology	notes	korean_audio	example
 - [x] Phase 3: Analyze new examples (confirmed 5.71 avg words)
 - [x] Phase 4: Merge v3 examples into anki import file
 - [x] Phase 5: Generate new audio for v3 examples (1847 files, 116 min total, 44MB)
-- [ ] Phase 6: Copy audio to Anki media folder
-- [ ] Phase 7: Import updated TSV into Anki
+- [ ] Phase 6: Export current deck & merge v3 examples
+- [ ] Phase 7: Filter for partial import (optional)
+- [ ] Phase 8: Backup & copy audio to Anki media folder
+- [ ] Phase 9: Import updated TSV into Anki
 
 ### Phase 4: Merge v3 examples into anki import
 
@@ -92,35 +94,95 @@ python scripts/generate-audio-verify.py --output output/koreantopik1/audio
 python scripts/generate-audio-stats.py --output output/koreantopik1/audio
 ```
 
-### Phase 6: Backup & Copy audio to Anki
+### Phase 6: Export current deck & merge v3 examples
 
-**Backup Anki collection first:**
+Export current Anki deck to preserve recent edits, then merge v3 examples:
+
+**Step 1: Export from Anki**
+1. Open Anki
+2. Select TOPIK 1 deck -> Export
+3. Export format: "Notes in Plain Text (.txt)"
+4. Include: tags
+5. Save as `output/koreantopik1/koreantopik1_v2_backup.txt`
+
+**Step 2: Merge v3 examples into exported backup**
+
+```bash
+python scripts/merge-examples.py \
+  --base output/koreantopik1/koreantopik1_v2_backup.txt \
+  --examples output/koreantopik1/koreantopik1_anki_import_v3.tsv \
+  --output output/koreantopik1/koreantopik1_anki_import_v3_merged.tsv
+```
+
+This preserves all non-example columns from your current deck while updating only `example_ko` and `example_en`.
+
+### Phase 7: Filter for partial import (optional)
+
+To update only specific cards (e.g., unlearned cards), filter the merged TSV:
+
+```bash
+# Filter by range (e.g., cards 500+)
+python scripts/filter-anki-import.py \
+  --input output/koreantopik1/koreantopik1_anki_import_v3_merged.tsv \
+  --output output/koreantopik1/koreantopik1_anki_import_v3_partial.tsv \
+  --audio output/koreantopik1/koreantopik1_anki_import_v3_partial_audio.txt \
+  --start 500
+
+# Filter by range with end
+python scripts/filter-anki-import.py \
+  --input output/koreantopik1/koreantopik1_anki_import_v3_merged.tsv \
+  --output output/koreantopik1/koreantopik1_anki_import_v3_partial.tsv \
+  --audio output/koreantopik1/koreantopik1_anki_import_v3_partial_audio.txt \
+  --start 500 --end 1000
+
+# Filter by specific numbers (supports ranges with -)
+python scripts/filter-anki-import.py \
+  --input output/koreantopik1/koreantopik1_anki_import_v3_merged.tsv \
+  --output output/koreantopik1/koreantopik1_anki_import_v3_partial.tsv \
+  --audio output/koreantopik1/koreantopik1_anki_import_v3_partial_audio.txt \
+  --numbers "1,5,10,100-200,500"
+```
+
+Use the filtered TSV for Phase 9 import, and the audio file list for Phase 8 copy.
+
+### Phase 8: Backup & Copy audio to Anki
+
+**Backup Anki collection first (optional, if not done in Phase 6):**
 1. Open Anki
 2. File -> Export
 3. Export format: "Anki Collection Package (.colpkg)" or deck as `.apkg`
 4. Include media and scheduling information
-5. Save as `koreantopik1_v2_backup.apkg` (before v3 update)
+5. Save as `koreantopik1_v2_backup.apkg`
 
 **Copy v3 example audio to Anki media folder:**
 
 ```bash
+# Full import: copy all audio
 cp output/koreantopik1/audio/koreantopik1_example_ko_*.mp3 ~/.local/share/Anki2/사용자\ 1/collection.media/
+
+# Partial import: copy only filtered audio (from Phase 6)
+cd output/koreantopik1/audio && cat ../koreantopik1_anki_import_v3_partial_audio.txt | xargs -I {} cp {} ~/.local/share/Anki2/사용자\ 1/collection.media/
 ```
 
 **Verification:**
 ```bash
+# Full import
 ls ~/.local/share/Anki2/사용자\ 1/collection.media/koreantopik1_example_ko_*.mp3 | wc -l
 # Expected: 1847
+
+# Partial import
+wc -l < output/koreantopik1/koreantopik1_anki_import_v3_partial_audio.txt
 ```
 
-### Phase 7: Import into Anki
+### Phase 9: Import into Anki
 
-**Goal**: Update all 1,847 cards with new v3 example sentences and audio.
+**Goal**: Update cards with new v3 example sentences and audio.
 
 1. **Open Anki** and go to File -> Import
 
 2. **Select the import file**:
-   - Navigate to: `output/koreantopik1/koreantopik1_anki_import_v3.tsv`
+   - Full import: `output/koreantopik1/koreantopik1_anki_import_v3_merged.tsv`
+   - Partial import: `output/koreantopik1/koreantopik1_anki_import_v3_partial.tsv`
    - Click "Open"
 
 3. **Configure Import Settings**:
