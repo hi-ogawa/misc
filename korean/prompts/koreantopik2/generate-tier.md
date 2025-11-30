@@ -136,6 +136,7 @@ Write TSV to `/home/hiroshi/code/personal/misc/korean/output/koreantopik2/tier-e
 
 ## Critical Rules
 - DO NOT write scripts or code - generate directly using Korean language knowledge
+- DO NOT run bash commands - just write the file and exit
 - Follow ALL requirements from requirements-example.md (multi-clause preferred, concrete context, etc.)
 - Process ALL entries in the batch
 - Let tier assignment emerge naturally from the example generation experience
