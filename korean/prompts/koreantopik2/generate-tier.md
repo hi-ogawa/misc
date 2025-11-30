@@ -85,33 +85,70 @@ For uncertain words, ask LLM to generate example sentences using TOPIK 1 vocabul
 
 ### Option D: Combined Tier + Example Generation (Recommended)
 
-Process in ~100 word batches (like `generate-examples.md`), but generate BOTH tier and example sentence together.
+Process in ~100 word batches, generating BOTH tier and example sentence together.
 
 **Rationale:**
-- 4000 words + 4000 tier outputs in one shot is too large
+- 4000 words + 4000 outputs in one shot is too large (LLM gets "nervous", writes scripts instead)
 - Generating an example forces LLM to "use" the word
 - If natural example comes easily → reveals Tier 1
 - If example feels forced/awkward → reveals Tier 2/3
 - The act of generating reveals word's "naturalness" better than abstract tier judgment
-
-**Process:**
-1. Use existing batch split: `input/koreantopik2-batch-1.tsv` to `input/koreantopik2-batch-39.tsv`
-2. For each batch, generate: number, korean, tier, example_ko, example_en
-3. Output: `output/koreantopik2/tier-examples-N.tsv`
-
-**Output format:**
-```
-number	korean	english	tier	example_ko	example_en
-1	-가	professional	2	그는 유명한 음악가입니다.	He is a famous musician.
-2	가까이	nearby	1	가까이 오세요.	Come closer.
-...
-```
 
 **Benefits:**
 - Tier decision informed by actual usage attempt
 - Get examples "for free" alongside tiering
 - Batch size matches existing infrastructure
 - Can filter Tier 1 words later and already have examples ready
+
+#### Subagent Prompt Template
+
+```
+**Task: Generate tier assignments AND example sentences for TOPIK 2 vocabulary batch {N}**
+
+## Step 1: Read Requirements
+Read `/home/hiroshi/code/personal/misc/korean/prompts/requirements-example.md` for example sentence quality requirements.
+
+## Step 2: Read Input
+Read `/home/hiroshi/code/personal/misc/korean/input/koreantopik2-batch-{N}.tsv`
+
+## Step 3: For Each Word - Generate Tier + Example Together
+
+**Key insight**: The act of generating an example reveals the word's tier.
+- If a natural, everyday example comes easily → Tier 1
+- If the example requires specific/moderate context → Tier 2
+- If the example feels forced, academic, or narrow → Tier 3
+
+**Tier definitions:**
+- **Tier 1**: Essential - High frequency in spoken Korean, everyday dramas/variety shows. Example sentence uses common, natural patterns.
+- **Tier 2**: Useful - Moderate frequency, practical but less common. Example requires more specific context.
+- **Tier 3**: Specialized - Academic, technical, literary, or narrow usage. Example feels domain-specific.
+
+**Process for each word:**
+1. Try to generate a natural example sentence following requirements-example.md
+2. Notice: Was this easy/natural, or did it require specialized context?
+3. Assign tier based on that experience
+4. Finalize the example sentence
+
+## Step 4: Write Output
+Write TSV to `/home/hiroshi/code/personal/misc/korean/output/koreantopik2/tier-examples-{N}.tsv`
+
+**Columns**: number	korean	english	tier	example_ko	example_en
+
+## Critical Rules
+- DO NOT write scripts or code - generate directly using Korean language knowledge
+- Follow ALL requirements from requirements-example.md (multi-clause preferred, concrete context, etc.)
+- Process ALL entries in the batch
+- Let tier assignment emerge naturally from the example generation experience
+```
+
+#### Output Format
+
+Per-batch: `output/koreantopik2/tier-examples-{N}.tsv`
+```
+number	korean	english	tier	example_ko	example_en
+1	-가	professional	3	유명한 음악가가 콘서트에서 피아노를 연주했어요.	A famous musician played piano at the concert.
+2	가까이	nearby	1	위험하니까 가까이 오지 마세요.	Don't come close because it's dangerous.
+```
 
 ## Validation Approach
 
@@ -136,22 +173,14 @@ With Option D:
 
 ## Output Format
 
-With Option D (recommended), output per-batch files:
-
-`output/koreantopik2/tier-examples-N.tsv` (N = 1-39):
-```
-number	korean	english	tier	example_ko	example_en
-```
-
 After all batches complete, merge into:
-`output/koreantopik2/tier-all.tsv` (tier column only, for filtering)
-`output/koreantopik2/examples-all.tsv` (examples, for downstream processing)
+- `output/koreantopik2/tier-all.tsv` (for filtering by tier)
+- `output/koreantopik2/examples-all.tsv` (for downstream processing)
 
 ## Open Questions
 
 1. **Refinement**: After initial tiers, allow manual adjustments?
-2. **Tier criteria in prompt**: How much guidance to give LLM vs let it decide naturally?
 
 ---
 
-**Next step**: Test Option D on batch 1 (~100 words) to validate approach.
+**Next step**: Test Option D on batch 1.
