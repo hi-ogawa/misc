@@ -169,11 +169,72 @@ if __name__ == "__main__":
     sys.exit(main())
 ```
 
+## TSV Processing Strategy
+
+**LLMs are bad at TSV hacking** - avoid ad-hoc awk/sed/python snippets for TSV manipulation.
+
+**Use `scripts/jq-tsv.py`** - a wrapper that:
+1. Converts TSV to JSON (list of dicts)
+2. Pipes through actual `jq`
+3. Converts back to TSV
+
+```bash
+# Filter rows
+python scripts/jq-tsv.py 'select(.tier == "1")' input.tsv > output.tsv
+
+# Project columns
+python scripts/jq-tsv.py '{number, korean, example_ko}' input.tsv > output.tsv
+
+# Combined filter + project
+python scripts/jq-tsv.py 'select(.tier == "1") | {number, korean, english}' input.tsv > output.tsv
+
+# Multiple inputs (concatenate)
+python scripts/jq-tsv.py '.' file1.tsv file2.tsv > combined.tsv
+```
+
+**JSON output for intermediate files:**
+```bash
+# Output as JSON (more robust for intermediate/analysis files)
+python scripts/jq-tsv.py --json 'select(.tier == "1")' input.tsv > output.json
+
+# Then use jq directly on JSON files
+jq 'length' output.json                    # Count entries
+jq '.[0]' output.json                      # First entry
+jq 'map(.korean)' output.json              # Extract field
+jq 'group_by(.tier) | map(length)' file.json  # Aggregation
+```
+
+**Why jq?**
+- Declarative, composable syntax
+- Well-documented, battle-tested
+- Handles edge cases (escaping, empty values)
+- LLMs know jq syntax well
+
+**Prefer JSON for:**
+- Intermediate files (more robust than TSV)
+- Analysis and inspection
+- Complex nested data
+
+**Use TSV for:**
+- Final output for import (Anki, spreadsheets)
+- Human-readable quick inspection
+
+**Temporary/intermediate files:**
+- Use `output/tmp/` for scratch files (encouraged)
+- NEVER use `/tmp` or system temp directories
+- Keep intermediate files in project for debugging/inspection
+
+**When NOT to use jq-tsv.py:**
+- Complex transformations requiring Python logic
+- Joins across multiple files
+- Aggregations (use jq directly on JSON)
+
 ## Reference Scripts
 
 When writing new scripts, reference these examples:
 - **`scripts/generate-audio.py`**: Argparse patterns, error handling
 - **`scripts/analyze-examples.py`**: Simple data processing, stdout output
+- **`scripts/jq-tsv.py`**: TSV filtering/projection via jq
 
 ## Anti-Patterns to Avoid
 
