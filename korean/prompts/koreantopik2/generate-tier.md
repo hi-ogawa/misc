@@ -160,28 +160,49 @@ After tiering:
 3. **두르다 test**: Should rank high in Tier 1
 4. **Sample Tier 3**: Should feel academic/specialized
 
-## Workflow
+## Output Files
 
-With Option D:
+**Per-batch outputs** (39 files):
+- `output/koreantopik2/tier-examples-{1-39}.tsv`
 
-1. **Generate tier + examples**: Process batches 1-39 with combined prompt
-2. **Merge outputs**: Combine batch files into tier-all.tsv and examples-all.tsv
-3. **Validate**: Spot-check Tier 1 results against intuition
-4. **Filter Tier 1**: Extract Tier 1 words (examples already generated)
-5. **Process Tier 1**: Generate notes, audio for Tier 1 words only
-6. **Create "TOPIK 1.5" deck**: Import Tier 1 as priority
-7. **Later**: Process Tier 2 when Tier 1 is mastered
+**Merged by tier** (using `scripts/jq-tsv.py`):
+```bash
+# Use {1..39} for correct numeric order (not *.tsv which gives 1,10,11,...,2,...)
+python3 scripts/jq-tsv.py 'select(.tier == "1")' output/koreantopik2/tier-examples-{1..39}.tsv > output/koreantopik2/tier-1-examples.tsv
+python3 scripts/jq-tsv.py 'select(.tier == "2")' output/koreantopik2/tier-examples-{1..39}.tsv > output/koreantopik2/tier-2-examples.tsv
+python3 scripts/jq-tsv.py 'select(.tier == "3")' output/koreantopik2/tier-examples-{1..39}.tsv > output/koreantopik2/tier-3-examples.tsv
+```
 
-## Output Format
+**Tier counts**:
+```bash
+python3 scripts/jq-tsv.py -s 'group_by(.tier) | map({tier: .[0].tier, count: length})' output/koreantopik2/tier-examples-*.tsv
+```
 
-After all batches complete, merge into:
-- `output/koreantopik2/tier-all.tsv` (for filtering by tier)
-- `output/koreantopik2/examples-all.tsv` (for downstream processing)
+## Execution Status
+
+**Completed**: All 39 batches processed with Option D.
+
+**Final Distribution**:
+| Tier | Count | % | Description |
+|------|-------|---|-------------|
+| Tier 1 | 1,049 | 27% | Essential - "TOPIK 1.5" priority deck |
+| Tier 2 | 2,052 | 53% | Useful - learn after Tier 1 |
+| Tier 3 | 772 | 20% | Specialized - lowest priority |
+
+**Output files created**:
+- `tier-examples-{1-39}.tsv` - per-batch with tier + examples
+- `tier-1-examples.tsv` - 1,049 essential words
+- `tier-2-examples.tsv` - 2,052 useful words
+- `tier-3-examples.tsv` - 772 specialized words
+
+## Next Steps
+
+1. ~~Generate tier + examples~~ ✓ Complete
+2. ~~Merge by tier~~ ✓ Complete
+3. **Process Tier 1**: Generate notes, audio for 1,049 essential words
+4. **Create "TOPIK 1.5" deck**: Import Tier 1 for Anki
+5. **Later**: Process Tier 2 when Tier 1 is mastered
 
 ## Open Questions
 
 1. **Refinement**: After initial tiers, allow manual adjustments?
-
----
-
-**Next step**: Test Option D on batch 1.

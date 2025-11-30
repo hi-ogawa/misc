@@ -208,7 +208,9 @@ jq 'group_by(.tier) | map(length)' file.json  # Aggregation
 - Declarative, composable syntax
 - Well-documented, battle-tested
 - Handles edge cases (escaping, empty values)
-- LLMs know jq syntax well
+- **LLMs know jq extremely well** (tons of training data from Stack Overflow, GitHub)
+- Prior art like miller/csvkit exists, but LLMs struggle with them and fall back to fragile awk/sed
+- jq-tsv.py bridges TSV to something LLMs already know
 
 **Prefer JSON for:**
 - Intermediate files (more robust than TSV)

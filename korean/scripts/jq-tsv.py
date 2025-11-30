@@ -9,6 +9,7 @@ Usage:
     python scripts/jq-tsv.py '{number, korean}' input.tsv > output.tsv
     python scripts/jq-tsv.py '.' file1.tsv file2.tsv > combined.tsv
     python scripts/jq-tsv.py --json '.' input.tsv  # Output as JSON
+    python scripts/jq-tsv.py -s 'group_by(.tier) | map({tier: .[0].tier, count: length})' input.tsv  # Slurp mode
 """
 
 import argparse
@@ -28,6 +29,7 @@ def main():
     parser.add_argument("files", nargs="+", help="Input TSV file(s)")
     parser.add_argument("--no-header", action="store_true", help="Input has no header row")
     parser.add_argument("--json", action="store_true", help="Output as JSON instead of TSV")
+    parser.add_argument("-s", "--slurp", action="store_true", help="Read all rows into array (for aggregations)")
 
     args = parser.parse_args()
 
@@ -63,9 +65,15 @@ def main():
     # Convert to JSON and pipe through jq
     json_input = json.dumps(rows, ensure_ascii=False)
 
+    # Build jq filter: per-row vs slurp mode
+    if args.slurp:
+        jq_filter = args.filter
+    else:
+        jq_filter = f".[] | {args.filter}"
+
     try:
         result = subprocess.run(
-            ["jq", "-c", f".[] | {args.filter}"],
+            ["jq", "-c", jq_filter],
             input=json_input,
             capture_output=True,
             text=True,
@@ -77,6 +85,12 @@ def main():
     except subprocess.CalledProcessError as e:
         print(f"Error: jq failed: {e.stderr}", file=sys.stderr)
         return 1
+
+    # Slurp mode: output raw JSON result
+    if args.slurp:
+        output = json.loads(result.stdout.strip())
+        print(json.dumps(output, ensure_ascii=False, indent=2))
+        return 0
 
     # Parse jq output (one JSON object per line)
     output_rows = []
