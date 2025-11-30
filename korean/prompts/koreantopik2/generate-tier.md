@@ -29,11 +29,13 @@ Instead of:
 
 ### Tier Definitions
 
-| Tier | Description | Estimated Size |
-|------|-------------|----------------|
-| **Tier 1** | Essential everyday words, high frequency, natural with TOPIK 1 | ~500-800 |
-| **Tier 2** | Useful but less frequent, broader vocabulary | ~1000-1500 |
-| **Tier 3** | Specialized, academic, or low-frequency | ~1500-2000 |
+| Tier | Description |
+|------|-------------|
+| **Tier 1** | Essential everyday words, high frequency, natural with TOPIK 1 |
+| **Tier 2** | Useful but less frequent, broader vocabulary |
+| **Tier 3** | Specialized, academic, or low-frequency |
+
+Let LLM decide distribution naturally - no enforced counts.
 
 ### Tier 1 Criteria (Priority)
 - High frequency in spoken Korean
@@ -49,7 +51,7 @@ Instead of:
 
 ## Implementation Options
 
-### Option A: Single-shot Full List (Preferred)
+### Option A: Single-shot Full List
 
 Feed all 3873 words to LLM in one prompt:
 
@@ -62,7 +64,7 @@ Tier 3: Specialized - Low frequency, academic, technical, or narrow usage
 
 For a TOPIK 1 graduate, Tier 1 words should feel like "missing" beginner vocabulary.
 
-Output: TSV with columns: number, korean, tier, reason (brief)
+Output: TSV with columns: number, korean, tier
 ```
 
 **Pros**: Simple, fast, leverages LLM's implicit frequency knowledge
@@ -81,6 +83,36 @@ For uncertain words, ask LLM to generate example sentences using TOPIK 1 vocabul
 - If natural sentence emerges -> Tier 1
 - If sentence feels forced -> Tier 2/3
 
+### Option D: Combined Tier + Example Generation (Recommended)
+
+Process in ~100 word batches (like `generate-examples.md`), but generate BOTH tier and example sentence together.
+
+**Rationale:**
+- 4000 words + 4000 tier outputs in one shot is too large
+- Generating an example forces LLM to "use" the word
+- If natural example comes easily → reveals Tier 1
+- If example feels forced/awkward → reveals Tier 2/3
+- The act of generating reveals word's "naturalness" better than abstract tier judgment
+
+**Process:**
+1. Use existing batch split: `input/koreantopik2-batch-1.tsv` to `input/koreantopik2-batch-39.tsv`
+2. For each batch, generate: number, korean, tier, example_ko, example_en
+3. Output: `output/koreantopik2/tier-examples-N.tsv`
+
+**Output format:**
+```
+number	korean	english	tier	example_ko	example_en
+1	-가	professional	2	그는 유명한 음악가입니다.	He is a famous musician.
+2	가까이	nearby	1	가까이 오세요.	Come closer.
+...
+```
+
+**Benefits:**
+- Tier decision informed by actual usage attempt
+- Get examples "for free" alongside tiering
+- Batch size matches existing infrastructure
+- Can filter Tier 1 words later and already have examples ready
+
 ## Validation Approach
 
 After tiering:
@@ -92,30 +124,34 @@ After tiering:
 
 ## Workflow
 
-1. **Generate tiers**: Run tiering prompt on full TOPIK 2 list
-2. **Validate**: Spot-check results against intuition
-3. **Process Tier 1 first**: Generate examples, notes, audio for ~500-800 words
-4. **Create "TOPIK 1.5" deck**: Import Tier 1 as priority
-5. **Later**: Process Tier 2 when Tier 1 is mastered
+With Option D:
+
+1. **Generate tier + examples**: Process batches 1-39 with combined prompt
+2. **Merge outputs**: Combine batch files into tier-all.tsv and examples-all.tsv
+3. **Validate**: Spot-check Tier 1 results against intuition
+4. **Filter Tier 1**: Extract Tier 1 words (examples already generated)
+5. **Process Tier 1**: Generate notes, audio for Tier 1 words only
+6. **Create "TOPIK 1.5" deck**: Import Tier 1 as priority
+7. **Later**: Process Tier 2 when Tier 1 is mastered
 
 ## Output Format
 
-`output/koreantopik2/tier-all.tsv`:
+With Option D (recommended), output per-batch files:
+
+`output/koreantopik2/tier-examples-N.tsv` (N = 1-39):
 ```
-number	korean	english	tier	reason
-1	-가	professional	2	suffix, less common standalone
-2	가까이	nearby	1	high frequency adverb
-3	가꾸다	raise/cultivate	2	moderate frequency verb
-...
+number	korean	english	tier	example_ko	example_en
 ```
+
+After all batches complete, merge into:
+`output/koreantopik2/tier-all.tsv` (tier column only, for filtering)
+`output/koreantopik2/examples-all.tsv` (examples, for downstream processing)
 
 ## Open Questions
 
-1. **Tier boundaries**: 500 vs 800 for Tier 1? Let LLM decide or set target?
-2. **Confidence scores**: Ask for tier + confidence? Or keep simple?
-3. **Context window**: Can 3873 words fit in one prompt? May need batching regardless.
-4. **Refinement**: After initial tiers, allow manual adjustments?
+1. **Refinement**: After initial tiers, allow manual adjustments?
+2. **Tier criteria in prompt**: How much guidance to give LLM vs let it decide naturally?
 
 ---
 
-**Next step**: Test tiering prompt on subset (batch 1: ~100 words) before full list.
+**Next step**: Test Option D on batch 1 (~100 words) to validate approach.
