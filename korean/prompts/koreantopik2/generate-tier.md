@@ -195,14 +195,77 @@ python3 scripts/jq-tsv.py -s 'group_by(.tier) | map({tier: .[0].tier, count: len
 - `tier-2-examples.tsv` - 2,052 useful words
 - `tier-3-examples.tsv` - 772 specialized words
 
+## Creating Tier 1 Anki Import
+
+### Goal
+Create `koreantopik2_tier1_anki_import.tsv` - a filtered deck of 1,049 essential words.
+
+### Naming Convention
+- `koreantopik2_tier1_N` for card IDs (not `koreantopik2_N`)
+- Audio files: `koreantopik2_tier1_korean_NNNN.mp3`, `koreantopik2_tier1_example_ko_NNNN.mp3`
+
+### Data Sources
+1. **Tier assignment**: `tier-examples-{1..39}.tsv` (number, tier)
+2. **Base content**: `koreantopik2_anki_import.tsv` (etymology, notes, existing examples)
+
+### Approach Options
+
+#### Option A: Reuse Existing Examples + Audio
+- Filter `koreantopik2_anki_import.tsv` to tier 1 words
+- Keep original examples (already have audio)
+- Renumber: `koreantopik2_1` → `koreantopik2_tier1_1`
+- Rename audio references accordingly
+- **Pro**: No new audio generation needed
+- **Con**: Examples weren't optimized for tier assessment
+
+#### Option B: Use Tier-Generated Examples
+- Use `example_ko`, `example_en` from `tier-examples-*.tsv`
+- Keep etymology, notes from original
+- Generate new audio for tier examples
+- **Pro**: Examples naturally demonstrate word's "essentialness"
+- **Con**: Requires new audio generation (~2100 files)
+
+#### Option C: Hybrid
+- Keep original examples + audio
+- Add tier examples as secondary field (for review/comparison)
+- **Pro**: Best of both worlds
+- **Con**: More complex card structure
+
+### Recommended: Option B (tier-generated examples are the point)
+
+```bash
+# Step 1: Extract tier 1 with examples (already done)
+python3 scripts/jq-tsv.py 'select(.tier == "1")' \
+  output/koreantopik2/tier-examples-{1..39}.tsv \
+  > output/koreantopik2/tier-1-examples.tsv
+
+# Step 2: Join with anki import to get etymology/notes, renumber
+python3 scripts/create-tier1-anki-import.py \
+  --tier output/koreantopik2/tier-1-examples.tsv \
+  --anki output/koreantopik2/koreantopik2_anki_import.tsv \
+  --prefix koreantopik2_tier1
+
+# Step 3: Generate audio for tier examples
+python3 scripts/generate-audio.py output/koreantopik2/koreantopik2_tier1_anki_import.tsv
+```
+
+### Output Structure
+Same columns as `koreantopik2_anki_import.tsv`:
+```
+number	korean	english	example_ko	example_en	etymology	notes	korean_audio	example_ko_audio
+koreantopik2_tier1_1	가까이	nearby	...	...	...	...	[sound:koreantopik2_tier1_korean_0001.mp3]	...
+```
+
 ## Next Steps
 
 1. ~~Generate tier + examples~~ ✓ Complete
 2. ~~Merge by tier~~ ✓ Complete
-3. **Process Tier 1**: Generate notes, audio for 1,049 essential words
-4. **Create "TOPIK 1.5" deck**: Import Tier 1 for Anki
-5. **Later**: Process Tier 2 when Tier 1 is mastered
+3. **Create tier1 anki import**: Filter and renumber (Option A)
+4. **Copy/rename audio files**: Map original audio to tier1 naming
+5. **Import to Anki**: Create "TOPIK 1.5" deck
+6. **Later**: Process Tier 2 when Tier 1 is mastered
 
 ## Open Questions
 
 1. **Refinement**: After initial tiers, allow manual adjustments?
+2. **Audio strategy**: Reuse existing (Option A) or regenerate for tier examples (Option B)?
