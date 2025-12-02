@@ -245,14 +245,78 @@ head -n 1001 output/koreantopik2/scores-sorted.tsv > output/koreantopik2/top-100
 
 ## Execution Status
 
-**Status**: Not yet started (planning phase)
+**Status**: Completed using Option A (single-shot scoring)
 
-**Next actions**:
-1. Run scoring for all 39 batches using Option D subagent prompt
-2. Consolidate into `scores-all.tsv`
-3. Sort by score descending → `scores-sorted.tsv`
-4. Analyze score distribution
-5. Decide cutoff for priority deck (e.g., top 500, top 1000, or score >= 80)
+**Approach**: Single-shot full list with 1-10 score scale (changed from original 1-100 for practicality)
+
+**Files**:
+- Raw output: `output/koreantopik2/scores-singleshot.tsv` (had validation issues)
+- Fixed output: `output/koreantopik2/scores-singleshot_edit.tsv` (canonical version)
+
+**Validation Issues Found**:
+1. **Hallucination**: 가능하다 added at row 7 (completing morphological family not in input)
+2. **Typo**: 지겹다 → 지겁다
+3. Fixed using jq-tsv.py transformation (see validation steps in Option A)
+
+**Score Distribution** (3873 words):
+```
+Score 9: 113 words (2.9%) - Essential
+Score 8: 1045 words (27.0%) - High priority
+Score 7: 2052 words (53.0%) - Useful
+Score 6: 551 words (14.2%) - Moderate
+Score 5: 107 words (2.8%) - Lower priority
+Score 4: 5 words (0.1%) - Specialized
+```
+
+**Statistics**:
+- Range: 4-9 (no scores 1-3 or 10 assigned)
+- Mean: 7.13
+- Median: 7
+
+**Sample Words by Score**:
+
+Score 9 (Essential - 113 words):
+- 가능 (possible), 가능성 (possibility)
+- 검색 (search)
+- 결국 (finally)
+- 경우 (case)
+- 그래도 (anyway), 그렇지 (right)
+- 근데 (however)
+- 기본 (basics)
+
+Score 8 (High priority - 1045 words):
+- 가까이 (nearby)
+- 가스 (gas)
+- 가정 (family)
+- 가져다주다 (bring)
+- 가치 (value)
+- 각 (each), 각자 (each person)
+- 갈수록 (increasingly)
+- 감정 (emotion)
+
+Score 5 (Lower priority - 107 words):
+- 가꾸다 (raise/cultivate)
+- 가로 (length)
+- 가뭄 (drought)
+- 가정 (assumption)
+- 가톨릭 (Catholic)
+- 각국 (each country)
+- 간 (liver)
+- 간접적 (indirect)
+
+Score 4 (Specialized - 5 words):
+- 강수량 (precipitation/rainfall)
+- 경복궁 (Gyeongbokgung)
+- 남미 (South America)
+- 북미 (North America)
+- 아프리카 (Africa)
+
+**Key Observations**:
+- LLM avoided extreme scores (1-3, 10) and clustered around 6-8
+- Morphological families correctly received identical scores
+- Geographic/specialized terms (continents, palaces) scored lowest
+- High-frequency functional words (근데, 경우, 결국) scored highest
+- Distribution suggests ~1200 words (scores 8-9) as priority tier
 
 ## Creating Priority Anki Deck
 
@@ -278,9 +342,16 @@ After scoring is complete, create a filtered Anki deck of high-priority words.
 
 ## Next Steps
 
-1. **Immediate**: Run scoring for all 39 batches
-2. Analyze score distribution
-3. Decide priority deck cutoff (score threshold or top N)
-4. Generate examples for priority words (if needed)
-5. Create filtered Anki import file
-6. Import to Anki as "TOPIK 1.5" or similar deck
+1. ✅ **Complete**: Single-shot scoring of all 3873 words
+2. ✅ **Complete**: Score distribution analysis
+3. **Decide priority deck approach**:
+   - Option A: Score >= 8 (1158 words - top 30%)
+   - Option B: Score == 9 only (113 words - top 3%)
+   - Option C: Top N (e.g., 500, 1000 words)
+4. **Generate examples for priority subset** (if going with filtered approach)
+   - Reuse existing examples from `output/koreantopik2/notes-*.tsv`
+   - Or generate fresh examples optimized for high-priority words
+5. **Create filtered Anki import file**
+   - Join scores with existing notes/examples/audio
+   - Filter to priority subset
+6. **Import to Anki** as "TOPIK 1.5" or "TOPIK 2 Essential" deck
