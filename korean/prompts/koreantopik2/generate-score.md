@@ -80,7 +80,35 @@ Output: TSV with columns: number, korean, english, score
 ```
 
 **Pros**: Simple, fast, leverages LLM's implicit frequency knowledge
-**Cons**: Single LLM's judgment, no validation
+**Cons**: Single LLM's judgment, risk of hallucinations/typos
+
+#### Validation Steps
+
+After generating output, verify data integrity:
+
+```bash
+# 1. Extract sorted Korean words from input
+python scripts/jq-tsv.py -s 'map(.korean) | sort' input/koreantopik2.tsv > output/tmp/input-korean-sorted.json
+
+# 2. Extract sorted Korean words from output
+python scripts/jq-tsv.py -s 'map(.korean) | sort' output/koreantopik2/scores-singleshot.tsv > output/tmp/output-korean-sorted.json
+
+# 3. Find hallucinations (words in output but not in input)
+jq -n --slurpfile a output/tmp/input-korean-sorted.json --slurpfile b output/tmp/output-korean-sorted.json '($b[0] - $a[0])'
+
+# 4. Find missing words (words in input but not in output)
+jq -n --slurpfile a output/tmp/input-korean-sorted.json --slurpfile b output/tmp/output-korean-sorted.json '($a[0] - $b[0])'
+```
+
+**Expected result**: Both commands should return `[]` (empty array).
+
+**Common issues found:**
+- **Hallucinations**: LLM adds words to complete morphological families (e.g., adding 가능하다 to complete 가능/가능성/가능하다 family, even though 가능하다 wasn't in input)
+- **Typos**: LLM misremembers spelling (e.g., 지겹다 → 지겁다)
+
+**If errors found:**
+- Document the discrepancies
+- Decide whether to manually fix or re-run with stricter prompt constraints
 
 ### Option B: Batch with Consensus
 

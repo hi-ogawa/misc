@@ -191,9 +191,14 @@ python scripts/jq-tsv.py 'select(.tier == "1") | {number, korean, english}' inpu
 # Multiple inputs (concatenate)
 python scripts/jq-tsv.py '.' file1.tsv file2.tsv > combined.tsv
 
-# Aggregations (use -s/--slurp flag)
-python scripts/jq-tsv.py -s 'group_by(.tier) | map({tier: .[0].tier, count: length})' input.tsv
-python scripts/jq-tsv.py -s 'map(.score | tonumber) | {min: min, max: max, mean: (add / length)}' input.tsv
+# Aggregations (use -s/--slurp flag with --json)
+# Note: Aggregations produce non-TSV output, so --json is required
+python scripts/jq-tsv.py -s --json 'group_by(.tier) | map({tier: .[0].tier, count: length})' input.tsv
+python scripts/jq-tsv.py -s --json 'map(.score | tonumber) | {min: min, max: max, mean: (add / length)}' input.tsv
+
+# Transformations with slurp (outputs TSV if result is array of objects)
+python scripts/jq-tsv.py -s 'map(select(.score | tonumber > 8))' input.tsv > filtered.tsv
+python scripts/jq-tsv.py -s 'map(if .korean == "typo" then . + {korean: "fixed"} else . end)' input.tsv > fixed.tsv
 ```
 
 **JSON output for intermediate files:**
@@ -233,7 +238,6 @@ jq 'group_by(.tier) | map(length)' file.json  # Aggregation
 **When NOT to use jq-tsv.py:**
 - Complex transformations requiring Python logic
 - Joins across multiple files
-- Aggregations (use jq directly on JSON)
 
 ## Reference Scripts
 
