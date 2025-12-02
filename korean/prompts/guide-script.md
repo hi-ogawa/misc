@@ -190,6 +190,10 @@ python scripts/jq-tsv.py 'select(.tier == "1") | {number, korean, english}' inpu
 
 # Multiple inputs (concatenate)
 python scripts/jq-tsv.py '.' file1.tsv file2.tsv > combined.tsv
+
+# Aggregations (use -s/--slurp flag)
+python scripts/jq-tsv.py -s 'group_by(.tier) | map({tier: .[0].tier, count: length})' input.tsv
+python scripts/jq-tsv.py -s 'map(.score | tonumber) | {min: min, max: max, mean: (add / length)}' input.tsv
 ```
 
 **JSON output for intermediate files:**
