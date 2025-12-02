@@ -318,6 +318,76 @@ Score 4 (Specialized - 5 words):
 - High-frequency functional words (근데, 경우, 결국) scored highest
 - Distribution suggests ~1200 words (scores 8-9) as priority tier
 
+### 1-100 Scale Attempt (Second Run)
+
+**Status**: Completed
+
+**Files**:
+- Output: `output/koreantopik2/scores-singleshot100.tsv` (canonical version)
+
+**Score Distribution** (3873 words):
+- Range: 42-92 (only 50 out of 100 points used)
+- Mean: 72.5, Median: 72
+
+**Heavy clustering around 4 scores**:
+- Score 72: 839 words (21.7%)
+- Score 75: 732 words (18.9%)
+- Score 68: 608 words (15.7%)
+- Score 78: 511 words (13.2%)
+- **Total: 69% of all words in just 4 scores**
+
+**By tier**:
+- 85-100 (Essential): 169 words (4.4%)
+- 75-84 (High): 1594 words (41.2%)
+- 65-74 (Mid): 1745 words (45.1%)
+- 55-64 (Lower): 350 words (9.0%)
+- 1-54 (Specialized): 15 words (0.4%)
+
+**Key Observations**:
+- 1-100 scale didn't solve clustering problem (just shifted from 6-8 → 65-78)
+- LLMs naturally avoid extremes and cluster around "safe" middle values
+- Morphological families correctly received identical scores
+- No hallucinations or typos (validation passed)
+
+## Post-Processing: Further Subdivision of Clusters
+
+**Problem**: Both 1-10 and 1-100 scales resulted in heavy clustering. For practical deck management, we want ~100-word batches with alphabetical variety.
+
+**Goal**: Split large score clusters (e.g., score 72 with 839 words) into smaller groups of ~100 words each, while:
+- Maintaining alphabetical variety within each group
+- Keeping morphological families together (never split 가능/가능성 across groups)
+
+### Approach: Morphological Family-Aware Binning
+
+**Algorithm**:
+1. **Group by morphological family** (shared stem/root)
+   - Heuristic: shared first 2-3 characters, or dictionary-based stems
+   - Examples: {가능, 가능성}, {개인, 개인적}, {간신히}
+
+2. **Sort families alphabetically** (by first word in family)
+   - Ensures natural alphabetical spread across bins
+
+3. **Pack families into bins of ~100 words**
+   - Bin-packing algorithm: greedily assign families to bins until ~100 words
+   - Never split a family across bins
+   - Some bins may have 90-110 words (acceptable variation)
+
+4. **Assign sub-scores**:
+   - Score 72 (839 words) → 72.1 (~100), 72.2 (~100), ..., 72.9 (~39)
+   - Score 75 (732 words) → 75.1 (~100), 75.2 (~100), ..., 75.8 (~32)
+
+**Result**:
+- ~40 buckets total across all scores
+- Each bucket: ~100 words with alphabetical variety
+- Morphological families intact for easier studying
+
+**Implementation** (TBD):
+- Write Python script for morphological family detection
+- Use bin-packing algorithm for assignment
+- Output: `scores-singleshot100-subdivided.tsv` with additional `subscore` column
+
+**Status**: Not yet implemented (potential future enhancement)
+
 ## Creating Priority Anki Deck
 
 ### Goal
