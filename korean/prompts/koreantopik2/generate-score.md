@@ -1,4 +1,4 @@
-# TOPIK 2 Vocabulary Tiering Strategy
+# TOPIK 2 Vocabulary Scoring Strategy
 
 ## Background
 
@@ -23,7 +23,7 @@ Instead of:
 - Generating 4000 example sentences (expensive)
 - Manual sentence mining (slow)
 
-**Direct approach**: Ask LLM to tier the entire vocabulary list.
+**Direct approach**: Ask LLM to score the entire vocabulary list.
 
 ## Scoring Strategy
 
@@ -68,15 +68,15 @@ Examples:
 Feed all 3873 words to LLM in one prompt:
 
 ```
-Given this TOPIK 2 vocabulary list (3873 words), assign each word to a tier:
+Given this TOPIK 2 vocabulary list (3873 words), assign each word a score (1-100):
 
-Tier 1: Essential - High frequency, everyday usage, natural co-occurrence with beginner vocabulary
-Tier 2: Useful - Moderate frequency, broader but practical vocabulary
-Tier 3: Specialized - Low frequency, academic, technical, or narrow usage
+80-100: Essential - High frequency, everyday usage, natural co-occurrence with beginner vocabulary
+40-79: Useful - Moderate frequency, broader but practical vocabulary
+1-39: Specialized - Low frequency, academic, technical, or narrow usage
 
-For a TOPIK 1 graduate, Tier 1 words should feel like "missing" beginner vocabulary.
+For a TOPIK 1 graduate, high-scoring words should feel like "missing" beginner vocabulary.
 
-Output: TSV with columns: number, korean, tier
+Output: TSV with columns: number, korean, english, score
 ```
 
 **Pros**: Simple, fast, leverages LLM's implicit frequency knowledge
@@ -92,8 +92,8 @@ Split into batches, process with multiple prompts, look for consensus.
 ### Option C: Validation via Example Generation
 
 For uncertain words, ask LLM to generate example sentences using TOPIK 1 vocabulary.
-- If natural sentence emerges -> Tier 1
-- If sentence feels forced -> Tier 2/3
+- If natural sentence emerges -> High score (8-10)
+- If sentence feels forced -> Low score (1-5)
 
 ### Option D: Batch Scoring (Recommended)
 
