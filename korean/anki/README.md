@@ -36,4 +36,4 @@ Tools and documentation for working with Anki via AnkiConnect.
 
 | Flag | Color | Purpose |
 |------|-------|---------|
-| 2 | Orange | (TBD - 154 cards currently flagged) |
+| 2 | Orange | Non-self-contained examples (see `prompts/extract-missing-vocab.md`) |
