@@ -24,7 +24,11 @@ korean/
 │   └── generate-fix.md
 ├── scripts/          # Helper scripts
 │   ├── generate-audio.py  # Audio generation script (tracked)
-|   └── ... 
+│   ├── anki.py       # AnkiConnect CLI wrapper
+│   └── ...
+├── anki/             # Anki integration docs
+│   ├── README.md     # Overview, deck structure, note model
+│   └── guide.md      # AnkiConnect API patterns
 ├── input/            # Input data files (not tracked)
 ├── output/           # Generated content (not tracked)
 └── README.md         # This file
