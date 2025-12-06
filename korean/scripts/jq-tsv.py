@@ -86,10 +86,28 @@ def main():
         print(f"Error: jq failed: {e.stderr}", file=sys.stderr)
         return 1
 
-    # Slurp mode: output raw JSON result
+    # Slurp mode
     if args.slurp:
         output = json.loads(result.stdout.strip())
-        print(json.dumps(output, ensure_ascii=False, indent=2))
+        if args.json:
+            # Output as JSON
+            print(json.dumps(output, ensure_ascii=False, indent=2))
+        else:
+            # Try to convert back to TSV if it's an array of objects
+            if isinstance(output, list) and output and isinstance(output[0], dict):
+                # Array of objects -> TSV
+                writer = csv.DictWriter(
+                    sys.stdout,
+                    fieldnames=output[0].keys(),
+                    delimiter="\t",
+                    lineterminator="\n"
+                )
+                writer.writeheader()
+                writer.writerows(output)
+            else:
+                # Aggregation result (not TSV-convertible)
+                print("Error: Result is not TSV-convertible (not an array of objects). Use --json flag for JSON output.", file=sys.stderr)
+                return 1
         return 0
 
     # Parse jq output (one JSON object per line)
