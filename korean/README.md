@@ -18,5 +18,7 @@ korean/
 ├── anki/                           # Anki integration (see anki/README.md)
 ├── scripts/                        # Automation scripts
 ├── input/                          # Source vocabulary files
-└── output/                         # Generated enhancements
+├── output/                         # Generated enhancements
+└── resources/
+    └── korean-grammar-in-use/      # Grammar patterns from textbook (see README.md)
 ```
