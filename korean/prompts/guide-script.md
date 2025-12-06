@@ -113,7 +113,15 @@ Examples removed from `analyze-examples.py`:
 - JSON output (stdout is sufficient)
 - Complex error reporting (simple checks are enough)
 
-### 7. Data Structures
+### 7. Type Annotations
+
+**Always use type hints** for function signatures:
+```python
+def process_rows(rows: list[dict], batch_size: int = 100) -> list[str]:
+    ...
+```
+
+### 8. Data Structures
 
 **Use simple, built-in types**
 - Lists and dicts from stdlib are usually sufficient
