@@ -17,7 +17,7 @@ Following the successful completion of TOPIK 1 (1847 words), this document outli
 ### Completed
 - [x] Base vocabulary extraction (39 pages → CSV files)
 - [x] Hanja and Japanese etymology columns added
-- [x] Consolidated file: `topik2/data/csv-extra/all.csv` (documented in [topik2/readme.md](topik2/readme.md))
+- [x] Consolidated file: `extraction/data/csv-extra/all.csv` (documented in [extraction/readme.md](extraction/readme.md))
 - [x] Converted to TSV format: `input/koreantopik2.tsv` (3873 entries)
 - [x] Prompts directory created (`prompts/koreantopik2/`)
 - [x] Batch splitting (39 batches of ~100 words)
@@ -56,7 +56,7 @@ korean/
 │       ├── generate-examples.md   # Examples execution strategy
 │       ├── generate-notes.md      # Notes execution strategy
 │       └── generate-audio-dual.md # Dual audio generation (vocab + example)
-├── topik2/                        # Original extraction work
+├── extraction/                    # Original extraction work
 │   ├── data/csv-extra/all.csv     # Raw extracted data with Hanja/Japanese
 │   ├── readme.md                  # Extraction documentation
 │   └── links.md                   # 39 lesson URLs
@@ -330,9 +330,9 @@ Audio field formats:
 ## Reference Links
 
 - Original vocabulary source: [TOPIK 2 Complete List](https://www.koreantopik.com/2024/09/complete-topik-2-vocabulary-list-3900.html)
-- Individual lesson links: See [topik2/links.md](topik2/links.md)
-- Extraction documentation: [topik2/readme.md](topik2/readme.md)
-- TOPIK 1 completed work: [topik1/readme.md](topik1/readme.md)
+- Individual lesson links: See [extraction/links.md](extraction/links.md)
+- Extraction documentation: [extraction/readme.md](extraction/readme.md)
+- TOPIK 1 completed work: [../koreantopik1/extraction/readme.md](../koreantopik1/extraction/readme.md)
 
 ---
 
