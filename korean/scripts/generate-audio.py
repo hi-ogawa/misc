@@ -10,6 +10,7 @@ import sys
 import time
 from pathlib import Path
 
+
 # Global counters (safe in single-threaded async)
 completed = 0
 success_count = 0
@@ -97,7 +98,7 @@ async def generate_all(filtered_rows, args, output_dir, total, failed_log_path, 
         # Run this batch concurrently
         tasks = [
             generate_audio(
-                int(row["number"]),
+                idx,
                 str(row[field_name]),
                 args.voice,
                 output_dir,
@@ -108,7 +109,7 @@ async def generate_all(filtered_rows, args, output_dir, total, failed_log_path, 
                 failed_log_path,
                 prefix
             )
-            for row in batch
+            for idx, row in batch
         ]
 
         await asyncio.gather(*tasks)
@@ -201,11 +202,9 @@ def main():
     rows = []
     with open(input_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f, delimiter="\t")
-        required_columns = ["number", args.field]
-
-        # Check columns
-        if not all(col in reader.fieldnames for col in required_columns):
-            print(f"Error: TSV must contain columns: {required_columns}", file=sys.stderr)
+        # Check field column exists
+        if args.field not in reader.fieldnames:
+            print(f"Error: TSV must contain column: {args.field}", file=sys.stderr)
             print(f"Found columns: {list(reader.fieldnames)}", file=sys.stderr)
             sys.exit(1)
 
@@ -214,12 +213,12 @@ def main():
 
     # Determine end if not specified
     if args.end is None:
-        args.end = max(int(row["number"]) for row in rows)
+        args.end = len(rows)
 
-    # Filter by range
+    # Filter by row index (1-based) and attach index to each row
     filtered_rows = [
-        row for row in rows
-        if args.start <= int(row["number"]) <= args.end
+        (idx, row) for idx, row in enumerate(rows, start=1)
+        if args.start <= idx <= args.end
     ]
 
     total = len(filtered_rows)

@@ -113,7 +113,15 @@ Examples removed from `analyze-examples.py`:
 - JSON output (stdout is sufficient)
 - Complex error reporting (simple checks are enough)
 
-### 7. Data Structures
+### 7. Type Annotations
+
+**Always use type hints** for function signatures:
+```python
+def process_rows(rows: list[dict], batch_size: int = 100) -> list[str]:
+    ...
+```
+
+### 8. Data Structures
 
 **Use simple, built-in types**
 - Lists and dicts from stdlib are usually sufficient
@@ -169,11 +177,82 @@ if __name__ == "__main__":
     sys.exit(main())
 ```
 
+## TSV Processing Strategy
+
+**LLMs are bad at TSV hacking** - avoid ad-hoc awk/sed/python snippets for TSV manipulation.
+
+**Use `scripts/jq-tsv.py`** - a wrapper that:
+1. Converts TSV to JSON (list of dicts)
+2. Pipes through actual `jq`
+3. Converts back to TSV
+
+```bash
+# Filter rows
+python scripts/jq-tsv.py 'select(.tier == "1")' input.tsv > output.tsv
+
+# Project columns
+python scripts/jq-tsv.py '{number, korean, example_ko}' input.tsv > output.tsv
+
+# Combined filter + project
+python scripts/jq-tsv.py 'select(.tier == "1") | {number, korean, english}' input.tsv > output.tsv
+
+# Multiple inputs (concatenate)
+python scripts/jq-tsv.py '.' file1.tsv file2.tsv > combined.tsv
+
+# Aggregations (use -s/--slurp flag with --json)
+# Note: Aggregations produce non-TSV output, so --json is required
+python scripts/jq-tsv.py -s --json 'group_by(.tier) | map({tier: .[0].tier, count: length})' input.tsv
+python scripts/jq-tsv.py -s --json 'map(.score | tonumber) | {min: min, max: max, mean: (add / length)}' input.tsv
+
+# Transformations with slurp (outputs TSV if result is array of objects)
+python scripts/jq-tsv.py -s 'map(select(.score | tonumber > 8))' input.tsv > filtered.tsv
+python scripts/jq-tsv.py -s 'map(if .korean == "typo" then . + {korean: "fixed"} else . end)' input.tsv > fixed.tsv
+```
+
+**JSON output for intermediate files:**
+```bash
+# Output as JSON (more robust for intermediate/analysis files)
+python scripts/jq-tsv.py --json 'select(.tier == "1")' input.tsv > output.json
+
+# Then use jq directly on JSON files
+jq 'length' output.json                    # Count entries
+jq '.[0]' output.json                      # First entry
+jq 'map(.korean)' output.json              # Extract field
+jq 'group_by(.tier) | map(length)' file.json  # Aggregation
+```
+
+**Why jq?**
+- Declarative, composable syntax
+- Well-documented, battle-tested
+- Handles edge cases (escaping, empty values)
+- **LLMs know jq extremely well** (tons of training data from Stack Overflow, GitHub)
+- Prior art like miller/csvkit exists, but LLMs struggle with them and fall back to fragile awk/sed
+- jq-tsv.py bridges TSV to something LLMs already know
+
+**Prefer JSON for:**
+- Intermediate files (more robust than TSV)
+- Analysis and inspection
+- Complex nested data
+
+**Use TSV for:**
+- Final output for import (Anki, spreadsheets)
+- Human-readable quick inspection
+
+**Temporary/intermediate files:**
+- Use `output/tmp/` for scratch files (encouraged)
+- NEVER use `/tmp` or system temp directories
+- Keep intermediate files in project for debugging/inspection
+
+**When NOT to use jq-tsv.py:**
+- Complex transformations requiring Python logic
+- Joins across multiple files
+
 ## Reference Scripts
 
 When writing new scripts, reference these examples:
 - **`scripts/generate-audio.py`**: Argparse patterns, error handling
 - **`scripts/analyze-examples.py`**: Simple data processing, stdout output
+- **`scripts/jq-tsv.py`**: TSV filtering/projection via jq
 
 ## Anti-Patterns to Avoid
 
