@@ -29,3 +29,17 @@ Reference material from the textbook "Korean Grammar in Use - Beginning" (112 pa
 - [x] Generate Anki cards (23 patterns)
 - [x] Generate audio for example sentences
 - [x] Import to Anki
+
+## Retrospective
+
+**What worked well:**
+- Marking gaps directly in source (`#`/`@` in toc.md) - quick and intuitive
+- Simplified `korean` field (`-나` vs `N(이)나`) with full notation in `notes`
+- `scripts/anki-add-notes.py` now handles both extract workflow and direct import
+
+**Future ideas:**
+- Grammar → Vocab linking: Tag existing TOPIK vocab cards that use these grammar patterns
+- More examples per pattern: Generate 2-3 variants for harder patterns
+- Intermediate book: Same workflow for "Korean Grammar in Use - Intermediate"
+- Review-driven: Flag grammar cards during review if example feels weak → regenerate
+- Prompt template: Formalize grammar card generation as reusable prompt
