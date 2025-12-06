@@ -7,6 +7,10 @@ Reference material from the textbook "Korean Grammar in Use - Beginning" (112 pa
 - `toc.md` - Table of contents with example sentences and gap markers
 - `gap-analysis.md` - Analysis of gaps vs TOPIK 1 coverage
 - `plan-anki-cards.md` - Plan for generating Anki cards from gaps
+- `output/` - Generated files for Anki import
+  - `grammar-cards.tsv` - Working file (7 columns)
+  - `grammar_anki_import.tsv` - Anki import file (9 columns)
+  - `audio/` - 23 MP3 files for example sentences
 
 ## Workflow
 
@@ -22,4 +26,6 @@ Reference material from the textbook "Korean Grammar in Use - Beginning" (112 pa
 - [x] TOC with examples
 - [x] Gap markers added
 - [x] Review gap-analysis.md
-- [ ] Generate Anki cards for 21 gap patterns
+- [x] Generate Anki cards (23 patterns)
+- [x] Generate audio for example sentences
+- [x] Import to Anki

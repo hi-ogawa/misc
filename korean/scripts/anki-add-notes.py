@@ -37,24 +37,27 @@ def anki_request(action: str, params: dict | None = None, url: str = "http://loc
 
 def build_note(row: dict, deck: str, model: str, tags: list[str]) -> dict:
     """Build note object from TSV row."""
-    # Generate number: extract_(source_number)_(korean) - Anki requires non-empty first field
-    source_num = row.get("source_number", "")
-    korean = row["korean"]
-    number = f"extract_{source_num}_{korean}" if source_num else f"extract_{korean}"
+    # Use 'number' from TSV if present, otherwise generate from source_number + korean
+    if row.get("number"):
+        number = row["number"]
+    else:
+        source_num = row.get("source_number", "")
+        korean = row["korean"]
+        number = f"extract_{source_num}_{korean}" if source_num else f"extract_{korean}"
 
     return {
         "deckName": deck,
         "modelName": model,
         "fields": {
             "number": number,
-            "korean": korean,
+            "korean": row["korean"],
             "english": row["english"],
             "example_ko": row["example_ko"],
             "example_en": row["example_en"],
             "etymology": row.get("etymology") or "",
             "notes": row.get("notes") or "",
-            "korean_audio": "",
-            "example_ko_audio": ""
+            "korean_audio": row.get("korean_audio") or "",
+            "example_ko_audio": row.get("example_ko_audio") or ""
         },
         "tags": tags
     }
