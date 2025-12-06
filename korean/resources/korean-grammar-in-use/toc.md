@@ -60,13 +60,13 @@
     - 천 원밖에 없어요. (I only have 1,000 won.)
 14. N(으)로 - 102
     - 지하철로 가요. (I go by subway.)
-15. N(이)나 ① - 105
+15. N(이)나 ① - 105 @
     - 커피나 차 마실래요? (Do you want coffee or tea?)
-16. N(이)나 ② - 107
+16. N(이)나 ② - 107 #
     - 사람이 100명이나 왔어요. (As many as 100 people came.)
-17. N쯤 - 110
+17. N쯤 - 110 #
     - 3시쯤 도착해요. (I'll arrive around 3.)
-18. N처럼, N같이 - 112
+18. N처럼, N같이 - 112 # N같이
     - 형처럼 되고 싶어요. (I want to be like my older brother.)
 19. N보다 - 114
     - 어제보다 더 추워요. (It's colder than yesterday.)
@@ -76,7 +76,7 @@
 **Unit 4. Listing and Contrast**
 1. A/V-고 - 120
    - 키가 크고 잘생겼어요. (He's tall and handsome.)
-2. A/V-거나 - 123
+2. A/V-거나 - 123 #
    - 주말에는 영화를 보거나 쉬어요. (On weekends I watch movies or rest.)
 3. A/V-지만 - 125
    - 비싸지만 샀어요. (It was expensive but I bought it.)
@@ -102,7 +102,7 @@
    - 집에 오자마자 잤어요. (I slept as soon as I got home.)
 9. N 동안, V-는 동안 - 154
    - 1년 동안 한국어를 배웠어요. (I studied Korean for a year.)
-10. V-(으)ㄴ 지 - 157
+10. V-(으)ㄴ 지 - 157 #
     - 한국에 온 지 3개월 됐어요. (It's been 3 months since I came to Korea.)
 
 **Unit 6. Ability and Possibility**
@@ -122,13 +122,13 @@
    - 사진 찍어도 돼요? (May I take a picture?)
 5. A/V-(으)면 안 되다 - 176
    - 여기서 담배 피우면 안 돼요. (You can't smoke here.)
-6. A/V-지 않아도 되다 (안 A/V-아/어도 되다) - 179
+6. A/V-지 않아도 되다 (안 A/V-아/어도 되다) - 179 @
    - 예약 안 해도 돼요. (You don't need to make a reservation.)
 
 **Unit 8. Expressions of Hope**
 1. V-고 싶다 - 182
    - 한국에 가고 싶어요. (I want to go to Korea.)
-2. A/V-았/었으면 좋겠다 - 184
+2. A/V-았/었으면 좋겠다 - 184 @
    - 내일 날씨가 좋았으면 좋겠어요. (I hope the weather is nice tomorrow.)
 
 **Unit 9. Reasons and Causes**
@@ -140,7 +140,7 @@
    - 비 때문에 취소했어요. (It was canceled because of rain.)
 
 **Unit 10. Making Requests and Assisting**
-1. V-아/어 주세요, V-아/어 주시겠어요? - 198
+1. V-아/어 주세요, V-아/어 주시겠어요? - 198 # 주시겠어요?
    - 도와주세요. (Please help me.)
 2. V-아/어 줄게요, V-아/어 줄까요? - 201
    - 제가 해 줄게요. (I'll do it for you.)
@@ -148,7 +148,7 @@
 **Unit 11. Trying New Things and Experiences**
 1. V-아/어 보다 - 204
    - 김치를 먹어 봤어요. (I've tried kimchi.)
-2. V-(으)ㄴ 적이 있다/없다 - 207
+2. V-(으)ㄴ 적이 있다/없다 - 207 @
    - 한국에 가 본 적이 있어요. (I've been to Korea before.)
 
 **Unit 12. Asking Opinions and Making Suggestions**
@@ -156,15 +156,15 @@
    - 창문을 열까요? (Shall I open the window?)
 2. V-(으)ㄹ까요? ② - 212
    - 비가 올까요? (I wonder if it will rain?)
-3. V-(으)ㅂ시다 - 214
+3. V-(으)ㅂ시다 - 214 @
    - 같이 갑시다. (Let's go together.)
-4. V-(으)시겠어요? - 217
+4. V-(으)시겠어요? - 217 @
    - 커피 드시겠어요? (Would you like coffee?)
 5. V-(으)ㄹ래요? ① - 219
    - 같이 갈래요? (Do you want to go together?)
 
 **Unit 13. Intentions and Plans**
-1. A/V-겠어요 ① - 222
+1. A/V-겠어요 ① - 222 @
    - 제가 하겠어요. (I'll do it.)
 2. V-(으)ㄹ게요 - 225
    - 나중에 전화할게요. (I'll call you later.)
@@ -174,8 +174,8 @@
 **Unit 14. Background Information and Explanations**
 1. A/V-(으)ㄴ/는데 ② - 232
    - 배가 고픈데 뭐 먹을래요? (I'm hungry, what do you want to eat?)
-2. V-(으)ㄴ가 ② - 235
-   - 어디 가는가 봐요. (I think they're going somewhere.)
+2. V-(으)니까 ② - 235 #@
+   - 집에 오니까 밤 12시였어요. (When I came home, it was 12 AM.)
 
 **Unit 15. Purpose and Intention**
 1. V-(으)러 가다/오다 - 238
@@ -186,19 +186,19 @@
    - 내일 출발하려고 해요. (I'm planning to leave tomorrow.)
 4. N을/를 위해(서), V-기 위해(서) - 245
    - 건강을 위해서 운동해요. (I exercise for my health.)
-5. V-기로 하다 - 248
+5. V-기로 하다 - 248 #
    - 내일 만나기로 했어요. (We decided to meet tomorrow.)
 
 **Unit 16. Conditions and Suppositions**
 1. A/V-(으)면 - 252
    - 시간 있으면 연락하세요. (If you have time, contact me.)
-2. V-(으)려면 - 255
+2. V-(으)려면 - 255 # I would say 하고 싶면
    - 서울에 가려면 기차를 타야 돼요. (If you want to go to Seoul, you need to take the train.)
 3. A/V-아/어도 - 257
    - 비가 와도 갈 거예요. (I'll go even if it rains.)
 
 **Unit 17. Conjecture**
-1. A/V-겠어요 ② - 260
+1. A/V-겠어요 ② - 260 #
    - 피곤하시겠어요. (You must be tired.)
 2. A/V-(으)ㄹ 거예요 ② - 262
    - 내일 비가 올 거예요. (It will probably rain tomorrow.)
@@ -214,13 +214,13 @@
    - 수영하기가 어려워요. (Swimming is difficult.)
 3. A-게 - 278
    - 크게 말하세요. (Speak loudly.)
-4. A-아/어하다 - 281
+4. A-아/어하다 - 281 # obviously know 좋아하다, but wasn't familiar with general consturction
    - 매운 걸 좋아해요. (I like spicy things.)
 
 **Unit 19. Expressions of State**
 1. V-고 있다 ② - 284
    - 안경을 쓰고 있어요. (I'm wearing glasses.)
-2. V-아/어 있다 - 287
+2. V-아/어 있다 - 287 #
    - 문이 열려 있어요. (The door is open.)
 3. A-아/어지다 - 290
    - 날씨가 추워졌어요. (The weather got cold.)
@@ -232,17 +232,17 @@
    - 어디에 있는지 알아요? (Do you know where it is?)
 2. V-는 데 걸리다/들다 - 299
    - 30분 걸려요. (It takes 30 minutes.)
-3. A/V-지요? - 301
+3. A/V-지요? - 301 # obvioulys know -죠 but didn't know formalish origin.
    - 맛있지요? (It's delicious, right?)
 
 **Unit 21. Discovery and Surprise**
-1. A/V-군요/는군요 - 304
+1. A/V-군요/는군요 - 304 # more familiar with casual tone "구나"
    - 정말 예쁘군요! (It's really pretty!)
-2. A/V-네요 - 306
+2. A/V-네요 - 306 
    - 여기 좋네요. (This place is nice.)
 
 **Unit 22. Additional Endings**
-1. A-(으)ㄴ가요?, V-니까? - 310
+1. A-(으)ㄴ가요?, V-나요? - 310 #
    - 맛있나요? (Is it delicious?)
 2. A/V-(으)ㄴ/는대요 - 312
    - 내일 비 온대요. (I heard it's going to rain tomorrow.)
@@ -252,7 +252,7 @@
    - "안녕하세요"라고 말했어요. (They said "hello.")
 2. Indirect Quotations - 319
    - 간다고 했어요. (They said they're going.)
-3. Indirect Quotation Contracted Forms - 322
+3. Indirect Quotation Contracted Forms - 322 #
    - 맛있댔어요. (They said it was delicious.)
 
 **Unit 24. Irregular Conjugations**
