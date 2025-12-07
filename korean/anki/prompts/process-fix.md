@@ -34,7 +34,7 @@ Requirements: Follow `prompts/requirements-example.md`:
 ### 3. Generate Audio
 
 ```bash
-python scripts/generate-audio.py --input anki/output/fix-cards-fixed.tsv --output output/fix-audio/ --field example_ko --prefix koreantopik1_example_ko_fix_ --number-field number
+python scripts/generate-audio.py --input anki/output/fix-cards-fixed.tsv --output output/fix-audio/ --field example_ko --prefix koreantopik1_example_ko_fix_ --id-field number
 ```
 
 ### 4. Copy to Anki Media

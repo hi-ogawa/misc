@@ -20,23 +20,28 @@ python scripts/anki-export.py \
 Generate MP3s for both `korean` and `example_ko` fields:
 
 ```bash
-# Generate audio using edge-tts
+# Korean word audio
 python scripts/generate-audio.py \
   --input output/tmp/custom-no-audio.tsv \
-  --dataset custom \
-  --output-dir output/audio/custom
+  --output output/audio/custom \
+  --field korean \
+  --id-field number \
+  --prefix custom_korean_
+
+# Example sentence audio
+python scripts/generate-audio.py \
+  --input output/tmp/custom-no-audio.tsv \
+  --output output/audio/custom \
+  --field example_ko \
+  --id-field number \
+  --prefix custom_example_ko_
 ```
 
-Expected output:
-- `output/audio/custom/custom_korean_NNNN.mp3` (or using number field as ID)
-- `output/audio/custom/custom_example_ko_NNNN.mp3`
-
-**Naming convention** (use note identifier):
-- If `number` field exists: use it (e.g., `extract_30_돌보다` → `custom_korean_extract_30_돌보다.mp3`)
-- If `number` is empty: use Anki note ID (e.g., `1764563410409` → `custom_korean_1764563410409.mp3`)
-- Sanitize identifiers: replace spaces/special chars with underscores for filenames
+Output: `custom_korean_{number}.mp3`, `custom_example_ko_{number}.mp3`
 
 ### 3. Upload audio to Anki media collection
+
+> **TODO**: Steps 3-5 are draft plans. Scripts not yet implemented.
 
 Use AnkiConnect `storeMediaFile` action:
 
