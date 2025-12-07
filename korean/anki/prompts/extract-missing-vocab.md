@@ -15,6 +15,7 @@
    - Review each `example_ko` sentence and identify OTHER words (not the card's target `korean` word) that appear difficult or worth learning as dedicated entries
    - Use linguistic judgment to assess which vocabulary would be useful to extract (no scripts, no external data - just language understanding)
    - Output: `anki/output/flag-2-extract.tsv` (number, korean, extracted, example_ko)
+   - Include ALL flagged cards in output (leave `extracted` empty if none found - user flagged for a reason)
    - Note: `extracted` may have multiple words comma-separated
 
 3. **Review extractions** (human)
@@ -36,7 +37,8 @@
 
 6. **Add notes to Anki**
    - Script: `python scripts/anki-add-notes.py --input anki/output/flag-2-cards.tsv [--unflag] [--dry-run]`
-     - With `--unflag`: sets flag to 0 on source cards after all notes added successfully
+     - `--dry-run`: checks for duplicates before adding (run first to catch issues)
+     - `--unflag`: sets flag to 0 on source cards after all notes added successfully
    - Deck: `Korean::Custom`
    - Model: "Korean Vocabulary"
    - Tag: `extracted`

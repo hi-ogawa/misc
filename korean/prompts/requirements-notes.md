@@ -36,6 +36,14 @@ REQUIREMENTS:
      - Similar spellings: 걷다 (walk) → 걸다 (hang), 걸리다 (take time)
      - Phonetic clusters: 굳다 (harden) → 굵다 (thick), 굽다 (bend/bake)
 
+  6. **CONTRACTIONS/ABBREVIATIONS** (full form ↔ shortened form):
+     - 것이 ↔ 게
+     - 무엇 ↔ 뭐
+     - 나는 ↔ 난, 너는 ↔ 넌
+     - 것을 ↔ 걸
+     - 이것 ↔ 이거, 그것 ↔ 그거, 저것 ↔ 저거
+     - 아이 ↔ 애
+
 - **Output format:**
   - Single word: `notes: 하얀색`
   - Multiple words: `notes: 간 (salty), 간격`

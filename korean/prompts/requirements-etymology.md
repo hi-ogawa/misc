@@ -40,7 +40,41 @@ REQUIREMENTS:
 
      Format: Show roots separated with " + "
 
-  3. **COMPOUNDS (합성어)**:
+  3. **INFLECTIONAL DERIVATIONS (활용 파생)**:
+     Verbs derived through grammatical suffixes (passive, causative, etc.)
+
+     **Passive Voice (피동사)** - Suffixes: -이/-히/-리/-기
+     - 보다 → 보이다 → "보다 + 이 (passive)"
+     - 먹다 → 먹히다 → "먹다 + 히 (passive)"
+     - 듣다 → 들리다 → "듣다 + 리 (passive)"
+     - 끊다 → 끊기다 → "끊다 + 기 (passive)"
+
+     **Causative Voice (사동사)** - Suffixes: -이/-히/-리/-기/-우/-추
+     - 먹다 → 먹이다 → "먹다 + 이 (causative)"
+     - 넓다 → 넓히다 → "넓다 + 히 (causative)"
+     - 알다 → 알리다 → "알다 + 리 (causative)"
+     - 웃다 → 웃기다 → "웃다 + 기 (causative)"
+     - 피다 → 피우다 → "피다 + 우 (causative)"
+     - 낮다 → 낮추다 → "낮다 + 추 (causative)"
+
+     **-되다/-시키다** (for 하다 verbs)
+     - 완성하다 → 완성되다 → "완성 + 되다 (passive)"
+     - 공부하다 → 공부시키다 → "공부 + 시키다 (causative)"
+
+     **Nominalization** - Suffixes: -음/-ㅁ, -이, -기
+     - 걷다 → 걸음 → "걷다 + 음 (nominalization)"
+     - 살다 → 삶 → "살다 + ㅁ (nominalization)"
+     - 놀다 → 놀이 → "놀다 + 이 (nominalization)"
+     - 달다 → 달기 → "달다 + 기 (nominalization)"
+
+     Format: Show "base + suffix (type)" (e.g., "듣다 + 리 (passive)")
+
+     Rationale:
+     - Shows morphological structure of derived verbs
+     - Helps learners recognize productive patterns
+     - Connects related verb forms (base ↔ passive ↔ causative)
+
+  4. **COMPOUNDS (합성어)**:
      Words formed by combining two or more roots
 
      - 눈물 → "눈 + 물"
@@ -58,7 +92,7 @@ REQUIREMENTS:
      - Helps learners understand word-building patterns
      - Reveals underlying meaning through components
 
-  4. **LOANWORDS (외래어)**:
+  5. **LOANWORDS (외래어)**:
      Words borrowed from other languages
 
      - 컴퓨터 → "computer"
@@ -77,7 +111,7 @@ REQUIREMENTS:
      - Example: 컴퓨터 → "computer"
      - Example: 버스 → "bus"
 
-  5. **SKIP: Pure Korean words with no clear etymology**
+  6. **SKIP: Pure Korean words with no clear etymology**
      - Native Korean words without analyzable structure: leave blank
      - Examples: 가다, 먹다, 좋다, 예쁘다
      - Only show etymology when it provides meaningful learning value

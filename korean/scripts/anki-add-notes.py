@@ -79,8 +79,13 @@ def add_notes(rows: list[dict], deck: str, model: str, tags: list[str], dry_run:
         korean = row["korean"]
 
         if dry_run:
-            print(f"[DRY-RUN] Would add: {note['fields']['number']}")
-            success += 1
+            can_add = anki_request("canAddNotes", {"notes": [note]}, url)
+            if can_add[0]:
+                print(f"[DRY-RUN] Would add: {note['fields']['number']}")
+                success += 1
+            else:
+                print(f"[DRY-RUN] DUPLICATE: {korean}", file=sys.stderr)
+                failed += 1
         else:
             try:
                 note_id = anki_request("addNote", {"note": note}, url)
