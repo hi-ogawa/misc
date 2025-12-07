@@ -19,7 +19,7 @@ Cards are tagged `fix` when they have problems (usually grammar/usage issues in 
 ### 1. Export
 
 ```bash
-python scripts/anki-export.py --query "tag:fix" --fields number,korean,english,example_ko,example_en --output anki/output/fix-cards.tsv
+python scripts/anki-export.py --query "tag:fix" --fields noteId,korean,english,example_ko,example_en --output anki/output/fix-cards.tsv
 ```
 
 ### 2. Correct Examples
@@ -34,7 +34,7 @@ Requirements: Follow `prompts/requirements-example.md`:
 ### 3. Generate Audio
 
 ```bash
-python scripts/generate-audio.py --input anki/output/fix-cards-fixed.tsv --output output/fix-audio/ --field example_ko --prefix koreantopik1_example_ko_fix_ --id-field number
+python scripts/generate-audio.py --input anki/output/fix-cards-fixed.tsv --output output/fix-audio/ --field example_ko --prefix koreantopik1_example_ko_fix_ --id-field noteId
 ```
 
 ### 4. Copy to Anki Media
@@ -46,10 +46,13 @@ cp output/fix-audio/*.mp3 ~/.local/share/Anki2/"사용자 1"/collection.media/
 ### 5. Update Cards and Remove Tag
 
 ```bash
-python scripts/anki-update-notes.py --input anki/output/fix-cards-fixed.tsv --audio-prefix koreantopik1_example_ko_fix_ --remove-tag fix --dry-run
+python scripts/anki-update-notes.py \
+  --input anki/output/fix-cards-fixed.tsv \
+  --fields example_ko,example_en \
+  --example-audio koreantopik1_example_ko_fix_ \
+  --remove-tag fix \
+  --dry-run  # Review first, then remove --dry-run
 ```
-
-Remove `--dry-run` to execute.
 
 ## Files
 

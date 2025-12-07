@@ -60,7 +60,10 @@ def main() -> int:
     for card in cards_info:
         row = {}
         for field in fields:
-            row[field] = card["fields"].get(field, {}).get("value", "")
+            if field == "noteId":
+                row[field] = str(card.get("note", ""))
+            else:
+                row[field] = card["fields"].get(field, {}).get("value", "")
         rows.append(row)
 
     # Write TSV
