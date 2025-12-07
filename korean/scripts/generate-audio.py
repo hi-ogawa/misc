@@ -144,6 +144,12 @@ def main():
         help="Filename prefix (e.g., 'vocab_' or 'example_')"
     )
     parser.add_argument(
+        "--number-field",
+        type=str,
+        default=None,
+        help="TSV column to use for filename numbers (default: row index)"
+    )
+    parser.add_argument(
         "--voice",
         type=str,
         default="ko-KR-SunHiNeural",
@@ -200,12 +206,14 @@ def main():
 
     # Read TSV and collect rows
     rows = []
+    fieldnames = None
     with open(input_file, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f, delimiter="\t")
+        fieldnames = reader.fieldnames
         # Check field column exists
-        if args.field not in reader.fieldnames:
+        if args.field not in fieldnames:
             print(f"Error: TSV must contain column: {args.field}", file=sys.stderr)
-            print(f"Found columns: {list(reader.fieldnames)}", file=sys.stderr)
+            print(f"Found columns: {list(fieldnames)}", file=sys.stderr)
             sys.exit(1)
 
         for row in reader:
@@ -215,11 +223,24 @@ def main():
     if args.end is None:
         args.end = len(rows)
 
-    # Filter by row index (1-based) and attach index to each row
-    filtered_rows = [
-        (idx, row) for idx, row in enumerate(rows, start=1)
-        if args.start <= idx <= args.end
-    ]
+    # Check number-field column exists if specified
+    if args.number_field and args.number_field not in fieldnames:
+        print(f"Error: TSV must contain column: {args.number_field}", file=sys.stderr)
+        print(f"Found columns: {list(fieldnames)}", file=sys.stderr)
+        sys.exit(1)
+
+    # Filter by row index (1-based) and attach number to each row
+    # Use number-field value if specified, otherwise use row index
+    if args.number_field:
+        filtered_rows = [
+            (int(row[args.number_field]), row) for idx, row in enumerate(rows, start=1)
+            if args.start <= idx <= args.end
+        ]
+    else:
+        filtered_rows = [
+            (idx, row) for idx, row in enumerate(rows, start=1)
+            if args.start <= idx <= args.end
+        ]
 
     total = len(filtered_rows)
     print(f"Generating audio for entries {args.start}-{args.end} ({total} total)")

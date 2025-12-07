@@ -16,18 +16,9 @@ AnkiConnect plugin exposes Anki via HTTP API at `http://localhost:8765`.
 {"result": ..., "error": ...}
 ```
 
-## Main Actions
+## Actions
 
-| Category | Actions |
-|----------|---------|
-| Decks | `deckNames`, `createDeck`, `getDeckStats`, `changeDeck`, `deleteDecks` |
-| Notes | `addNote`, `addNotes`, `findNotes`, `notesInfo`, `updateNote`, `deleteNotes` |
-| Cards | `findCards`, `cardsInfo`, `suspend`, `unsuspend`, `areDue` |
-| Models | `modelNames`, `modelFieldNames`, `createModel`, `updateModelTemplates` |
-| Media | `storeMediaFile`, `retrieveMediaFile`, `getMediaDirPath` |
-| GUI | `guiBrowse`, `guiAddCards`, `guiCurrentCard` |
-| Stats | `getDeckStats`, `getNumCardsReviewedToday`, `cardReviews` |
-| Misc | `multi` (batch), `sync`, `requestPermission`, `version` |
+See latest documentation for available actions and parameters.
 
 ## Examples
 
