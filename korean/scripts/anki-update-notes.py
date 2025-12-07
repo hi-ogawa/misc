@@ -3,16 +3,14 @@
 Update existing Anki notes from TSV.
 
 Usage:
-    # Update text fields only
-    python scripts/anki-update-notes-v2.py --input file.tsv --fields example_ko,example_en
+    # Update text fields
+    python scripts/anki-update-notes.py --input file.tsv --fields example_ko,example_en
 
-    # Update audio fields (add-audio workflow)
-    python scripts/anki-update-notes-v2.py --input file.tsv \
-        --korean-audio custom_korean_ --example-audio custom_example_ko_
+    # Update audio fields
+    python scripts/anki-update-notes.py --input file.tsv --fields korean_audio,example_ko_audio
 
-    # Update text + audio + remove tag (process-fix workflow)
-    python scripts/anki-update-notes-v2.py --input file.tsv \
-        --fields example_ko,example_en --example-audio koreantopik1_example_ko_fix_ --remove-tag fix
+    # Update + remove tag
+    python scripts/anki-update-notes.py --input file.tsv --fields example_ko,example_en --remove-tag fix
 """
 
 import argparse
@@ -46,11 +44,7 @@ def anki_request(action: str, params: dict | None = None, url: str = "http://loc
 def main() -> int:
     parser = argparse.ArgumentParser(description="Update Anki notes from TSV")
     parser.add_argument("--input", required=True, help="Input TSV file (must have noteId column)")
-    parser.add_argument("--fields", default="", help="Comma-separated fields to update from TSV")
-    parser.add_argument("--korean-audio", default="", metavar="PREFIX",
-                        help="Set korean_audio field with [sound:{PREFIX}{noteId}.mp3]")
-    parser.add_argument("--example-audio", default="", metavar="PREFIX",
-                        help="Set example_ko_audio field with [sound:{PREFIX}{noteId}.mp3]")
+    parser.add_argument("--fields", required=True, help="Comma-separated fields to update from TSV")
     parser.add_argument("--remove-tag", default="", help="Tag to remove after update")
     parser.add_argument("--dry-run", action="store_true", help="Print without executing")
     parser.add_argument("--url", default="http://localhost:8765", help="AnkiConnect URL")
@@ -76,16 +70,17 @@ def main() -> int:
         print("Error: TSV must contain 'noteId' column", file=sys.stderr)
         return 1
 
-    fields = [f.strip() for f in args.fields.split(",") if f.strip()]
+    fields = [f.strip() for f in args.fields.split(",")]
+
+    # Validate fields exist in TSV
+    missing = [f for f in fields if f not in rows[0]]
+    if missing:
+        print(f"Error: Fields not in TSV: {', '.join(missing)}", file=sys.stderr)
+        return 1
 
     # Print config
     print(f"=== Updating {len(rows)} notes ===")
-    if fields:
-        print(f"Fields: {', '.join(fields)}")
-    if args.korean_audio:
-        print(f"korean_audio: [sound:{args.korean_audio}{{noteId}}.mp3]")
-    if args.example_audio:
-        print(f"example_ko_audio: [sound:{args.example_audio}{{noteId}}.mp3]")
+    print(f"Fields: {', '.join(fields)}")
     if args.remove_tag:
         print(f"Remove tag: {args.remove_tag}")
     print()
@@ -96,20 +91,7 @@ def main() -> int:
 
     for row in rows:
         note_id = int(row["noteId"])
-
-        # Build fields to update
-        update_fields = {}
-
-        # Text fields from TSV
-        for field in fields:
-            if field in row:
-                update_fields[field] = row[field]
-
-        # Audio fields
-        if args.korean_audio:
-            update_fields["korean_audio"] = f"[sound:{args.korean_audio}{note_id}.mp3]"
-        if args.example_audio:
-            update_fields["example_ko_audio"] = f"[sound:{args.example_audio}{note_id}.mp3]"
+        update_fields = {field: row[field] for field in fields}
 
         if args.dry_run:
             print(f"[DRY-RUN] {note_id}")

@@ -37,21 +37,28 @@ Requirements: Follow `prompts/requirements-example.md`:
 python scripts/generate-audio.py --input anki/output/fix-cards-fixed.tsv --output output/fix-audio/ --field example_ko --prefix koreantopik1_example_ko_fix_ --id-field noteId
 ```
 
-### 4. Copy to Anki Media
+### 4. Add audio column
 
 ```bash
-cp output/fix-audio/*.mp3 ~/.local/share/Anki2/"사용자 1"/collection.media/
+python scripts/jq-tsv.py \
+  '. + {example_ko_audio: "[sound:koreantopik1_example_ko_fix_\(.noteId).mp3]"}' \
+  anki/output/fix-cards-fixed.tsv > anki/output/fix-cards-with-audio.tsv
 ```
 
 ### 5. Update Cards and Remove Tag
 
 ```bash
 python scripts/anki-update-notes.py \
-  --input anki/output/fix-cards-fixed.tsv \
-  --fields example_ko,example_en \
-  --example-audio koreantopik1_example_ko_fix_ \
+  --input anki/output/fix-cards-with-audio.tsv \
+  --fields example_ko,example_en,example_ko_audio \
   --remove-tag fix \
   --dry-run  # Review first, then remove --dry-run
+```
+
+### 6. Copy to Anki Media
+
+```bash
+cp output/fix-audio/*.mp3 ~/.local/share/Anki2/"사용자 1"/collection.media/
 ```
 
 ## Files

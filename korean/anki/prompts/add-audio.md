@@ -17,8 +17,6 @@ python scripts/anki-export.py \
 
 ### 2. Generate audio files
 
-Generate MP3s for both `korean` and `example_ko` fields:
-
 ```bash
 # Korean word audio
 python scripts/generate-audio.py \
@@ -39,25 +37,30 @@ python scripts/generate-audio.py \
   --concurrency 5
 ```
 
-Output: `custom_korean_{noteId}.mp3`, `custom_example_ko_{noteId}.mp3`
-
-### 3. Upload audio to Anki media collection
+### 3. Add audio columns
 
 ```bash
-cp output/audio/custom/*.mp3 ~/.local/share/Anki2/"사용자 1"/collection.media/
+python scripts/jq-tsv.py \
+  '. + {korean_audio: "[sound:custom_korean_\(.noteId).mp3]", example_ko_audio: "[sound:custom_example_ko_\(.noteId).mp3]"}' \
+  output/tmp/custom-no-audio.tsv > output/tmp/custom-with-audio.tsv
 ```
 
 ### 4. Update note audio fields
 
 ```bash
 python scripts/anki-update-notes.py \
-  --input output/tmp/custom-no-audio.tsv \
-  --korean-audio custom_korean_ \
-  --example-audio custom_example_ko_ \
+  --input output/tmp/custom-with-audio.tsv \
+  --fields korean_audio,example_ko_audio \
   --dry-run  # Review first, then remove --dry-run
 ```
 
-### 5. Verify audio
+### 5. Copy audio to Anki media
+
+```bash
+cp output/audio/custom/*.mp3 ~/.local/share/Anki2/"사용자 1"/collection.media/
+```
+
+### 6. Verify
 
 ```bash
 python scripts/anki.py findNotes --params '{"query": "deck:Korean::Custom -korean_audio:[sound:*]"}'
