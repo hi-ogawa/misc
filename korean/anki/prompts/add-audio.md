@@ -57,7 +57,7 @@ python scripts/anki-update-notes.py \
 ### 5. Copy audio to Anki media
 
 ```bash
-cp output/audio/custom/*.mp3 ~/.local/share/Anki2/"사용자 1"/collection.media/
+cp output/audio/custom/*.mp3 "$(python scripts/anki.py getMediaDirPath | tr -d '"')"
 ```
 
 ### 6. Verify
