@@ -86,6 +86,9 @@ REQUIREMENTS:
      - 햇빛 → "해 + 빛"
      - 강아지 → "개 + 아지"
 
+     **Hybrid compounds** (native Korean + Sino-Korean):
+     - 갈비탕 → "갈비 + 湯"
+
      **IMPORTANT: For compounds with sound changes, use the ORIGINAL root form**
      - 강아지 comes from 개 (dog) + 아지, so write "개 + 아지" (NOT "강 + 아지")
      - 냇가 comes from 내 (stream) + 가, so write "내 + 가" (NOT "냇 + 가")
