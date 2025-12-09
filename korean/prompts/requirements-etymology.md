@@ -31,12 +31,16 @@ REQUIREMENTS:
      - Useful for learners of both Korean and Japanese
      - Helps distinguish traditional vs simplified forms
 
-  2. **DERIVATIONS (파생어)**:
-     Compound verbs or words formed by combining a root with affixes
-
-     - 가져가다 → "가지다 + 가다"
-     - 걸어가다 → "걷다 + 가다"
-     - 먹어보다 → "먹다 + 보다"
+  2. **AUXILIARY VERB COMPOUNDS (보조동사 합성)**:
+     Compound verbs formed by combining a main verb with an auxiliary verb
+     - 가져가다 → "가지다 + 가다" (directional)
+     - 먹어보다 → "먹다 + 보다" (try/experience)
+     - 잊어버리다 → "잊다 + 버리다" (completion/regret)
+     - 도와주다 → "돕다 + 주다" (for others)
+     - 찾아내다 → "찾다 + 내다" (accomplishment)
+     - 떠들어대다 → "떠들다 + 대다" (repeated action)
+     - 부딪치다 → "부딪다 + 치다" (intensive)
+     - 터뜨리다 → "터지다 + 뜨리다" (causative)
 
      Format: Show roots separated with " + "
 

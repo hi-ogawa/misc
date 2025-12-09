@@ -91,7 +91,7 @@ def main() -> int:
 
     for row in rows:
         note_id = int(row["noteId"])
-        update_fields = {field: row[field] for field in fields}
+        update_fields = {field: row[field] or "" for field in fields}
 
         if args.dry_run:
             print(f"[DRY-RUN] {note_id}")
