@@ -111,7 +111,22 @@ REQUIREMENTS:
      - Example: 컴퓨터 → "computer"
      - Example: 버스 → "bus"
 
-  6. **SKIP: Pure Korean words with no clear etymology**
+  6. **CONTRACTIONS (축약형)**:
+     Shortened forms created by phonological fusion
+
+     - 게 → "것이"
+     - 뭐 → "무엇"
+     - 난 → "나는"
+     - 넌 → "너는"
+     - 걸 → "것을"
+     - 이거 → "이것"
+     - 그거 → "그것"
+     - 저거 → "저것"
+     - 애 → "아이"
+
+     Format: Show the full form in quotes
+
+  7. **SKIP: Pure Korean words with no clear etymology**
      - Native Korean words without analyzable structure: leave blank
      - Examples: 가다, 먹다, 좋다, 예쁘다
      - Only show etymology when it provides meaningful learning value
