@@ -6,10 +6,11 @@ Generate plot→dialogue cards. Works as production practice.
 
 ## Core Concept
 
-**Plot→Dialogue**: Turn-by-turn plot triggers full dialogue production.
+**Plot→Dialogue**: Paragraph scene description triggers full dialogue production.
 
-- Plot describes each speaker's intent (A→B→A→B)
-- Dialogue realizes intent with natural conversational flow
+- Plot is a brief paragraph describing the situation (not turn-by-turn)
+- Dialogue has extra details beyond what plot describes (forces production, not translation)
+- Dialogue is richer—each turn has substance, natural elaboration
 - Discourse connectives drive flow (그런데, 그래서, 그럼, 왜냐면, 그래도, etc.)
 
 Plot language (Korean vs English) may or may not matter—see TBD.
@@ -25,56 +26,71 @@ Content constraints specific to the current learning objective:
 
 ## Examples
 
-### Example 1
+### Example 1: Weather small talk
 
 **Plot (EN)**:
-Weekend plans + availability conflict
-A: Ask about weekend plans.
-B: Busy Saturday (work), but free Sunday.
-A: Suggest movie on Sunday.
-B: Agree, will contact later.
+Two friends talking about the cold weather. They compare it to yesterday and wonder if it will snow.
+
+**Plot (KO)**:
+두 친구가 추운 날씨에 대해 이야기한다. 어제와 비교하고 눈이 올지 궁금해한다.
 
 **Dialogue (KO)**:
-A: 이번 주말에 뭐 할 거예요?
-B: 토요일에는 일해야 돼서 못 만나요. 그런데 일요일은 시간 있어요.
-A: 그럼 일요일에 영화 볼까요?
-B: 좋아요! 연락할게요.
+A: 오늘 진짜 춥네요. 밖에 나가기 싫어요.
+B: 맞아요. 어제보다 훨씬 추워진 것 같아요. 바람도 많이 불고요.
+A: 이렇게 추우면 눈이 올까요?
+B: 뉴스에서 오늘 밤에 온대요. 그래서 내일 아침에 길이 미끄러울 것 같아요.
 
-**Patterns**: -아/어야 되다, -아/어서 (reason), 그런데, -(으)ㄹ까요, -(으)ㄹ게요
+**Dialogue (EN)**:
+A: It's really cold today. I don't want to go outside.
+B: Right. It seems much colder than yesterday. And it's really windy too.
+A: If it's this cold, will it snow?
+B: The news said it'll snow tonight. So I think the roads will be slippery tomorrow morning.
 
-### Example 2
+**Patterns**: -네요, V-기 싫다, N보다, -아/어지다, -(으)ㄹ 것 같다, N도, -고요, -(으)ㄹ까요, -대요 (hearsay), 그래서
+
+### Example 2: Weekend plans
 
 **Plot (EN)**:
-Explaining absence + resolution
-A: Ask if homework is done.
-B: No, was too sick yesterday. Planning to do it today.
-A: Ask when it's due.
-B: Tomorrow, but think can finish today.
+Two friends trying to make weekend plans. One is busy Saturday but free Sunday.
+
+**Plot (KO)**:
+두 친구가 주말 계획을 세우려고 한다. 한 명은 토요일에 바쁘지만 일요일에는 시간이 있다.
 
 **Dialogue (KO)**:
-A: 숙제 다 했어요?
-B: 아니요, 어제 너무 아파서 못 했어요. 그래서 오늘 하려고 해요.
-A: 언제까지 내야 돼요?
-B: 내일까지인데 오늘 끝낼 수 있을 것 같아요.
+A: 이번 주말에 뭐 할 거예요? 오랜만에 같이 뭐 하고 싶어요.
+B: 토요일에는 회사 일이 있어서 못 만나요. 그런데 일요일은 완전 시간 있어요.
+A: 그럼 일요일에 영화 볼까요? 요즘 재미있는 영화 많대요.
+B: 좋아요! 시간 정해서 연락할게요.
 
-**Patterns**: 못 V, -아/어서 (reason), 그래서, -(으)려고 하다, -는데, -(으)ㄹ 것 같다
+**Dialogue (EN)**:
+A: What are you doing this weekend? I want to do something together, it's been a while.
+B: I have work on Saturday so I can't meet. But I'm completely free on Sunday.
+A: Then shall we watch a movie on Sunday? I heard there are lots of good movies lately.
+B: Sounds good! I'll set a time and contact you.
 
-### Example 3
+**Patterns**: -(으)ㄹ 거예요, 오랜만에, -고 싶다, -아/어서 (reason), 못 V, 그런데, -(으)ㄹ까요, -대요 (hearsay), -(으)ㄹ게요
+
+### Example 3: Asking for directions
 
 **Plot (EN)**:
-Giving directions
-A: Ask how to get to friend's place.
-B: Take subway, exit and turn right, walk 5min to convenience store, house nearby.
-A: Sounds complicated, offer to meet at station.
-B: It's okay, will call when arriving.
+Someone asking how to get to a friend's house. The friend gives subway directions.
+
+**Plot (KO)**:
+친구 집에 어떻게 가는지 물어본다. 친구가 지하철 길을 알려준다.
 
 **Dialogue (KO)**:
-A: 집에 어떻게 가요?
-B: 지하철로 오면 돼요. 역에서 나와서 오른쪽으로 걸으면 편의점이 보여요. 거기서 5분쯤 더 가면 우리 집이에요.
-A: 복잡하네요. 제가 마중 나갈까요?
-B: 괜찮아요. 도착하면 전화할게요.
+A: 집에 어떻게 가요? 처음 가는 거라서 잘 모르겠어요.
+B: 지하철로 오면 돼요. 3호선 타고 신사역에서 내리세요. 역에서 나와서 오른쪽으로 5분쯤 걸으면 편의점이 보여요. 거기서 전화하세요.
+A: 좀 복잡하네요. 제가 길을 잘 못 찾아서 걱정돼요. 역에서 마중 나와 줄 수 있어요?
+B: 그럼요. 도착하면 전화하세요. 바로 나갈게요.
 
-**Patterns**: -(으)로, -(으)면, -아/어서 ①, N쯤, -네요, -(으)ㄹ까요, -(으)ㄹ게요
+**Dialogue (EN)**:
+A: How do I get to your place? It's my first time going so I'm not sure.
+B: You can take the subway. Take line 3 and get off at Sinsa station. Exit and walk right for about 5 minutes and you'll see a convenience store. Call me from there.
+A: That's a bit complicated. I'm worried because I'm bad at finding directions. Can you come meet me at the station?
+B: Of course. Call me when you arrive. I'll come right out.
+
+**Patterns**: -(으)로, -(으)면 되다, N에서 내리다, -아/어서 (sequential), N쯤, -(으)세요, -네요, 못 V, -아/어서 (reason), -아/어 주다, -(으)ㄹ게요
 
 ## Data Format
 
@@ -82,8 +98,8 @@ TSV with fields:
 
 | Field | Description |
 |-------|-------------|
-| `plot_ko` | Turn-by-turn plot in Korean (title as first line) |
-| `plot_en` | Turn-by-turn plot in English (title as first line) |
+| `plot_ko` | Paragraph scene description in Korean |
+| `plot_en` | Paragraph scene description in English |
 | `dialogue_ko` | Full Korean dialogue |
 | `dialogue_en` | Full English dialogue |
 | `notes` | Grammar patterns used, usage notes |
@@ -95,7 +111,9 @@ TSV with fields:
 - **Deck**: `Korean::Dialogue`
 - **Note type**: "Korean Dialogue"
   - Fields: `plot_ko`, `plot_en`, `dialogue_ko`, `dialogue_en`, `notes`, `plot_ko_audio`, `dialogue_ko_audio`
-  - Card layout: see TBD
+  - Card layout:
+      Front: `plot_en`
+      Back: `dialogue_ko`
 
 ## Workflow
 
@@ -161,7 +179,7 @@ cp output/dialogue/audio/*.mp3 "$(python scripts/anki.py getMediaDirPath | tr -d
 ### TBD
 
 - Plot language: `plot_en`→`dialogue_ko` or `plot_ko`→`dialogue_ko` for full Korean
-- Dialogue structure: flexible 3-5 sentences or strict 4-turn A→B→A→B
+- Dialogue structure: strict 4-turn A→B→A→B or flexible
 - Reference [requirements-example.md](../../prompts/requirements-example.md) for dialogue generation inspiration
 - LLM prompt template needs iteration
 
@@ -169,9 +187,9 @@ cp output/dialogue/audio/*.mp3 "$(python scripts/anki.py getMediaDirPath | tr -d
 
 ### Motivation
 
-**Plot→Script approach**: Plot describes turn-by-turn intent, dialogue provides natural realization with discourse connectives.
+**Plot→Script approach**: Plot is a brief paragraph describing the scene. Dialogue provides natural realization with extra details beyond plot.
 
-Key insight: Plot acts as situational index, not translation prompt. User retrieves pre-memorized dialogue chunks, not constructed translations.
+Key insight: Plot acts as situational index, not translation prompt. Dialogue has elaboration not in plot, forcing genuine production rather than direct translation. User retrieves pre-memorized dialogue chunks, not constructed translations.
 
 ### Relation to Existing System
 
