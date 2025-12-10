@@ -123,7 +123,78 @@ Generate dialogues via LLM conversation, output to TSV.
 
 Output: `output/dialogue/dialogues.tsv`
 
-LLM prompt template: TBD - needs iteration
+LLM prompt template:
+
+````
+Generate Korean dialogue data for Anki cards.
+
+## Instructions
+
+Read ONLY: `resources/korean-grammar-in-use/toc.md` (for grammar patterns reference)
+
+Do NOT read other files in the repository.
+
+## Output Format
+
+Output in YAML:
+
+```yaml
+- id: 1
+  title: Weather small talk
+  plot_en: Two friends talking about the cold weather. They compare it to yesterday and wonder if it will snow.
+  plot_ko: 두 친구가 추운 날씨에 대해 이야기한다. 어제와 비교하고 눈이 올지 궁금해한다.
+  dialogue_ko:
+    - A: 오늘 진짜 춥네요. 밖에 나가기 싫어요.
+    - B: 맞아요. 어제보다 훨씬 추워진 것 같아요. 바람도 많이 불고요.
+    - A: 이렇게 추우면 눈이 올까요?
+    - B: 뉴스에서 오늘 밤에 온대요. 그래서 내일 아침에 길이 미끄러울 것 같아요.
+  dialogue_en:
+    - A: It's really cold today. I don't want to go outside.
+    - B: Right. It seems much colder than yesterday. And it's really windy too.
+    - A: If it's this cold, will it snow?
+    - B: The news said it'll snow tonight. So I think the roads will be slippery tomorrow morning.
+  patterns:
+    - -네요
+    - V-기 싫다
+    - N보다
+    - -아/어지다
+    - -(으)ㄹ 것 같다
+    - -고요
+    - -(으)ㄹ까요
+    - -대요
+    - 그래서
+```
+
+## Core Principle: Plot→Dialogue Production
+
+Plot = brief paragraph describing the scene (2-3 sentences)
+Dialogue = natural conversation with EXTRA DETAILS beyond plot
+
+Key: Dialogue must contain elaboration NOT in plot. This forces genuine production,
+not direct translation. The plot is a situational index, not a script.
+
+## Dialogue Requirements
+
+1. **Structure**: Strict 4-turn A→B→A→B
+2. **Richness**: Each turn has substance—natural elaboration, not bare minimum
+   - ❌ "오늘 춥네요." (too simple)
+   - ✅ "오늘 진짜 춥네요. 밖에 나가기 싫어요." (elaboration)
+3. **Discourse connectives**: Use naturally (그런데, 그래서, 그럼, 그래도, -고요, etc.)
+4. **Extra details in dialogue**: Add specifics not mentioned in plot
+   - Plot: "They wonder if it will snow"
+   - Dialogue: "뉴스에서 오늘 밤에 온대요. 그래서 내일 아침에 길이 미끄러울 것 같아요."
+   (news source, tonight timing, slippery roads tomorrow = extra details)
+
+## Constraints
+
+- **Vocabulary**: TOPIK1 level (simple words, complex structure)
+- **Grammar patterns**: Target specific patterns from Korean Grammar in Use
+- **Natural flow**: Would sound natural in Korean variety show conversation
+
+## Task
+
+Generate [N] dialogues targeting these grammar patterns: [PATTERNS]
+````
 
 ### 2. Generate audio
 
