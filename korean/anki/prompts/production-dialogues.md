@@ -196,6 +196,36 @@ not direct translation. The plot is a situational index, not a script.
 Generate [N] dialogues targeting these grammar patterns: [PATTERNS]
 ````
 
+### 1b. Merge YAML batches to TSV
+
+```bash
+# Fix YAML quoting for dialogue lines with colons
+for f in output/dialogue/dialogues-batch-*.yaml; do
+  sed -i 's/^\(    - \)\(A:\|B:\)\(.*\)$/\1"\2\3"/g' "$f"
+done
+
+# Merge all batches and convert to TSV
+yq eval-all '. as $item ireduce ([]; . + $item)' output/dialogue/dialogues-batch-*.yaml | \
+  yq -o=json | \
+  python3 -c "
+import json, csv, sys
+data = json.load(sys.stdin)
+with open('output/dialogue/dialogues.tsv', 'w', newline='') as f:
+    writer = csv.writer(f, delimiter='\t')
+    writer.writerow(['id', 'title', 'plot_en', 'plot_ko', 'dialogue_ko', 'dialogue_en', 'patterns'])
+    for d in data:
+        writer.writerow([
+            d.get('id', ''),
+            d.get('title', ''),
+            d.get('plot_en', ''),
+            d.get('plot_ko', ''),
+            '<br>'.join(d.get('dialogue_ko', [])),
+            '<br>'.join(d.get('dialogue_en', [])),
+            ', '.join(d.get('patterns', []))
+        ])
+"
+```
+
 ### 2. Generate audio
 
 ```bash
