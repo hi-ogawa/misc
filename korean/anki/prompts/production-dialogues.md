@@ -229,36 +229,66 @@ with open('output/dialogue/dialogues.tsv', 'w', newline='') as f:
 ### 2. Generate audio
 
 ```bash
-# Plot audio
+# Plot audio (~30s with concurrency 5)
 python scripts/generate-audio.py \
   --input output/dialogue/dialogues.tsv \
   --output output/dialogue/audio \
   --field plot_ko \
-  --prefix dialogue_plot_ko_
+  --prefix dialogue_plot_ko_ \
+  --concurrency 5
 
-# Dialogue audio
+# Dialogue audio (~60s with concurrency 5)
 python scripts/generate-audio.py \
   --input output/dialogue/dialogues.tsv \
   --output output/dialogue/audio \
   --field dialogue_ko \
-  --prefix dialogue_dialogue_ko_
+  --prefix dialogue_dialogue_ko_ \
+  --concurrency 5
 ```
 
 ### 3. Add audio columns
 
 ```bash
 python scripts/jq-tsv.py \
-  '. + {plot_ko_audio: "[sound:dialogue_plot_ko_\(.row).mp3]", dialogue_ko_audio: "[sound:dialogue_dialogue_ko_\(.row).mp3]"}' \
+  '. + {plot_ko_audio: "[sound:dialogue_plot_ko_\(.id | tostring | ("0000" + .)[-4:]).mp3]", dialogue_ko_audio: "[sound:dialogue_dialogue_ko_\(.id | tostring | ("0000" + .)[-4:]).mp3]"}' \
   output/dialogue/dialogues.tsv > output/dialogue/dialogues-with-audio.tsv
 ```
 
-### 4. Create note type in Anki (manual)
+### 4. Create note type and deck in Anki
 
-Create "Korean Dialogue" note type with fields from Data Format section.
+```bash
+# Create deck
+curl -s localhost:8765 -X POST -d '{"action": "createDeck", "version": 6, "params": {"deck": "Korean::Dialogue"}}'
+
+# Create note type
+curl -s localhost:8765 -X POST -d '{
+  "action": "createModel",
+  "version": 6,
+  "params": {
+    "modelName": "Korean Dialogue",
+    "inOrderFields": ["id", "title", "plot_en", "plot_ko", "dialogue_ko", "dialogue_en", "patterns", "plot_ko_audio", "dialogue_ko_audio"],
+    "cardTemplates": [
+      {
+        "Name": "Plot to Dialogue",
+        "Front": "{{plot_ko}}<br><br>{{plot_ko_audio}}",
+        "Back": "{{FrontSide}}<hr id=answer>{{dialogue_ko}}<br><br>{{dialogue_ko_audio}}<br><br><details><summary>English</summary>{{dialogue_en}}</details><br><small>{{patterns}}</small>"
+      }
+    ]
+  }
+}'
+```
 
 ### 5. Import to Anki
 
 ```bash
+# Dry run first
+python scripts/anki-add-notes.py \
+  --input output/dialogue/dialogues-with-audio.tsv \
+  --deck "Korean::Dialogue" \
+  --model "Korean Dialogue" \
+  --dry-run
+
+# Actual import
 python scripts/anki-add-notes.py \
   --input output/dialogue/dialogues-with-audio.tsv \
   --deck "Korean::Dialogue" \

@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 """
 Generate Korean audio files from TSV using Edge TTS.
+
+Requirements:
+    edge-tts (install via: uv tool install edge-tts)
+
+    Note: edge-tts v7.2.3 has a known issue (Dec 2024) where Microsoft
+    disabled the endpoint. Downgrade to v7.2.1 if you get NoAudioReceived errors:
+        uv tool install edge-tts==7.2.1 --force
+    See: https://github.com/rany2/edge-tts/issues/444
 """
 
 import argparse
@@ -88,6 +96,25 @@ async def generate_audio(file_id: str, text: str, voice: str, output_dir: Path, 
         return (file_id, False, message)
 
 
+def normalize_text_for_audio(text: str) -> str:
+    """Normalize text for TTS audio generation.
+
+    - Replace <br> with period+space for natural pauses
+    - Strip speaker labels (A:, B:, etc.)
+    """
+    import re
+    # Replace <br> with ". " for natural pause
+    text = text.replace("<br>", ". ")
+    # Strip speaker labels like "A: " or "B: " at start of sentences
+    text = re.sub(r'(?:^|\. )\s*[A-Z]:\s*', '. ', text)
+    # Clean up leading period/space
+    text = re.sub(r'^[\.\s]+', '', text)
+    # Clean up multiple periods/spaces
+    text = re.sub(r'\.(\s*\.)+', '.', text)
+    text = re.sub(r'\s+', ' ', text)
+    return text.strip()
+
+
 async def generate_all(rows_with_ids: list[tuple[str, dict]], args, output_dir: Path, total: int, failed_log_path: Path, field_name: str, prefix: str):
     """Generate audio files in batches with concurrency."""
     concurrency = args.concurrency
@@ -98,7 +125,7 @@ async def generate_all(rows_with_ids: list[tuple[str, dict]], args, output_dir: 
         tasks = [
             generate_audio(
                 file_id,
-                str(row[field_name]),
+                normalize_text_for_audio(str(row[field_name])),
                 args.voice,
                 output_dir,
                 not args.force,
@@ -189,6 +216,12 @@ def main():
         default=None,
         help="Log file for failed generations (default: <output>/failed.txt)"
     )
+    parser.add_argument(
+        "--pad",
+        type=int,
+        default=4,
+        help="Zero-pad width for row number IDs (default: 4, e.g., 0001.mp3)"
+    )
 
     args = parser.parse_args()
 
@@ -230,7 +263,7 @@ def main():
     # Build list of (file_id, row) tuples
     # Use id-field value if specified, otherwise use zero-padded row number
     total = len(rows)
-    pad_width = len(str(end))  # Pad based on end value for consistent filenames
+    pad_width = args.pad
 
     if args.id_field:
         rows_with_ids = [
@@ -260,6 +293,7 @@ def main():
     # Determine failed log path
     failed_log_path = Path(args.failed_log) if args.failed_log else output_dir / "failed.txt"
 
+    start_time = time.perf_counter()
     try:
         asyncio.run(generate_all(rows_with_ids, args, output_dir, total, failed_log_path, args.field, args.prefix))
 
@@ -267,12 +301,13 @@ def main():
         interrupted = True
         print("\n\nInterrupted by user (Ctrl-C)")
 
+    elapsed = time.perf_counter() - start_time
     print()
     if interrupted:
-        print(f"Partially completed: {success_count}/{total} files generated before interruption")
+        print(f"Partially completed: {success_count}/{total} files generated before interruption ({elapsed:.1f}s)")
         print(f"To resume, run the same command again (existing files will be skipped)")
     else:
-        print(f"Completed: {success_count}/{total} files generated successfully")
+        print(f"Completed: {success_count}/{total} files generated successfully ({elapsed:.1f}s)")
 
     # Report if there were failures
     if failed_log_path.exists():
