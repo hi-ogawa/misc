@@ -301,6 +301,18 @@ python scripts/anki-add-notes.py \
 cp output/dialogue/audio/*.mp3 "$(python scripts/anki.py getMediaDirPath | tr -d '"')"
 ```
 
+### 7. Configure deck options
+
+Create a "Dialogue" preset in Anki (Deck → Options → Add Preset):
+
+| Setting | Value | Rationale |
+|---------|-------|-----------|
+| New cards/day | 5 | Dialogues are longer than vocab cards |
+| Learning steps | 10m 1d | Space initial learning across days |
+| Graduating interval | 2-3 days | Buffer after learning steps |
+| Easy interval | 5-7 days | For confident recalls |
+| Reviews/day | 200 | Adjust based on workload |
+
 ## Status
 
 - [ ] Finalize grammar pattern target list
