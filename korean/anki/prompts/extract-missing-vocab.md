@@ -37,6 +37,8 @@ python scripts/anki-export.py \
   - `number`: Unique ID in format `extract_YYYYMMDD_NNN` (e.g., `extract_20251212_001`)
   - `english`: translation
   - `example_ko`: fresh example sentence (see `prompts/requirements-example.md`)
+    - **Use simple, common vocabulary** - avoid introducing new difficult words
+    - Learner should focus on the target word, not struggle with other words in the sentence
   - `example_en`: translation of example
   - `etymology`: see `prompts/requirements-etymology.md`
   - `notes`: see `prompts/requirements-notes.md`
