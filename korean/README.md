@@ -12,9 +12,9 @@ korean/
 │   ├── requirements-example.md     # Example sentence standards
 │   ├── requirements-notes.md       # Study notes standards
 │   ├── koreantopik1/
-│   │   └── README.md               # TOPIK 1 workflow (1,847 words)
+│   │   └── README.md               # TOPIK 1 workflow (1,847 cards)
 │   └── koreantopik2/
-│       └── README.md               # TOPIK 2 workflow (3,873 words)
+│       └── README.md               # TOPIK 2 workflow (3,179 cards)
 ├── anki/                           # Anki integration (see anki/README.md)
 ├── scripts/                        # Automation scripts
 ├── input/                          # Source vocabulary files
