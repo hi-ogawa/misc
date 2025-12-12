@@ -1,63 +1,98 @@
-Generate natural example sentences for Korean vocabulary entries (TOPIK 2).
+# Generate Examples (TOPIK 2)
 
-## Requirements
+Generate example sentences for TOPIK 2 vocabulary using subagents.
 
-**All generation requirements are in `prompts/requirements-example.md`**
+## Overview
 
-Read and follow all requirements before generating examples.
+- **Input**: `input/koreantopik2-batch-{1..39}.tsv` (pre-split, ~100 entries each)
+- **Output**: `output/koreantopik2/examples-{1..39}.tsv`
+- **Requirements**: `prompts/requirements-example.md`
 
-## Input/Output Format
+## Subagent Prompt
 
-**Input**: Pre-split batch files in `input/` directory
-- Source: `input/koreantopik2.tsv` (3873 entries total)
-- Pre-split into: `input/koreantopik2-batch-1.tsv` to `input/koreantopik2-batch-39.tsv`
-  - Batches 1-38: 100 entries each (+ header)
-  - Batch 39: 73 entries (entries 3801-3873, + header)
-- Columns: number, korean, english
+Use this prompt template for each batch. Replace `N` with batch number (1-39).
 
-**Output**: TSV files (tab-separated)
-- Columns: number, korean, example_ko, example_en
-- Output files:
-  - `output/koreantopik2/examples-1.tsv` (entries 1-100)
-  - `output/koreantopik2/examples-2.tsv` (entries 101-200)
-  - ...
-  - `output/koreantopik2/examples-39.tsv` (entries 3801-3873)
+````
+Generate example sentences for Korean vocabulary batch N.
+
+## Task
+
+Read `input/koreantopik2-batch-N.tsv` and generate `output/koreantopik2/examples-N.tsv`.
+
+## CRITICAL: File Access Rules
+
+**ONLY read these files:**
+- `prompts/requirements-example.md` (quality requirements)
+- `input/koreantopik2-batch-N.tsv` (your assigned batch)
+
+**DO NOT read any other files**, especially:
+- Any files in `output/` directory
+- Other batch files
+- Any existing examples files
+
+Generate from scratch based only on the input batch and requirements.
+
+## Input Format
+
+TSV with columns: number, korean, english
+
+## Output Format
+
+TSV with columns: number, korean, example_ko, example_en
+
+Write header row first, then one row per vocabulary entry.
+
+Example output:
+```
+number	korean	example_ko	example_en
+1	-가	그는 유명한 사진가로 활동하면서 전시회도 열어요.	He works as a famous photographer while also holding exhibitions.
+2	가까이	집이 학교에서 가까우니까 걸어 다녀요.	Since my house is close to school, I walk there.
+```
 
 ## Process
 
-1. Read `prompts/requirements-example.md` for complete generation requirements
-2. Process input file in batches of 100 entries
-3. Generate examples following all requirements
-4. Write output to corresponding batch file
-5. Process directly using Korean language understanding (no script-based automation)
+1. Read `prompts/requirements-example.md` first - follow ALL requirements strictly
+2. Read `input/koreantopik2-batch-N.tsv`
+3. For each entry, generate one example sentence pair (Korean + English)
+4. Write all entries to `output/koreantopik2/examples-N.tsv`
 
-## Execution Strategy
+## Key Requirements Summary
 
-**Use subagents for isolated context generation:**
+From `requirements-example.md`:
+- Example MUST contain the vocabulary word (conjugated forms OK for verbs/adjectives)
+- STRONGLY PREFER multi-clause sentences with connectives (-서, -(으)니까, -지만, etc.)
+- Include concrete context (who, what, where, when)
+- NEVER drop subjects - always explicit
+- Use specific nouns, not pronouns/demonstratives
+- Force evaluation: sentence should require understanding THIS specific word
+````
 
-See `prompts/subagent-management.md` for complete guidelines on:
-- Why use subagents (fresh context, parallel execution, isolation)
-- Context contamination prevention (DO NOT read output files)
-- What to read (requirements + assigned batch only)
-- Independence and quality assurance
+## Execution
 
-**Per-batch agent task:**
-1. Read `prompts/requirements-example.md` (quality requirements)
-2. Read `input/koreantopik2-batch-N.tsv` (assigned batch file)
-3. Generate example sentences following all requirements
-4. Write `output/koreantopik2/examples-N.tsv`
+### Cleanup (before starting)
 
-**CRITICAL for subagents:**
-- DO NOT read any existing output files
-- Generate from scratch based ONLY on requirements
+```bash
+rm -f output/koreantopik2/examples-{1..39}.tsv output/koreantopik2/examples-all.tsv
+```
 
-**Benefits of pre-split approach:**
-- Each agent reads only ~100 entries instead of full 3873-entry file
-- No extraction logic needed (cleaner, faster)
-- Reduces token usage per agent
-- No risk of extraction errors
+### Launch subagents
 
-**Launch agents:**
-- Can run sequentially (1-39) or in parallel batches
-- Each agent receives identical instructions but different batch files
-- No shared state between agents
+Launch 39 subagents (sequentially or in parallel batches):
+
+```
+Batch 1:  input/koreantopik2-batch-1.tsv  → output/koreantopik2/examples-1.tsv
+Batch 2:  input/koreantopik2-batch-2.tsv  → output/koreantopik2/examples-2.tsv
+...
+Batch 39: input/koreantopik2-batch-39.tsv → output/koreantopik2/examples-39.tsv
+```
+
+## Consolidation
+
+After all batches complete:
+
+```bash
+python scripts/jq-tsv.py '.' output/koreantopik2/examples-{1..39}.tsv > output/koreantopik2/examples-all.tsv
+
+# Verify count
+wc -l output/koreantopik2/examples-all.tsv  # Should be 3874 (3873 + header)
+```

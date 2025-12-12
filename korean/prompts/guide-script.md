@@ -196,8 +196,11 @@ python scripts/jq-tsv.py '{number, korean, example_ko}' input.tsv > output.tsv
 # Combined filter + project
 python scripts/jq-tsv.py 'select(.tier == "1") | {number, korean, english}' input.tsv > output.tsv
 
-# Multiple inputs (concatenate)
+# Multiple inputs (concatenate with automatic header deduplication)
 python scripts/jq-tsv.py '.' file1.tsv file2.tsv > combined.tsv
+
+# Batch file aggregation (brace expansion)
+python scripts/jq-tsv.py '.' output/examples-{1..39}.tsv > output/examples-all.tsv
 
 # Aggregations (use -s/--slurp flag with --json)
 # Note: Aggregations produce non-TSV output, so --json is required

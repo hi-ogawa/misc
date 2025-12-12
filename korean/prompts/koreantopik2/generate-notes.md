@@ -1,80 +1,90 @@
-Generate related vocabulary words for the "notes" field (TOPIK 2).
+# Generate Notes (TOPIK 2)
 
-## Requirements
+Generate related vocabulary words for the "notes" field using subagents.
 
-**All generation requirements are in `prompts/requirements-notes.md`**
+## Overview
 
-Read and follow all requirements before generating notes.
+- **Input**: `input/koreantopik2-batch-{1..39}.tsv` (pre-split, ~100 entries each)
+- **Output**: `output/koreantopik2/notes-{1..39}.tsv`
+- **Requirements**: `prompts/requirements-notes.md`
 
-## Input/Output Format
+## Subagent Prompt
 
-**Input**: Two-step approach for cross-referencing
-1. **Vocabulary reference** (read first): `input/korean.tsv`
-   - Contains: All Korean vocabulary (5720 words: TOPIK 1 + TOPIK 2)
-   - Format: Single column, one word per line, no header
-   - Purpose: Bring full vocabulary into context for cross-referencing
+Use this prompt template for each batch. Replace `N` with batch number (1-39).
 
-2. **Batch file** (read second): `input/koreantopik2-batch-N.tsv`
-   - Contains: Assigned batch only (100 entries + header)
-   - Columns: number, korean, english
-   - Purpose: Explicit list of entries to generate notes for
+````
+Generate related vocabulary notes for batch N.
 
-**Rationale**:
-- Reading vocab reference first enables finding related words across all vocabulary
-- Antonyms may be far apart (e.g., 높다 in TOPIK 1, 낮다 in TOPIK 2)
-- Honorific pairs span across TOPIK levels
-- Confusables benefit from seeing all similar words
-- Batch file makes it explicit which entries to process
+Read `input/koreantopik2-batch-N.tsv` and write `output/koreantopik2/notes-N.tsv`.
 
-**Output**: TSV files (tab-separated) - ONLY for assigned batch
-- Columns: number, korean, notes
-- Relationship types: related meanings, antonyms, family pairs, honorific pairs, Hanja-순우리말 pairs, confusables
-- Leave blank if no meaningful related words
-- Output files:
-  - `output/koreantopik2/notes-1.tsv` (entries 1-100 ONLY)
-  - `output/koreantopik2/notes-2.tsv` (entries 101-200 ONLY)
-  - ...
-  - `output/koreantopik2/notes-39.tsv` (entries 3801-3873 ONLY)
+## CRITICAL RULES
 
-## Process
+- DO NOT write scripts or run verification commands
+- DO NOT read other files besides your batch file
+- Use your Korean language knowledge directly
 
-1. Read `prompts/requirements-notes.md` for complete generation requirements
-2. Read `input/korean.tsv` (all vocabulary for cross-referencing)
-3. Read `input/koreantopik2-batch-N.tsv` (assigned batch of 100 entries)
-4. Generate related words ONLY for entries in the batch file
-5. Write output to corresponding batch file
-6. Process directly using Korean language understanding (no script-based automation)
+## Output Format
 
-## Execution Strategy
+TSV with columns: number, korean, notes
 
-**Use subagents for isolated context generation:**
+Example:
+```
+number	korean	notes
+1	-가	-사, -자, -인
+2	가까이	멀리
+3	가꾸다	기르다
+4	가난	부자, 가난하다
+5	가능	불가능
+```
 
-See `prompts/subagent-management.md` for complete guidelines on:
-- Why use subagents (fresh context, parallel execution, isolation)
-- Context contamination prevention (DO NOT read output files)
-- What to read (requirements + vocab reference + assigned batch)
-- Independence and quality assurance
+## What to Include
 
-**Per-batch agent task:**
-1. Read `prompts/requirements-notes.md` (quality requirements)
-2. Read `input/korean.tsv` (vocabulary reference - 5720 words)
-3. Read `input/koreantopik2-batch-N.tsv` (assigned batch file)
-4. Generate related words ONLY for entries in batch file
-5. Write `output/koreantopik2/notes-N.tsv`
+For each word, add related vocabulary:
+- Synonyms: 흰색 → 하얀색
+- Antonyms: 높다 → 낮다
+- Honorific pairs: 먹다 → 드시다
+- Hanja-순우리말: 가격 → 값
+- Confusables: 넣다 → 놓다
 
-**CRITICAL for subagents:**
-- DO NOT read any existing output files
-- Generate from scratch based ONLY on requirements
+Leave blank if no meaningful relationships.
 
-**Benefits of vocabulary reference approach:**
-- Agents can find related words across ALL vocabulary (TOPIK 1 + TOPIK 2)
-- Better quality cross-referencing (antonyms, honorific pairs, confusables)
-- Vocabulary reference is lightweight (just Korean words, no metadata)
-- Can find relationships across TOPIK levels (e.g., TOPIK 1 word related to TOPIK 2 word)
-- Batch file makes it explicit which entries to process
-- Each agent outputs ONLY their assigned batch (100 words)
+## What NOT to Include
 
-**Launch agents:**
-- Can run sequentially (1-39) or in parallel batches
-- Each agent receives identical instructions but different batch files
-- No shared state between agents
+- Morphological pairs: ❌ 닫히다 → 닫다
+- Contractions: ❌ 게 → 것이
+
+## Format
+
+- Comma-separated: 높다, 낮다
+- Parentheses for clarification: 간 (salty), 간격
+````
+
+## Execution
+
+### Cleanup (before starting)
+
+```bash
+rm -f output/koreantopik2/notes-{1..39}.tsv output/koreantopik2/notes-all.tsv
+```
+
+### Launch subagents
+
+Launch 39 subagents (sequentially or in parallel batches):
+
+```
+Batch 1:  input/koreantopik2-batch-1.tsv  → output/koreantopik2/notes-1.tsv
+Batch 2:  input/koreantopik2-batch-2.tsv  → output/koreantopik2/notes-2.tsv
+...
+Batch 39: input/koreantopik2-batch-39.tsv → output/koreantopik2/notes-39.tsv
+```
+
+## Consolidation
+
+After all batches complete:
+
+```bash
+python scripts/jq-tsv.py '.' output/koreantopik2/notes-{1..39}.tsv > output/koreantopik2/notes-all.tsv
+
+# Verify count
+wc -l output/koreantopik2/notes-all.tsv  # Should be 3874 (3873 + header)
+```
