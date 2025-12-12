@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """
-Update existing Anki notes from TSV and optionally remove tags.
+Update existing Anki notes from TSV.
 
 Usage:
-    python scripts/anki-update-notes.py --input anki/output/fix-cards-fixed.tsv --dry-run
-    python scripts/anki-update-notes.py --input anki/output/fix-cards-fixed.tsv
-    python scripts/anki-update-notes.py --input anki/output/fix-cards-fixed.tsv --remove-tag fix
+    # Update text fields
+    python scripts/anki-update-notes.py --input file.tsv --fields example_ko,example_en
+
+    # Update audio fields
+    python scripts/anki-update-notes.py --input file.tsv --fields korean_audio,example_ko_audio
+
+    # Update + remove tag
+    python scripts/anki-update-notes.py --input file.tsv --fields example_ko,example_en --remove-tag fix
 """
 
 import argparse
@@ -38,12 +43,9 @@ def anki_request(action: str, params: dict | None = None, url: str = "http://loc
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Update Anki notes from TSV")
-    parser.add_argument("--input", required=True, help="Input TSV file")
-    parser.add_argument("--fields", default="example_ko,example_en",
-                        help="Comma-separated fields to update (default: example_ko,example_en)")
-    parser.add_argument("--audio-prefix", default="",
-                        help="Audio filename prefix (e.g., 'koreantopik1_example_ko_fix_')")
-    parser.add_argument("--remove-tag", default="", help="Tag to remove after update (e.g., 'fix')")
+    parser.add_argument("--input", required=True, help="Input TSV file (must have noteId column)")
+    parser.add_argument("--fields", required=True, help="Comma-separated fields to update from TSV")
+    parser.add_argument("--remove-tag", default="", help="Tag to remove after update")
     parser.add_argument("--dry-run", action="store_true", help="Print without executing")
     parser.add_argument("--url", default="http://localhost:8765", help="AnkiConnect URL")
 
@@ -62,19 +64,25 @@ def main() -> int:
 
     if not rows:
         print("No rows found in input file")
-        return 1
+        return 0
 
-    if "number" not in rows[0]:
-        print("Error: TSV must contain 'number' column", file=sys.stderr)
+    if "noteId" not in rows[0]:
+        print("Error: TSV must contain 'noteId' column", file=sys.stderr)
         return 1
 
     fields = [f.strip() for f in args.fields.split(",")]
 
-    # Update notes
+    # Validate fields exist in TSV
+    missing = [f for f in fields if f not in rows[0]]
+    if missing:
+        print(f"Error: Fields not in TSV: {', '.join(missing)}", file=sys.stderr)
+        return 1
+
+    # Print config
     print(f"=== Updating {len(rows)} notes ===")
     print(f"Fields: {', '.join(fields)}")
-    if args.audio_prefix:
-        print(f"Audio prefix: {args.audio_prefix}")
+    if args.remove_tag:
+        print(f"Remove tag: {args.remove_tag}")
     print()
 
     success = 0
@@ -82,58 +90,38 @@ def main() -> int:
     updated_note_ids = []
 
     for row in rows:
-        number = row["number"]
+        note_id = int(row["noteId"])
+        update_fields = {field: row[field] or "" for field in fields}
 
         if args.dry_run:
-            print(f"[DRY-RUN] Would update: number={number}")
-            for field in fields:
-                if field in row:
-                    val = row[field]
-                    print(f"  {field}: {val[:50]}..." if len(val) > 50 else f"  {field}: {val}")
-            if args.audio_prefix:
-                print(f"  example_ko_audio: [sound:{args.audio_prefix}{int(number):04d}.mp3]")
+            print(f"[DRY-RUN] {note_id}")
+            for k, v in update_fields.items():
+                display_v = v[:60] + "..." if len(v) > 60 else v
+                print(f"  {k}: {display_v}")
             success += 1
             continue
-
-        # Find note ID
-        note_ids = anki_request("findNotes", {"query": f"number:{number}"}, args.url)
-        if not note_ids:
-            print(f"[FAIL] Note not found: number={number}", file=sys.stderr)
-            failed += 1
-            continue
-
-        note_id = note_ids[0]
-
-        # Build fields to update
-        update_fields = {field: row[field] for field in fields if field in row}
-        if args.audio_prefix:
-            update_fields["example_ko_audio"] = f"[sound:{args.audio_prefix}{int(number):04d}.mp3]"
 
         try:
             anki_request("updateNoteFields", {"note": {"id": note_id, "fields": update_fields}}, args.url)
-            print(f"[OK] Updated: number={number}")
+            print(f"[OK] {note_id}")
             updated_note_ids.append(note_id)
             success += 1
         except Exception as e:
-            print(f"[FAIL] number={number}: {e}", file=sys.stderr)
+            print(f"[FAIL] {note_id}: {e}", file=sys.stderr)
             failed += 1
 
     print()
-    print(f"Update: {success} success, {failed} failed")
+    print(f"Updated: {success} success, {failed} failed")
 
     # Remove tag
-    if args.remove_tag and (success > 0 or args.dry_run):
-        print()
-        print(f"=== Removing tag '{args.remove_tag}' ===")
-
-        if args.dry_run:
-            print(f"[DRY-RUN] Would remove tag '{args.remove_tag}' from {len(rows)} notes")
-        elif failed > 0:
-            print("Skipping tag removal - some updates failed")
+    if args.remove_tag and updated_note_ids and not args.dry_run:
+        if failed > 0:
+            print(f"\nSkipping tag removal - some updates failed")
         else:
+            print(f"\nRemoving tag '{args.remove_tag}'...")
             try:
                 anki_request("removeTags", {"notes": updated_note_ids, "tags": args.remove_tag}, args.url)
-                print(f"[OK] Removed tag '{args.remove_tag}' from {len(updated_note_ids)} notes")
+                print(f"[OK] Removed tag from {len(updated_note_ids)} notes")
             except Exception as e:
                 print(f"[FAIL] Remove tag: {e}", file=sys.stderr)
                 return 1

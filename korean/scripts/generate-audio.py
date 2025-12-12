@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 """
-Generate Korean audio files from example sentences using Edge TTS.
+Generate Korean audio files from TSV using Edge TTS.
+
+Requirements:
+    edge-tts (install via: uv tool install edge-tts)
+
+    Note: edge-tts v7.2.3 has a known issue (Dec 2024) where Microsoft
+    disabled the endpoint. Downgrade to v7.2.1 if you get NoAudioReceived errors:
+        uv tool install edge-tts==7.2.1 --force
+    See: https://github.com/rany2/edge-tts/issues/444
 """
 
 import argparse
@@ -16,25 +24,26 @@ completed = 0
 success_count = 0
 
 
-async def generate_audio(number: int, text: str, voice: str, output_dir: Path, skip_existing: bool, total: int, timeout: float, concurrency: int, failed_log_path: Path, prefix: str = "") -> tuple[int, bool, str]:
+async def generate_audio(file_id: str, text: str, voice: str, output_dir: Path, skip_existing: bool, total: int, timeout: float, failed_log_path: Path, prefix: str = "") -> tuple[str, bool, str]:
     """Generate audio file for a single text entry using edge-tts CLI.
 
     Args:
+        file_id: Identifier for the output filename
         prefix: Optional filename prefix (e.g., "vocab_" or "example_")
 
     Returns:
-        Tuple of (number, success, message)
+        Tuple of (file_id, success, message)
     """
     global completed, success_count
 
-    filename = f"{prefix}{number:04d}.mp3" if prefix else f"{number:04d}.mp3"
+    filename = f"{prefix}{file_id}.mp3"
     output_file = output_dir / filename
 
     if skip_existing and output_file.exists():
         completed += 1
-        message = f"Skipped {number:04d} (already exists)"
+        message = f"Skipped {file_id} (exists)"
         print(f"  [{completed}/{total}] {message}")
-        return (number, True, message)
+        return (file_id, True, message)
 
     try:
         start_time = time.perf_counter()
@@ -57,59 +66,75 @@ async def generate_audio(number: int, text: str, voice: str, output_dir: Path, s
 
         if returncode == 0:
             success_count += 1
-            message = f"Generated {number:04d} ({duration:.2f}s): {text}"
+            message = f"Generated {file_id} ({duration:.2f}s): {text}"
             print(f"  [{completed}/{total}] {message}")
-            return (number, True, message)
+            return (file_id, True, message)
         else:
             error_msg = stderr.decode().strip()
             with open(failed_log_path, "a", encoding="utf-8") as f:
-                f.write(f"{number}\tProcess error: {error_msg}\n")
-            message = f"ERROR {number:04d} ({duration:.2f}s): {error_msg}"
+                f.write(f"{file_id}\tProcess error: {error_msg}\n")
+            message = f"ERROR {file_id} ({duration:.2f}s): {error_msg}"
             print(f"  [{completed}/{total}] {message}")
-            return (number, False, message)
+            return (file_id, False, message)
 
     except asyncio.TimeoutError:
         completed += 1
         duration = time.perf_counter() - start_time
         with open(failed_log_path, "a", encoding="utf-8") as f:
-            f.write(f"{number}\tTimeout after {timeout}s\n")
-        message = f"ERROR {number:04d} ({duration:.2f}s): Timeout after {timeout}s"
+            f.write(f"{file_id}\tTimeout after {timeout}s\n")
+        message = f"ERROR {file_id} ({duration:.2f}s): Timeout after {timeout}s"
         print(f"  [{completed}/{total}] {message}")
-        return (number, False, message)
+        return (file_id, False, message)
 
     except Exception as e:
         completed += 1
         duration = time.perf_counter() - start_time
         with open(failed_log_path, "a", encoding="utf-8") as f:
-            f.write(f"{number}\t{str(e)}\n")
-        message = f"ERROR {number:04d} ({duration:.2f}s): {e}"
+            f.write(f"{file_id}\t{str(e)}\n")
+        message = f"ERROR {file_id} ({duration:.2f}s): {e}"
         print(f"  [{completed}/{total}] {message}")
-        return (number, False, message)
+        return (file_id, False, message)
 
 
-async def generate_all(filtered_rows, args, output_dir, total, failed_log_path, field_name: str, prefix: str):
-    """Generate audio files in chunks."""
+def normalize_text_for_audio(text: str) -> str:
+    """Normalize text for TTS audio generation.
+
+    - Replace <br> with period+space for natural pauses
+    - Strip speaker labels (A:, B:, etc.)
+    """
+    import re
+    # Replace <br> with ". " for natural pause
+    text = text.replace("<br>", ". ")
+    # Strip speaker labels like "A: " or "B: " at start of sentences
+    text = re.sub(r'(?:^|\. )\s*[A-Z]:\s*', '. ', text)
+    # Clean up leading period/space
+    text = re.sub(r'^[\.\s]+', '', text)
+    # Clean up multiple periods/spaces
+    text = re.sub(r'\.(\s*\.)+', '.', text)
+    text = re.sub(r'\s+', ' ', text)
+    return text.strip()
+
+
+async def generate_all(rows_with_ids: list[tuple[str, dict]], args, output_dir: Path, total: int, failed_log_path: Path, field_name: str, prefix: str):
+    """Generate audio files in batches with concurrency."""
     concurrency = args.concurrency
 
-    # Process in chunks
-    for i in range(0, len(filtered_rows), concurrency):
-        batch = filtered_rows[i:i+concurrency]
+    for i in range(0, len(rows_with_ids), concurrency):
+        batch = rows_with_ids[i:i+concurrency]
 
-        # Run this batch concurrently
         tasks = [
             generate_audio(
-                idx,
-                str(row[field_name]),
+                file_id,
+                normalize_text_for_audio(str(row[field_name])),
                 args.voice,
                 output_dir,
                 not args.force,
                 total,
                 args.timeout,
-                concurrency,
                 failed_log_path,
                 prefix
             )
-            for idx, row in batch
+            for file_id, row in batch
         ]
 
         await asyncio.gather(*tasks)
@@ -141,13 +166,13 @@ def main():
         "--prefix",
         type=str,
         default="",
-        help="Filename prefix (e.g., 'vocab_' or 'example_')"
+        help="Filename prefix (e.g., 'koreantopik1_korean_')"
     )
     parser.add_argument(
-        "--number-field",
+        "--id-field",
         type=str,
         default=None,
-        help="TSV column to use for filename numbers (default: row index)"
+        help="TSV column for filename ID (default: row number, zero-padded)"
     )
     parser.add_argument(
         "--voice",
@@ -160,13 +185,13 @@ def main():
         "--start",
         type=int,
         default=1,
-        help="Start from this entry number (inclusive, default: 1)"
+        help="Start from this row number (1-based, inclusive, default: 1)"
     )
     parser.add_argument(
         "--end",
         type=int,
         default=None,
-        help="End at this entry number (inclusive, default: last entry)"
+        help="End at this row number (inclusive, default: last row)"
     )
     parser.add_argument(
         "--force",
@@ -190,6 +215,12 @@ def main():
         type=str,
         default=None,
         help="Log file for failed generations (default: <output>/failed.txt)"
+    )
+    parser.add_argument(
+        "--pad",
+        type=int,
+        default=4,
+        help="Zero-pad width for row number IDs (default: 4, e.g., 0001.mp3)"
     )
 
     args = parser.parse_args()
@@ -219,36 +250,39 @@ def main():
         for row in reader:
             rows.append(row)
 
-    # Determine end if not specified
-    if args.end is None:
-        args.end = len(rows)
-
-    # Check number-field column exists if specified
-    if args.number_field and args.number_field not in fieldnames:
-        print(f"Error: TSV must contain column: {args.number_field}", file=sys.stderr)
+    # Check id-field column exists if specified
+    if args.id_field and args.id_field not in fieldnames:
+        print(f"Error: TSV must contain column: {args.id_field}", file=sys.stderr)
         print(f"Found columns: {list(fieldnames)}", file=sys.stderr)
         sys.exit(1)
 
-    # Filter by row index (1-based) and attach number to each row
-    # Use number-field value if specified, otherwise use row index
-    if args.number_field:
-        filtered_rows = [
-            (int(row[args.number_field]), row) for idx, row in enumerate(rows, start=1)
-            if args.start <= idx <= args.end
+    # Apply --start/--end range filter
+    end = args.end if args.end is not None else len(rows)
+    rows = [(idx, row) for idx, row in enumerate(rows, start=1) if args.start <= idx <= end]
+
+    # Build list of (file_id, row) tuples
+    # Use id-field value if specified, otherwise use zero-padded row number
+    total = len(rows)
+    pad_width = args.pad
+
+    if args.id_field:
+        rows_with_ids = [
+            (row[args.id_field], row)
+            for idx, row in rows
         ]
     else:
-        filtered_rows = [
-            (idx, row) for idx, row in enumerate(rows, start=1)
-            if args.start <= idx <= args.end
+        rows_with_ids = [
+            (str(idx).zfill(pad_width), row)
+            for idx, row in rows
         ]
 
-    total = len(filtered_rows)
-    print(f"Generating audio for entries {args.start}-{args.end} ({total} total)")
-    print(f"Field: {args.field}")
-    print(f"Voice: {args.voice}")
-    print(f"Prefix: '{args.prefix}' (filename format: {args.prefix}NNNN.mp3)")
-    print(f"Concurrency: {args.concurrency}")
-    print(f"Output: {output_dir}/")
+    print(f"Generating audio for rows {args.start}-{end} ({total} entries)")
+    print(f"  Field: {args.field}")
+    print(f"  ID: {args.id_field or f'row number (zero-padded to {pad_width} digits)'}")
+    print(f"  Voice: {args.voice}")
+    print(f"  Prefix: '{args.prefix}'")
+    print(f"  Concurrency: {args.concurrency}")
+    print(f"  Output: {output_dir}/")
     print()
 
     # Reset global counters
@@ -259,19 +293,21 @@ def main():
     # Determine failed log path
     failed_log_path = Path(args.failed_log) if args.failed_log else output_dir / "failed.txt"
 
+    start_time = time.perf_counter()
     try:
-        asyncio.run(generate_all(filtered_rows, args, output_dir, total, failed_log_path, args.field, args.prefix))
+        asyncio.run(generate_all(rows_with_ids, args, output_dir, total, failed_log_path, args.field, args.prefix))
 
     except KeyboardInterrupt:
         interrupted = True
         print("\n\nInterrupted by user (Ctrl-C)")
 
+    elapsed = time.perf_counter() - start_time
     print()
     if interrupted:
-        print(f"Partially completed: {success_count}/{total} files generated before interruption")
+        print(f"Partially completed: {success_count}/{total} files generated before interruption ({elapsed:.1f}s)")
         print(f"To resume, run the same command again (existing files will be skipped)")
     else:
-        print(f"Completed: {success_count}/{total} files generated successfully")
+        print(f"Completed: {success_count}/{total} files generated successfully ({elapsed:.1f}s)")
 
     # Report if there were failures
     if failed_log_path.exists():

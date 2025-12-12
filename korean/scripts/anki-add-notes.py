@@ -35,67 +35,65 @@ def anki_request(action: str, params: dict | None = None, url: str = "http://loc
     return result["result"]
 
 
-def build_note(row: dict, deck: str, model: str, tags: list[str]) -> dict:
-    """Build note object from TSV row."""
-    # Use 'number' from TSV if present, otherwise generate from source_number + korean
-    if row.get("number"):
-        number = row["number"]
-    else:
-        source_num = row.get("source_number", "")
-        korean = row["korean"]
-        number = f"extract_{source_num}_{korean}" if source_num else f"extract_{korean}"
+def build_note(row: dict, deck: str, model: str, tags: list[str], model_fields: list[str]) -> dict:
+    """Build note object from TSV row.
+
+    Maps TSV columns to model fields. Only includes fields that exist in both.
+    """
+    fields = {}
+    for field in model_fields:
+        if field in row:
+            fields[field] = row[field] or ""
 
     return {
         "deckName": deck,
         "modelName": model,
-        "fields": {
-            "number": number,
-            "korean": row["korean"],
-            "english": row["english"],
-            "example_ko": row["example_ko"],
-            "example_en": row["example_en"],
-            "etymology": row.get("etymology") or "",
-            "notes": row.get("notes") or "",
-            "korean_audio": row.get("korean_audio") or "",
-            "example_ko_audio": row.get("example_ko_audio") or ""
-        },
+        "fields": fields,
         "tags": tags
     }
 
 
 def add_notes(rows: list[dict], deck: str, model: str, tags: list[str], dry_run: bool, url: str) -> bool:
     """Add notes to Anki."""
-    print(f"=== Adding {len(rows)} notes ===")
+    total = len(rows)
+    print(f"=== Adding {total} notes ===")
     print(f"Deck: {deck}")
     print(f"Model: {model}")
     print(f"Tag: {tags}")
     print()
 
+    # Get model fields
+    model_fields = anki_request("modelFieldNames", {"modelName": model}, url)
+    print(f"Model fields: {model_fields}")
+    print()
+
     success = 0
     failed = 0
 
-    for row in rows:
-        note = build_note(row, deck, model, tags)
-        korean = row["korean"]
+    for i, row in enumerate(rows, 1):
+        note = build_note(row, deck, model, tags, model_fields)
+        # Use first field or id as label
+        label = row.get("id") or row.get("korean") or row.get(model_fields[0]) or f"row {i}"
 
         if dry_run:
             can_add = anki_request("canAddNotes", {"notes": [note]}, url)
             if can_add[0]:
-                print(f"[DRY-RUN] Would add: {note['fields']['number']}")
+                print(f"[{i}/{total}] [DRY-RUN] Would add: {label}")
                 success += 1
             else:
-                print(f"[DRY-RUN] DUPLICATE: {korean}", file=sys.stderr)
+                print(f"[{i}/{total}] [DRY-RUN] Cannot add: {label}", file=sys.stderr)
                 failed += 1
         else:
             try:
                 note_id = anki_request("addNote", {"note": note}, url)
-                print(f"[OK] Added: {korean} (note_id: {note_id})")
+                print(f"[{i}/{total}] Added: {label} (note_id: {note_id})")
                 success += 1
             except Exception as e:
-                print(f"[FAIL] {korean}: {e}", file=sys.stderr)
+                print(f"[{i}/{total}] FAIL {label}: {e}", file=sys.stderr)
                 failed += 1
 
-    print(f"Add notes: {success} success, {failed} failed")
+    print()
+    print(f"Completed: {success} success, {failed} failed")
     return failed == 0
 
 
@@ -146,7 +144,7 @@ def main() -> int:
     parser.add_argument("--unflag", action="store_true", help="Unflag source cards (uses source_number column)")
     parser.add_argument("--deck", default="Korean::Custom", help="Target deck")
     parser.add_argument("--model", default="Korean Vocabulary", help="Note model")
-    parser.add_argument("--tag", default="extracted", help="Tag to add")
+    parser.add_argument("--tag", default="", help="Tag to add (optional)")
     parser.add_argument("--dry-run", action="store_true", help="Print without executing")
     parser.add_argument("--url", default="http://localhost:8765", help="AnkiConnect URL")
 
