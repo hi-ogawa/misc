@@ -322,3 +322,33 @@ Determine `filter` value directly:
 - koreantopik.com TOPIK 2 source: https://www.koreantopik.com/2024/09/complete-topik-2-vocabulary-list-3900.html
 - 국립국어원: https://www.korean.go.kr/
 - Etymology patterns: `prompts/requirements-etymology.md`
+
+---
+
+## Side Note: TOPIK 1 Curation (for comparison)
+
+Ran same Pass 1+2 tagging on TOPIK 1 vocabulary (1,847 entries).
+
+**Output**: `output/koreantopik1-curation/curation-all.tsv`
+
+**Category distribution**:
+| category | count | % |
+|----------|-------|---|
+| 1 sino-korean | 702 | 38% |
+| 7 native | 655 | 35% |
+| 4 compound | 270 | 15% |
+| 5 loanword | 104 | 6% |
+| 2 auxiliary-compound | 61 | 3% |
+| 3 derivation | 46 | 2% |
+| 6 contraction | 9 | <1% |
+
+**Filter distribution**:
+| filter | count | % |
+|--------|-------|---|
+| yes | 330 | 17.9% |
+| no | 1,517 | 82.1% |
+
+**Comparison with TOPIK 2**:
+- TOPIK 1 has more native Korean (35% vs 19%) - beginner vocab is more native
+- TOPIK 1 has fewer sino-korean (38% vs 53%) - advanced vocab is more Hanja-heavy
+- TOPIK 1 filter rate slightly higher (17.9% vs 13.3%) - more trivial loanwords in beginner list
