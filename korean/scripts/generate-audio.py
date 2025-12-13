@@ -48,11 +48,14 @@ async def generate_audio(file_id: str, text: str, voice: str, output_dir: Path, 
     try:
         start_time = time.perf_counter()
 
+        # Use temp file for atomic write (avoid broken files on interrupt)
+        temp_file = output_file.with_suffix('.mp3.tmp')
+
         # Wrap subprocess execution with timeout
         async def run_tts():
             # Use --text=value format to avoid issues with text starting with hyphens
             process = await asyncio.create_subprocess_exec(
-                "edge-tts", f"--voice={voice}", f"--text={text}", f"--write-media={str(output_file)}",
+                "edge-tts", f"--voice={voice}", f"--text={text}", f"--write-media={str(temp_file)}",
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE
             )
@@ -65,11 +68,15 @@ async def generate_audio(file_id: str, text: str, voice: str, output_dir: Path, 
         completed += 1
 
         if returncode == 0:
+            # Atomic rename: temp file -> final file
+            temp_file.rename(output_file)
             success_count += 1
             message = f"Generated {file_id} ({duration:.2f}s): {text}"
             print(f"  [{completed}/{total}] {message}")
             return (file_id, True, message)
         else:
+            # Clean up temp file on error
+            temp_file.unlink(missing_ok=True)
             error_msg = stderr.decode().strip()
             with open(failed_log_path, "a", encoding="utf-8") as f:
                 f.write(f"{file_id}\tProcess error: {error_msg}\n")
@@ -80,6 +87,8 @@ async def generate_audio(file_id: str, text: str, voice: str, output_dir: Path, 
     except asyncio.TimeoutError:
         completed += 1
         duration = time.perf_counter() - start_time
+        # Clean up temp file on timeout
+        temp_file.unlink(missing_ok=True)
         with open(failed_log_path, "a", encoding="utf-8") as f:
             f.write(f"{file_id}\tTimeout after {timeout}s\n")
         message = f"ERROR {file_id} ({duration:.2f}s): Timeout after {timeout}s"
@@ -89,6 +98,8 @@ async def generate_audio(file_id: str, text: str, voice: str, output_dir: Path, 
     except Exception as e:
         completed += 1
         duration = time.perf_counter() - start_time
+        # Clean up temp file on error
+        temp_file.unlink(missing_ok=True)
         with open(failed_log_path, "a", encoding="utf-8") as f:
             f.write(f"{file_id}\t{str(e)}\n")
         message = f"ERROR {file_id} ({duration:.2f}s): {e}"

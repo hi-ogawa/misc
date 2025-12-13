@@ -127,3 +127,65 @@ Note: Morphological families (e.g., 가능/가능하다/가능성) must have ide
 **Problem with batches**: Each batch establishes its own baseline. Batch 1 might score 두르다 as 90, while batch 20 scores an equally essential word as 70 due to different local context.
 
 **Single-shot advantage**: Consistent baseline across all 3873 words. You can compare any two words directly and maintain relative ordering.
+
+---
+
+## Results
+
+Output: `output/koreantopik2/scores-singleshot100.tsv`
+
+### Overall Statistics
+| Metric | Value |
+|--------|-------|
+| Total words | 3,873 |
+| Min score | 42 |
+| Max score | 92 |
+| Mean score | 72.5 |
+
+### Tier Breakdown
+| Tier | Count | % |
+|------|-------|---|
+| 80-100 (Essential) | 517 | 13.3% |
+| 40-79 (Useful) | 3,356 | 86.7% |
+| 1-39 (Specialized) | 0 | 0% |
+
+### Score Distribution (24 unique values)
+```
+42 | 1
+45 | 1
+48 | 2
+52 | 11
+55 |█ 27
+56 | 1
+58 |████████ 136
+60 | 1
+62 |██████████ 175
+64 | 10
+65 |████████████████ 276
+68 |████████████████████████████████████ 608
+70 |█ 20
+72 |██████████████████████████████████████████████████ 839
+74 | 2
+75 |███████████████████████████████████████████ 732
+76 | 3
+78 |██████████████████████████████ 511
+80 |███ 60
+82 |█████████████████ 288
+85 |██████ 117
+88 |██ 48
+90 | 1
+92 | 3
+```
+
+### Highest Scored (92)
+- 가능, 가능성, 두르다
+
+### Lowest Scored (42-52)
+- 가뭄 (drought) - 42
+- -가 (professional suffix) - 45
+- 가로막다 (obstruct), 강수량 (precipitation) - 48
+
+### Observations
+- **Narrow range**: Only 24 unique values, clustered 58-85 (not using full 1-100)
+- **No low-priority words**: Nothing scored below 42
+- **Morphological families**: 가능/가능성 correctly share score (92)

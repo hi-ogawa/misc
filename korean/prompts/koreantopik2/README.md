@@ -1,8 +1,11 @@
 # TOPIK 2 Vocabulary Enhancement Plan (3873 words)
 
+> [!NOTE]
+> This document is from earlier iterations. See **[plan.md](plan.md)** for the final pipeline (3,179 cards imported to Anki, 2025-12).
+
 **Source**: TOPIK 2 vocabulary list from https://www.koreantopik.com/2024/09/complete-topik-2-vocabulary-list-3900.html
 
-**Status**: 🚧 Planning phase - base extraction complete, enhancements pending
+**Status**: ✅ Complete - see plan.md
 
 ## Overview
 
