@@ -51,7 +51,7 @@
 ```bash
 python scripts/anki-export.py \
   --query "deck:Korean::TOPIK2 -is:suspended" \
-  --fields "noteId,number,korean,english" \
+  --fields "noteId,korean,english" \
   --output output/tmp/topik2-cards.tsv
 ```
 
@@ -59,15 +59,26 @@ python scripts/anki-export.py \
 
 Subagent only classifies POS - category→origin mapping is done by script.
 
-**Input**: `output/tmp/topik2-cards.tsv` (split into batches)
+See `prompts/subagent-management.md` for subagent best practices.
 
-**Subagent prompt**:
+#### Split into batches
+
+```bash
+python scripts/split-batches.py \
+  --input output/tmp/topik2-cards.tsv \
+  --output-dir output/tmp/topik2-pos-batches \
+  --prefix batch- \
+  --batch-size 100
+```
+
+#### Subagent prompt
+
 ````
-Classify part of speech for Korean vocabulary batch N.
+Classify part of speech for Korean vocabulary.
 
 ## Task
 
-Read batch file and add `pos` column.
+Read batch file `output/tmp/topik2-pos-batches/batch-N.tsv` and add `pos` column.
 
 ## POS Tags
 
@@ -86,10 +97,16 @@ Read batch file and add `pos` column.
 
 ## Output
 
-TSV with columns: noteId, number, korean, english, pos
+Write to `output/tmp/topik2-pos-batches/pos-N.tsv`
+
+TSV with columns: noteId, korean, english, pos
 ````
 
-**Output**: `output/tmp/topik2-pos.tsv`
+#### Merge batches
+
+```bash
+python scripts/jq-tsv.py '.' output/tmp/topik2-pos-batches/pos-*.tsv > output/tmp/topik2-pos.tsv
+```
 
 ### Step 3: Join with curation data and map origin
 
@@ -107,11 +124,13 @@ ORIGIN_MAP = {
     '7': 'origin::native',
 }
 
-# Load curation data (korean → category)
+# Load curation data (korean/english → category)
+# Use pair as key to handle homonyms
 curation = {}
 with open('output/koreantopik2/curation-all.tsv') as f:
     for row in csv.DictReader(f, delimiter='\t'):
-        curation[row['korean']] = row['category']
+        key = (row['korean'], row['english'])
+        curation[key] = row['category']
 
 # Load POS classification
 with open('output/tmp/topik2-pos.tsv') as f:
@@ -119,12 +138,13 @@ with open('output/tmp/topik2-pos.tsv') as f:
 
 # Join and map
 for row in rows:
-    category = curation.get(row['korean'], '')
+    key = (row['korean'], row['english'])
+    category = curation.get(key, '')
     row['origin'] = ORIGIN_MAP.get(category, '')
 
 # Output
 with open('output/tmp/topik2-tagged.tsv', 'w') as f:
-    cols = ['noteId', 'number', 'korean', 'english', 'origin', 'pos']
+    cols = ['noteId', 'korean', 'english', 'origin', 'pos']
     writer = csv.DictWriter(f, fieldnames=cols, delimiter='\t')
     writer.writeheader()
     writer.writerows(rows)
@@ -162,7 +182,55 @@ deck:Korean::TOPIK2 tag:origin::native tag:pos::verb
 Final tagged file:
 ```
 output/tmp/topik2-tagged.tsv
-Columns: noteId, number, korean, english, category, pos, tags
+Columns: noteId, korean, english, origin, pos
+```
+
+## Distribution (3102 cards)
+
+### By Origin
+
+| Origin | Count | % |
+|--------|-------|---|
+| hanja | 1842 | 59% |
+| native | 638 | 21% |
+| derivation | 314 | 10% |
+| compound | 279 | 9% |
+| loanword | 18 | <1% |
+| contraction | 6 | <1% |
+
+### By POS
+
+| POS | Count | % |
+|-----|-------|---|
+| noun | 2119 | 68% |
+| verb | 752 | 24% |
+| adverb | 213 | 7% |
+| interjection | 18 | <1% |
+
+### Priority Matrix (Origin × POS)
+
+| Origin + POS | Count | Priority |
+|--------------|-------|----------|
+| hanja + noun | 1667 | Medium |
+| native + verb | 282 | **High** |
+| derivation + verb | 272 | Low |
+| native + noun | 224 | Medium |
+| compound + noun | 171 | Medium |
+| hanja + verb | 125 | Medium |
+| native + adverb | 116 | **High** |
+| compound + verb | 71 | Medium |
+| hanja + adverb | 50 | Medium |
+| compound + adverb | 37 | Medium |
+
+### High-Priority (native verb/adverb)
+
+~398 cards (13%) - must learn, no alternative
+
+```bash
+# Analyze distribution
+python scripts/jq-tsv.py -s --json \
+  'group_by(.origin) | map({origin: .[0].origin, count: length}) | sort_by(-.count)' \
+  output/tmp/topik2-tagged.tsv
 ```
 
 ## Notes

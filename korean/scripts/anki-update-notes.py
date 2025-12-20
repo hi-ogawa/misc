@@ -110,13 +110,15 @@ def main() -> int:
     failed = 0
     updated_note_ids = []
 
-    for row in rows:
+    total = len(rows)
+    for i, row in enumerate(rows, 1):
         note_id = int(row["noteId"])
         update_fields = {field: row[field] or "" for field in fields} if fields else {}
         tags_to_add = [row[col] for col in tag_columns if row.get(col)]
+        progress = f"[{i}/{total} {100*i//total}%]"
 
         if args.dry_run:
-            print(f"[DRY-RUN] {note_id}")
+            print(f"{progress} [DRY-RUN] {note_id}")
             for k, v in update_fields.items():
                 display_v = v[:60] + "..." if len(v) > 60 else v
                 print(f"  {k}: {display_v}")
@@ -134,11 +136,11 @@ def main() -> int:
             if tags_to_add:
                 anki_request("addTags", {"notes": [note_id], "tags": " ".join(tags_to_add)}, args.url)
 
-            print(f"[OK] {note_id}" + (f" +{' '.join(tags_to_add)}" if tags_to_add else ""))
+            print(f"{progress} [OK] {note_id}" + (f" +{' '.join(tags_to_add)}" if tags_to_add else ""))
             updated_note_ids.append(note_id)
             success += 1
         except Exception as e:
-            print(f"[FAIL] {note_id}: {e}", file=sys.stderr)
+            print(f"{progress} [FAIL] {note_id}: {e}", file=sys.stderr)
             failed += 1
 
     print()
