@@ -11,6 +11,12 @@ Usage:
 
     # Update + remove tag
     python scripts/anki-update-notes.py --input file.tsv --fields example_ko,example_en --remove-tag fix
+
+    # Add tags from TSV columns
+    python scripts/anki-update-notes.py --input file.tsv --add-tags origin,pos
+
+    # Tags only (no field updates)
+    python scripts/anki-update-notes.py --input file.tsv --add-tags origin,pos --fields ""
 """
 
 import argparse
@@ -44,7 +50,8 @@ def anki_request(action: str, params: dict | None = None, url: str = "http://loc
 def main() -> int:
     parser = argparse.ArgumentParser(description="Update Anki notes from TSV")
     parser.add_argument("--input", required=True, help="Input TSV file (must have noteId column)")
-    parser.add_argument("--fields", required=True, help="Comma-separated fields to update from TSV")
+    parser.add_argument("--fields", default="", help="Comma-separated fields to update from TSV (empty for tags only)")
+    parser.add_argument("--add-tags", default="", help="Comma-separated TSV columns to add as tags (values become tags)")
     parser.add_argument("--remove-tag", default="", help="Tag to remove after update")
     parser.add_argument("--dry-run", action="store_true", help="Print without executing")
     parser.add_argument("--url", default="http://localhost:8765", help="AnkiConnect URL")
@@ -70,7 +77,12 @@ def main() -> int:
         print("Error: TSV must contain 'noteId' column", file=sys.stderr)
         return 1
 
-    fields = [f.strip() for f in args.fields.split(",")]
+    fields = [f.strip() for f in args.fields.split(",") if f.strip()]
+    tag_columns = [t.strip() for t in args.add_tags.split(",") if t.strip()]
+
+    if not fields and not tag_columns:
+        print("Error: Must specify --fields or --add-tags", file=sys.stderr)
+        return 1
 
     # Validate fields exist in TSV
     missing = [f for f in fields if f not in rows[0]]
@@ -78,9 +90,18 @@ def main() -> int:
         print(f"Error: Fields not in TSV: {', '.join(missing)}", file=sys.stderr)
         return 1
 
+    # Validate tag columns exist in TSV
+    missing_tags = [t for t in tag_columns if t not in rows[0]]
+    if missing_tags:
+        print(f"Error: Tag columns not in TSV: {', '.join(missing_tags)}", file=sys.stderr)
+        return 1
+
     # Print config
     print(f"=== Updating {len(rows)} notes ===")
-    print(f"Fields: {', '.join(fields)}")
+    if fields:
+        print(f"Fields: {', '.join(fields)}")
+    if tag_columns:
+        print(f"Add tags from: {', '.join(tag_columns)}")
     if args.remove_tag:
         print(f"Remove tag: {args.remove_tag}")
     print()
@@ -91,19 +112,29 @@ def main() -> int:
 
     for row in rows:
         note_id = int(row["noteId"])
-        update_fields = {field: row[field] or "" for field in fields}
+        update_fields = {field: row[field] or "" for field in fields} if fields else {}
+        tags_to_add = [row[col] for col in tag_columns if row.get(col)]
 
         if args.dry_run:
             print(f"[DRY-RUN] {note_id}")
             for k, v in update_fields.items():
                 display_v = v[:60] + "..." if len(v) > 60 else v
                 print(f"  {k}: {display_v}")
+            if tags_to_add:
+                print(f"  tags: {' '.join(tags_to_add)}")
             success += 1
             continue
 
         try:
-            anki_request("updateNoteFields", {"note": {"id": note_id, "fields": update_fields}}, args.url)
-            print(f"[OK] {note_id}")
+            # Update fields if specified
+            if update_fields:
+                anki_request("updateNoteFields", {"note": {"id": note_id, "fields": update_fields}}, args.url)
+
+            # Add tags if specified
+            if tags_to_add:
+                anki_request("addTags", {"notes": [note_id], "tags": " ".join(tags_to_add)}, args.url)
+
+            print(f"[OK] {note_id}" + (f" +{' '.join(tags_to_add)}" if tags_to_add else ""))
             updated_note_ids.append(note_id)
             success += 1
         except Exception as e:
