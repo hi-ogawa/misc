@@ -30,39 +30,33 @@ REQUIREMENTS:
      - 시간 → 때 (.syn:native)
      - Only include if 순우리말 equivalent is commonly used
 
-  5. **CONFUSABLE PAIRS** (easily confused words):
-     - Homophones: 간 (liver) → 간 (.cf), 간격 (.cf)
-     - Near-homophones: 넣다 → 놓다 (.cf)
-     - Similar spellings: 걷다 → 걸다 (.cf), 걸리다 (.cf)
-     - Phonetic clusters: 굳다 → 굵다 (.cf), 굽다 (.cf)
+  5. **REGISTER VARIANTS** (formal/written ↔ casual/spoken):
+     Words with same meaning but different formality level.
+     Annotate what register THE RELATED WORD belongs to.
+     Often correlates with hanja (formal) vs native Korean (casual).
 
-  6. **REGISTER VARIANTS** (formal/written ↔ casual/spoken):
-     Words with same meaning but different register (formality level).
-     The simpler/casual form is typically TOPIK1 level; the formal/written form is TOPIK2.
+     Entry (formal/hanja) → related word is casual/native:
+     - 오직 → 만 (.syn:casual)
+     - 즉시 → 바로 (.syn:casual)
+     - 감정 → 기분 (.syn:casual)
 
-     - 얼른 → 빨리 (.syn:formal)
-     - 그저 → 그냥 (.syn:written)
-     - 요새 → 요즘 (.syn:casual)
-     - 한참 → 오래 (.syn:formal)
-     - 즉 → 그러니까 (.syn:written)
-     - 게다가 → 그리고 (.syn:written)
-     - 몹시 → 매우 (.syn:literary)
+     Entry (casual/native) → related word is formal/hanja:
+     - 믿음 → 신뢰 (.syn:formal)
+     - 외로움 → 고독 (.syn:formal)
+     - 주고받다 → 교환하다 (.syn:formal)
 
 - **Output format:**
 
-  Use parenthetical tags to indicate relationship type:
+  Annotate each related word to describe what IT is:
 
-  | Type | Tag | Example |
-  |------|-----|---------|
-  | Antonym | `(.ant)` | `불가능 (.ant)` |
-  | Synonym | `(.syn)` | `감추다 (.syn)` |
-  | Register (casual) | `(.syn:casual)` | `그런데 (.syn:casual)` |
-  | Register (formal) | `(.syn:formal)` | `빨리 (.syn:formal)` |
-  | Register (written) | `(.syn:written)` | `그러니까 (.syn:written)` |
-  | Register (literary) | `(.syn:literary)` | `매우 (.syn:literary)` |
-  | Hanja-native | `(.syn:native)` | `값 (.syn:native)` |
-  | Honorific | `(.hon)` | `드시다 (.hon)` |
-  | Confusable | `(.cf)` | `놓다 (.cf)` |
+  | Relationship | Tag | Meaning |
+  |--------------|-----|---------|
+  | Antonym | `(.ant)` | related word is opposite |
+  | Synonym | `(.syn)` | related word is synonym |
+  | Casual synonym | `(.syn:casual)` | related word is casual/colloquial |
+  | Formal synonym | `(.syn:formal)` | related word is formal/written/literary |
+  | Native Korean | `(.syn:native)` | related word is 순우리말 |
+  | Honorific | `(.hon)` | related word is honorific form |
 
   - Multiple: `낮다 (.ant), 짧다 (.syn)`
   - No related words: leave blank

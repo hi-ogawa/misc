@@ -56,9 +56,16 @@ python scripts/split-batches.py \
 
 ## Step 3: Subagent Processing
 
+### Cleanup (before starting to avoid subagent output confusion)
+
+```bash
+rm -f output/koreantopik2/notes-v2-{1..99}.tsv output/koreantopik2/notes-v2-all.tsv
+```
+
 ### Subagent Prompt
 
 Use this prompt template for each batch. Replace `N` with batch number.
+Avoid processing fully parallel. Use at most 5 subagents at one time.
 
 ````
 Generate related vocabulary notes for batch N.
@@ -81,24 +88,23 @@ TSV with columns: noteId, korean, english, notes
 
 TSV with columns: noteId, korean, notes
 
+Annotations describe the RELATED WORD, not the entry:
+- `만 (.syn:casual)` = 만 is the casual synonym
+- `신뢰 (.syn:formal)` = 신뢰 is the formal synonym
+
 Example:
 ```
 noteId	korean	notes
 1234567890	높다	낮다 (.ant)
-1234567891	얼른	빨리 (.syn:formal)
-1234567892	먹다	드시다 (.hon)
-1234567893	가격	값 (.syn:native)
-1234567894	넣다	놓다 (.cf)
+1234567891	오직	단지 (.syn), 만 (.syn:casual)
+1234567892	즉시	바로 (.syn:casual), 곧 (.syn:native)
+1234567893	믿음	신뢰 (.syn:formal)
+1234567894	외로움	고독 (.syn:formal)
+1234567895	먹다	드시다 (.hon), 잡수시다 (.hon)
 ```
 
 Leave notes blank if no meaningful relationships exist.
 ````
-
-### Cleanup (before starting)
-
-```bash
-rm -f output/koreantopik2/notes-v2-{1..99}.tsv output/koreantopik2/notes-v2-all.tsv
-```
 
 ### Launch subagents
 
@@ -147,12 +153,16 @@ for row in rows:
 wc -l output/koreantopik2/notes-v2-update.tsv
 ```
 
+## Step 5: Update Anki
+
+CRITICAL: Agent shouldn't run. Delegate to users for Anki update.
+
 ### Apply update
 
 ```bash
 python scripts/anki-update-notes.py \
   --input output/koreantopik2/notes-v2-update.tsv \
-  --fields notes
+  --fields notes --dry-run
 ```
 
 ---
