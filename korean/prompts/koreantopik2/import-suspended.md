@@ -2,6 +2,8 @@
 
 **Goal**: Import previously filtered-out TOPIK 2 vocabulary into Anki as suspended cards.
 
+**Status**: ✅ Complete (2025-12-25)
+
 ## Context
 
 During initial import, ~700 words were filtered out:
@@ -83,6 +85,8 @@ writer.writerows(rows)
 
 **Expected**: ~700 words (515 curation + ~200 duplicates, minus overlap)
 
+**Actual**: 761 words
+
 ### 1.3 Verify count
 
 ```bash
@@ -125,9 +129,7 @@ writer.writerows(rows)
 
 ---
 
-## Step 3: Import + Suspend via AnkiConnect
-
-**TODO**: Review this step before execution.
+## Step 3: Import + Suspend
 
 ### 3.1 Import via GUI
 
@@ -136,18 +138,11 @@ File → Import → select `output/koreantopik2/suspended-anki-import.tsv`
 - Note type: `Korean Vocabulary`
 - Map columns: number, korean, english (leave other fields empty)
 
-### 3.2 Suspend all new cards
+### 3.2 Suspend via GUI
 
-```bash
-# Find the newly imported cards
-python scripts/anki.py findCards \
-  --params '{"query": "deck:Korean number:koreantopik2_000_*"}' \
-  > output/tmp/suspended-card-ids.json
-
-# Suspend them
-python scripts/anki.py suspend \
-  --params "{\"cards\": $(cat output/tmp/suspended-card-ids.json)}"
-```
+- query by `number:koreantopik2_000_*`
+- select all
+- suspend
 
 ### 3.3 Verify
 
@@ -156,12 +151,12 @@ python scripts/anki.py suspend \
 python scripts/anki.py findCards \
   --params '{"query": "deck:Korean number:koreantopik2_000_* is:suspended"}' \
   | jq 'length'
-# Should match total imported
+# Should be 761
 ```
 
 ---
 
-## Alternative: Import via AnkiConnect (skip GUI)
+## Alternative: Import via AnkiConnect
 
 Can use `addNotes` action to import directly:
 
@@ -196,17 +191,15 @@ python scripts/anki.py addNotes --params \"\$(cat output/tmp/suspended-notes-pay
 
 Then suspend as in 3.2.
 
-**Note**: Alternative section also needs review before execution.
-
 ---
 
 ## Summary
 
-| Step | Output |
-|------|--------|
-| 1. Identify filtered | `suspended-candidates.tsv` (~700) |
-| 2. Create import | `suspended-anki-import.tsv` |
-| 3. Import + suspend | Cards in Anki (suspended) |
+| Step | Output | Status |
+|------|--------|--------|
+| 1. Identify filtered | `suspended-candidates.tsv` (761) | ✅ |
+| 2. Create import | `suspended-anki-import.tsv` (koreantopik2_000_3180-3940) | ✅ |
+| 3. Import + suspend | 761 cards in Anki (suspended) | ✅ |
 
 ---
 
