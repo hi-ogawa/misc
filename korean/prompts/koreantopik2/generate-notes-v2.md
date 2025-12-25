@@ -104,6 +104,15 @@ noteId	korean	notes
 ```
 
 Leave notes blank if no meaningful relationships exist.
+
+## Response Format
+
+After writing the output file, respond ONLY with:
+- Batch number
+- Entries processed count
+- File path
+
+Do NOT include generated content in your response.
 ````
 
 ### Launch subagents
