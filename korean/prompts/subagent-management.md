@@ -60,6 +60,34 @@ Each subagent should follow this structure:
 **Notes generation adds one step:**
 - After step 1, also read the vocabulary reference file for cross-referencing
 
+## Subagent Response Format
+
+**Subagents must return ONLY status information, not generated content.**
+
+When a subagent completes its task, its response flows back to the orchestrator's context. If subagents include full generated content in their responses, this:
+- Bloats orchestrator context unnecessarily
+- Could inadvertently influence instructions for subsequent batches
+- Defeats the purpose of isolated generation
+
+**Correct response format:**
+```
+✅ Wrote 100 entries to output/koreantopik2/etymology-3.tsv
+   - Batch: 3
+   - Entries processed: 100
+   - Status: Complete
+```
+
+**Incorrect response format:**
+```
+❌ Here are the 100 etymology entries I generated:
+   1. 가격 (價格): Sino-Korean from 價 "price" + 格 "standard"...
+   2. 가능 (可能): Sino-Korean from 可 "can" + 能 "ability"...
+   [... 98 more entries ...]
+```
+
+**Add to subagent prompts:**
+> After writing the output file, respond ONLY with batch number, entries processed count, and file path. Do NOT include generated content in your response.
+
 ## Independence and Fresh Context
 
 **Each agent must:**
