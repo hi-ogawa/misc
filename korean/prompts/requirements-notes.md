@@ -36,9 +36,33 @@ REQUIREMENTS:
      - Similar spellings: 걷다 (walk) → 걸다 (hang), 걸리다 (take time)
      - Phonetic clusters: 굳다 (harden) → 굵다 (thick), 굽다 (bend/bake)
 
+  6. **REGISTER VARIANTS** (formal/written ↔ casual/spoken):
+     Words with same meaning but different register (formality level).
+     The simpler/casual form is typically TOPIK1 level; the formal/written form is TOPIK2.
+
+     - Adverbs:
+       - 얼른 → = 빨리 (formal)
+       - 그저 → = 그냥 (written)
+       - 요새 → = 요즘 (variant)
+       - 한참 → = 오래 (formal)
+       - 어쩌면 → = 아마 (formal)
+       - 오직 → = 만 (literary)
+       - 몹시 → = 매우 (literary)
+       - 마침 → = 딱 (written)
+
+     - Connectives/discourse markers:
+       - 즉 → = 그러니까 (written)
+       - 게다가 → = 그리고 (written)
+       - 따라서 → = 그래서 (written)
+
+     Format: `[casual equivalent] ([register])`
+     - Register labels: `formal`, `written`, `literary`, `variant`
+
 - **Output format:**
   - Single word: `notes: 하얀색`
   - Multiple words: `notes: 간 (salty), 간격`
+  - Register variant: `notes: = 빨리 (formal)`
+  - Combined: `notes: = 빨리 (formal), 느리다`
   - No related words: `notes: ` (blank)
 
 - **What NOT to include:**
