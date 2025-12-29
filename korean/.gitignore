@@ -4,4 +4,7 @@
 *.mp3
 *.zip
 *.yaml
+*.sql
+*.html
+*.json
 output/tmp/
