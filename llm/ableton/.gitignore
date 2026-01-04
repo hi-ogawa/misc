@@ -1,1 +1,6 @@
+# Raw data and experiments (untracked)
 /data
+
+# Scraped documentation - regenerate with: uv run scripts/scrape-manual.py
+# Do NOT commit to avoid copyright issues
+/docs/official/

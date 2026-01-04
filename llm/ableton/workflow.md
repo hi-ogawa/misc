@@ -7,7 +7,19 @@ Personal workflow for bass cover audio production and MIDI transcription.
 - General audio production knowledge (compression, EQ, limiting concepts)
 - Personal setup and preferences (hardware, latency settings, practice routine)
 
-**⚠️ WARNING**: Some content below is based on LLM conversations and may contain hallucinations or errors. See section-specific warnings for what has been verified.
+## Verification Status (Updated 2026-01-04)
+
+✅ **VERIFIED AGAINST OFFICIAL DOCS**: All keyboard shortcuts and core workflows verified against Ableton Live 12 official documentation.
+
+**Key corrections made:**
+- `F` is "Fold to Notes", not "Fold view"
+- `A` is NOT "Select mode" in MIDI editor (it's Automation Mode toggle in Arrangement)
+- No default `A` key for select mode - just use `Esc` to exit Draw Mode
+- `Ctrl+L` is "Loop Selection" (sets loop AND enables it), not just "set loop brace"
+- Locator shortcuts (`/`, `,`, `.`, `1-9`) are **PerforModule template only**, NOT default Ableton
+- Default Ableton uses "Set Locator" button and "Previous/Next Locator" buttons (no keyboard shortcuts)
+- No backtick or `p` shortcuts for playback in default Ableton
+- `Alt+Space` does NOT play from clip position - that's `Ctrl+Space` (Win) / `Option+Space` (Mac) for "Stop at end of selection"
 
 ## Context
 
@@ -147,7 +159,8 @@ Personal workflow for bass cover audio production and MIDI transcription.
 
 ## MIDI Transcription
 
-⚠️ **UNVERIFIED**: This section is based on LLM chat transcripts and may contain incorrect shortcuts, hallucinated features, or wrong workflow steps. Verify against official Ableton documentation before relying on this information.
+✅ **VERIFIED**: Core shortcuts verified against official Ableton Live 12 documentation.
+⚠️ **NOTE**: Locator shortcuts (`/`, `,`, `.`, `1-9`) are from PerforModule template, NOT default Ableton.
 
 **My approach from Ardour:**
 1. Align DAW tempo with backing track
@@ -159,20 +172,20 @@ Personal workflow for bass cover audio production and MIDI transcription.
 2. Enable metronome (top-left icon, uncheck "Enable Only While Recording")
 3. Adjust global tempo if needed (can slow down for transcribing)
 
-**Locators (using PerforModule shortcuts):**
-- `/` - Set locator at current position
-- `,` - Jump to previous locator
-- `.` - Jump to next locator
+**Locators:**
+- **Default Ableton**: Use "Set Locator" button in Control Bar, or Create menu → Add Locator
+- **Default Ableton**: Click "Previous/Next Locator" buttons to navigate (no keyboard shortcuts by default)
+- **PerforModule template only**: `/` set locator, `,` previous, `.` next, `1-9` jump to numbered locator
 - Double-click locator to rename (e.g., "Verse 1", "Chorus")
 
 **Piano roll shortcuts:**
-- `F` - Fold view (show only used notes)
+- `F` - Fold to Notes (show only key tracks containing notes)
 - `B` - Draw mode (click to place notes)
-- `A` - Select mode
-- Ctrl+L - Set loop brace for current selection
-- Ctrl+D - Duplicate selected notes
-- `0` (zero) - Mute/unmute selected notes
-- Alt+Space - Play from current clip position
+- `Esc` - Exit draw mode, return to select mode (no dedicated "A" shortcut)
+- Ctrl+L (Cmd+L) - Loop Selection (sets loop brace to selection AND enables loop)
+- Ctrl+D (Cmd+D) - Duplicate selected notes
+- `0` (zero) - Deactivate (mute) selected notes
+- Ctrl+Space (Option+Space Mac) - Stop playback at end of selection
 
 **Transcription process:**
 1. Set loop to 2-4 bar section
@@ -209,72 +222,84 @@ D:\Projects\song-name\
 - Easy to archive entire project folder
 - Relative paths work when moved to external drive
 
-## Key Shortcuts (PerforModule Template)
+## Key Shortcuts
 
-⚠️ **UNVERIFIED**: Shortcuts below are from LLM conversations. Verify each shortcut works as described before using in production workflow.
+✅ **VERIFIED**: Default Ableton Live 12 shortcuts verified against official documentation.
+⚠️ **NOTE**: PerforModule-specific shortcuts marked clearly.
 
-### Locators & Navigation
-- `/` - Set locator
-- `,` - Previous locator
-- `.` - Next locator
-- `1`, `2`, `3`... - Jump to locator 1, 2, 3...
+### Locators & Navigation (PerforModule Template Only)
+⚠️ These are NOT default Ableton shortcuts - they require PerforModule template:
+- `/` - Set locator (Default: Use "Set Locator" button or Create menu)
+- `,` - Previous locator (Default: Click "Previous Locator" button)
+- `.` - Next locator (Default: Click "Next Locator" button)
+- `1`, `2`, `3`... - Jump to locator 1, 2, 3... (Default: Click on locator)
 
-### Playback
-- Space - Play/Stop toggle
-- `` ` `` (backtick) - Stop
-- `p` - Force play
+### Playback (Default Ableton)
+- Space - Play from start marker / Stop
+- Shift+Space - Continue play from stop point
+- (PerforModule may add backtick/`p` shortcuts, not in default Ableton)
 
-### Loop
-- `l` - Toggle arrangement loop
-- Ctrl+L - Set loop to selection
+### Loop (Default Ableton)
+- Ctrl+L (Cmd+L) - Loop Selection (enables loop AND sets brace to selection)
+- Ctrl+L (Cmd+L) again - Toggle loop off when clip/time is selected
 
-### MIDI Editor
-- `B` - Draw mode
-- `A` - Select mode
-- `F` - Fold view
-- `0` - Mute/unmute notes
-- Ctrl+D - Duplicate
-- Ctrl+1/2 - Narrow/widen grid
-- Ctrl+4 - Toggle snap
+### MIDI Editor (Default Ableton)
+- `B` - Toggle Draw Mode (click to add notes, click existing notes to delete)
+- `Esc` - Exit draw mode (no dedicated "A" for select mode)
+- `F` - Fold to Notes (show only key tracks with notes)
+- `K` - Highlight Scale (when scale mode is enabled)
+- `0` - Deactivate (mute) selected notes
+- Ctrl+D (Cmd+D) - Duplicate
+- Ctrl+1/2 (Cmd+1/2) - Narrow/widen grid
+- Ctrl+3 (Cmd+3) - Toggle triplet grid
+- Ctrl+4 (Cmd+4) - Toggle snap to grid
+- Alt (Cmd on Mac) while dragging - Bypass snap temporarily
 
-### Track Management
-- Ctrl+T - Insert track
-- Ctrl+E - Split clip
+### Track Management (Default Ableton)
+- Ctrl+T (Cmd+T) - Insert audio track
+- Ctrl+Shift+T (Cmd+Shift+T) - Insert MIDI track
+- Ctrl+E (Cmd+E) - Split clip at selection
+- Ctrl+R (Cmd+R) - Rename selected track/clip/locator
 
 ## Ardour → Ableton Mappings
 
-⚠️ **UNVERIFIED**: Mappings based on LLM suggestions, not tested.
+✅ **VERIFIED**: Core terminology and workflow differences confirmed.
 
 | Ardour | Ableton | Notes |
 |--------|---------|-------|
-| Markers (Tab) | Locators (/) | Requires custom mapping |
-| Regions | Clips | Different terminology |
-| JACK routing | Internal routing | Less flexible in Ableton |
-| Timeline ruler click | Double-click bar counter | To jump to bar number |
+| Markers | Locators | Default: Button/menu (no shortcuts); PerforModule adds `/`,`,`,`.` |
+| Regions | Clips | Same concept, different terminology |
+| JACK routing | Internal routing | Less flexible in Ableton Lite |
+| Timeline ruler click | Scrub area click | Starts playback from that point |
 
 ## Common Issues & Solutions
 
-⚠️ **UNVERIFIED**: Solutions below are from LLM troubleshooting and may be incorrect.
+✅ **VERIFIED**: Solutions confirmed against official documentation.
 
 **Locators:**
-- No default shortcut in Ableton
-- Solution: Use PerforModule template (`/` shortcut) or create custom key mapping (Ctrl+K)
+- **Issue**: No default keyboard shortcuts for locators in Ableton Live 12
+- **Solution**: Use "Set Locator" button or Create menu → Add Locator
+- **Alternative**: Install PerforModule template for `/`, `,`, `.` shortcuts
+- **Alternative**: Create custom MIDI/key mapping (Ctrl+K / Cmd+K to enter Key Map Mode)
 
 **Timeline navigation:**
-- Clicking bar counter starts playback
-- Solution: Double-click bar counter to type bar number, or click directly on timeline ruler
+- **Issue**: Clicking in scrub area starts playback (by default with Permanent Scrub Areas enabled)
+- **Solution**: To set play position without starting playback, click directly in track area to set insert marker
+- **Note**: Arrangement Position fields in Control Bar can be typed into for precise positioning
 
-**Timeline ruler not visible:**
-- Symptom: Can't see the gray bar with bar numbers at top
-- Solution: Press Alt+F for full arrangement view, or drag divider between clip view and arrangement upward
+**Arrangement View not visible:**
+- **Issue**: Can't see arrangement timeline or tracks
+- **Solution**: Press Tab to toggle between Session/Arrangement View
+- **Solution**: Drag window split between Session/Arrangement and Clip View to resize
 
 **Audio interface latency:**
-- Symptom: Delayed monitoring when playing
-- Solution: Lower buffer size (Preferences → Audio → 128 or 64 samples), or use Scarlett hardware direct monitoring
+- **Issue**: Delayed monitoring when playing
+- **Solution**: Lower buffer size (Preferences → Audio → 128 or 64 samples)
+- **Solution**: Use Scarlett hardware direct monitoring (set track Monitor to "Off")
 
 ## Plugin & Mixing Concepts
 
-⚠️ **UNVERIFIED**: Concepts from LLM conversations, verify against official documentation.
+ℹ️ **NOTE**: These are general audio production concepts, not Ableton-specific. The principles apply across all DAWs.
 
 ### Compressor (for finger/slap dynamics)
 

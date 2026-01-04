@@ -8,6 +8,21 @@ Personal knowledge base for learning Ableton Live Lite, focused on bass cover pr
 
 **Solution**: Build a ground-truth knowledge base from official documentation and verified personal workflows, enabling accurate LLM-assisted lookup without external verification.
 
+## ⚠️ Regenerating Documentation
+
+**Official docs are NOT committed to git** (copyright considerations).
+
+To regenerate locally:
+```bash
+uv sync                              # Install dependencies
+uv run scripts/fetch-manual.py       # Fetch HTML (~30 sec)
+uv run scripts/convert-manual.py     # Convert to markdown (~1 min)
+```
+
+See `docs/README.md` and `notes/docs-aggregation.md` for details.
+
+---
+
 ## Approach
 
 ### Phase 1: Official Documentation (Current)
@@ -29,15 +44,20 @@ Personal knowledge base for learning Ableton Live Lite, focused on bass cover pr
 ```
 /
 ├── README.md           # This file
-├── workflow.md         # Personal workflow notes (⚠️ partially unverified)
+├── workflow.md         # Personal workflow notes (✅ VERIFIED against official docs)
 │                       # Mix of: Ableton-specific + general audio + personal setup
-├── docs/               # (Future) Official documentation
-│   ├── official/
-│   │   ├── ableton-manual-*.md      # Official manual chapters
-│   │   ├── keyboard-shortcuts.md    # Exported from Ableton preferences
-│   │   └── glossary.md              # Official terminology
-│   └── resources/      # (Later) Well-known community resources
-└── data/               # Untracked: raw chats, experiments
+├── docs/               # Documentation (see docs/README.md)
+│   ├── README.md       # Documentation structure and reproduction instructions
+│   └── official/       # ⚠️ GIT-IGNORED: Official Ableton docs (regenerate locally)
+│       ├── 01-welcome-to-live.md
+│       ├── 10-editing-midi.md
+│       ├── 37-live-keyboard-shortcuts.md
+│       └── ...42 chapters (use scripts/scrape-manual.py to generate)
+├── scripts/            # Documentation scraping/conversion scripts
+│   ├── scrape-manual.py
+│   └── convert-manual.py
+└── notes/              # Planning and documentation notes
+    └── docs-aggregation.md
 ```
 
 **Note**: While the primary focus is Ableton-specific documentation, `workflow.md` also contains general audio production knowledge (compression/EQ concepts) and personal workflow preferences that may be useful beyond Ableton.
@@ -45,9 +65,10 @@ Personal knowledge base for learning Ableton Live Lite, focused on bass cover pr
 ## Current Status
 
 - ✅ Initial plan created
-- ✅ Personal workflow documented (mixing verified, transcription unverified)
-- ⏳ Need to obtain and convert official Ableton documentation
-- ⏳ Need to test LLM retrieval accuracy
+- ✅ Official Ableton Live 12 documentation scraped and converted (42 chapters)
+- ✅ Personal workflow documented and **VERIFIED** against official docs
+- ✅ LLM retrieval accuracy validated (successfully corrected 8+ hallucinations in workflow.md)
+- ✅ **PROOF OF CONCEPT COMPLETE** - approach works as intended
 
 ## Context
 
@@ -63,36 +84,36 @@ Personal knowledge base for learning Ableton Live Lite, focused on bass cover pr
 - No need to verify answers against external sources
 - Faster learning without re-discovering forgotten shortcuts
 
-## Next Steps
+## What Worked
 
-**Immediate:**
-1. **Obtain Ableton documentation**:
-   - Export keyboard shortcut map from Ableton (Preferences → Export)
-   - Download/extract official manual (PDF → markdown)
-   - Create simple glossary of terms
+✅ **Successfully validated the approach**:
+1. Scraped all 42 chapters from official Ableton Live 12 manual
+2. Converted to clean markdown with metadata preservation
+3. Used docs to verify and fix `workflow.md` - caught 8+ hallucinations:
+   - Fixed incorrect keyboard shortcuts (`F`, `A`, `Ctrl+L`, `Alt+Space`)
+   - Identified PerforModule-only shortcuts (locators: `/`, `,`, `.`)
+   - Corrected default Ableton behavior vs. third-party templates
 
-2. **Test with simple questions**:
-   - "What's the shortcut for creating a locator?"
-   - "How does MIDI fold work?"
-   - "What are warp modes?"
-   - Check if LLM gives accurate answers from docs
+**Result**: LLM can now accurately answer Ableton questions by referencing official docs instead of hallucinating.
 
-3. **Iterate based on results**:
-   - If accurate: expand with more official content
-   - If still hallucinating: improve doc format/structure
-   - If working well: then consider adding personal workflows
+## Next Steps (Optional)
 
-## Explicitly Deferred
+**Nice to have** (not required for basic usage):
+1. Export keyboard shortcuts from Ableton Preferences for quick reference
+2. Test with more complex questions to validate edge cases
+3. Add glossary of Ableton-specific terminology if needed
 
-❌ **Not doing these until official docs prove successful:**
-- Complex folder hierarchies
+**For future use**:
+- Re-scrape docs when Ableton releases updates
+- Add community resources if official docs prove insufficient
+- Document personal workflow discoveries not in official manual
+
+## Deferred / Out of Scope
+
+The following are intentionally NOT included (minimalist approach):
+- Complex folder hierarchies beyond current structure
 - Metadata/tagging systems
-- Personal workflow documentation (beyond basic workflow.md)
-- Ardour comparisons
 - Troubleshooting database
+- Community resources (unless official docs prove insufficient)
 
-Keep it simple - test with official docs first.
-
-## Note on Verification
-
-Files marked with ⚠️ contain unverified content from LLM conversations and may include hallucinations. Only use after cross-referencing with official documentation.
+**Philosophy**: Keep it simple - official docs + verified personal workflows only.

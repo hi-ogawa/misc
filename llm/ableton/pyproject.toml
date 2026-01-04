@@ -1,0 +1,17 @@
+[project]
+name = "ableton-knowledge-base"
+version = "0.1.0"
+description = "Ableton Live knowledge base scraping and documentation tools"
+requires-python = ">=3.10"
+dependencies = [
+    "aiohttp>=3.9.0",
+    "beautifulsoup4>=4.12.0",
+    "html2text>=2020.1.16",
+]
+
+# [build-system]
+# requires = ["setuptools"]
+# build-backend = "setuptools.build_meta"
+
+# [tool.setuptools]
+# py-modules = []
