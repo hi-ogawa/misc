@@ -11,15 +11,12 @@ Windows-specific VSCode configuration and best practices.
 
 ## Settings
 
-```json
-{
-  // Line endings - CRITICAL: force LF for Git compatibility
-  "files.eol": "\n",
+See **[dotfiles/vscode-settings.json](dotfiles/vscode-settings.json)** and **[dotfiles/vscode-keybindings.json](dotfiles/vscode-keybindings.json)**
 
-  // Terminal - choose your default shell
-  "terminal.integrated.defaultProfile.windows": "Git Bash",  // or "PowerShell"
-}
-```
+Key settings:
+- Force LF line endings for Git compatibility
+- Git Bash as default terminal
+- Shift+Enter for terminal escape sequence
 
 ## Notes
 
