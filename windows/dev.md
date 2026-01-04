@@ -6,11 +6,12 @@
 
 ### Recommendation: Use scoop for CLI tools, winget for GUI apps
 
-**scoop for CLI dev tools** (Preferred)
+**scoop https://scoop.sh for CLI dev tools** (Preferred)
 - No admin needed
 - No terminal restart needed (PATH updates immediately)
 - User-local install (`~/scoop/apps/`)
 - Better version management
+- e.g. `gh`, `yazi`
 
 Examples:
 ```bash
@@ -19,28 +20,10 @@ scoop install gh yazi jq ripgrep fd fzf
 
 **winget for GUI apps**
 - Official Microsoft tool (pre-installed)
-- Better for GUI apps
+- Better for GUI apps, Closed source
 - System-wide install (`C:\Program Files\`)
 - Often needs admin, requires terminal restart
-
-Examples:
-```bash
-winget install Git.Git Microsoft.VisualStudioCode Google.Chrome Microsoft.PowerToys
-```
-
-See https://scoop.sh/ for scoop details.
-
-## CLI Tools
-
-Install via scoop:
-
-```bash
-scoop install gh           # GitHub CLI
-scoop install yazi         # Terminal file manager
-scoop install jq           # JSON processor
-scoop install ripgrep      # Fast grep alternative (rg)
-scoop install fd           # Fast find alternative
-```
+- e.g. Chrome, VsCode
 
 ### Claude Code
 

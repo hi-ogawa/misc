@@ -42,10 +42,10 @@ The same content is found in https://github.com/hi-ogawa/misc/tree/main/windows
     - PowerToys → Keyboard Manager → Remap keys: Caps Lock ↔ Left Ctrl
 - Install Chrome
   - Install, sign in, sync bookmarks and extensions
-- Setup development tools (see `dev.md` etc. for details)
+- Setup development tools
   - install git, vscode
   - install scoop https://scoop.sh/
-  - apply dotfiles (see `./dotfiles/README.md`)
+  - apply dotfiles and install scoop packages (follow [dotfiles/README.md](./dotfiles/README.md`))
 
 Tool installtion via winget:
 
