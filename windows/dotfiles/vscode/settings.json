@@ -1,0 +1,7 @@
+{
+  // Line endings - CRITICAL: force LF for Git compatibility
+  "files.eol": "\n",
+
+  // Terminal - choose your default shell
+  "terminal.integrated.defaultProfile.windows": "Git Bash" // or "PowerShell"
+}

@@ -54,6 +54,7 @@ winget install -e --id Microsoft.PowerToys
 winget install -e --id Google.Chrome
 winget install -e --id Git.Git
 winget install -e --id Microsoft.VisualStudioCode
+scoop install yazi gh
 ```
 
 ## Desktop tips
