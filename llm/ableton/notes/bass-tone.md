@@ -668,4 +668,293 @@ Looking at your screenshot, your **Small Tile reverb is almost perfect**. The on
 
 That one change will make a huge difference! Everything else (decay 851ms, dry/wet 15%) is already ideal for bass.
 
-Good luck! Start with these settings and adjust by ear. 🎸
+## Playing with Backtracks: Context-Aware Tone
+
+### The Solo vs Mix Problem
+
+**Solo (bass alone)**: You hear every detail, adjust tone perfectly
+**With backtrack**: Your "perfect" tone might disappear or sound wrong!
+
+This is **normal** - tone that sounds good solo ≠ tone that fits in a mix.
+
+---
+
+### Key Principle: Frequency Masking
+
+**Analogy**: Think of the audio spectrum like a highway with lanes:
+```
+HIGH:   |Cymbals|Vocals|Guitar|        ← Lots of traffic here
+MID:    |Snare|Guitar|Keys|Bass|       ← VERY crowded
+LOW:    |Kick|Bass|                    ← Bass competes with kick drum
+SUB:    |Bass fundamental|             ← You own this space
+```
+
+When backtrack plays:
+- Other instruments "cover up" your bass in certain frequency ranges
+- You need to find your "space" in the mix
+- Solo tone = all frequencies. Mix tone = emphasize YOUR frequencies.
+
+---
+
+### Tone Adjustments for Playing with Backtracks
+
+#### Problem 1: "Bass Disappears in the Mix"
+**Why**: Midrange frequencies are masked by guitar, keys, vocals
+
+**Solutions**:
+1. **Boost Mids on Bass Amp**: 
+   - Increase Middle knob from 2.5 → **3.5-4.5**
+   - This is your "presence" range (800Hz-1.5kHz)
+   - Helps bass cut through without getting louder
+
+2. **Boost Upper-Mids/Presence**:
+   - Increase Presence knob from 5.0 → **6.0-7.0**
+   - Adds "clack" and finger/pick attack
+   - Makes bass audible even at lower volume
+
+3. **Check Your Frequency Balance**:
+   - Solo tone might have too much bass, not enough mids
+   - With backtrack, you need mids to be heard
+
+**Think**: "Cut through" vs "sound full alone"
+
+---
+
+#### Problem 2: "Bass Clashes with Kick Drum"
+**Why**: Kick and bass both occupy 60-100 Hz range
+
+**Solutions**:
+1. **Slight Low-End Reduction**:
+   - Reduce Bass knob on Bass Amp: 7.5 → **6.5-7.0**
+   - Leaves room for kick drum thump
+   - Your job = sub-bass (40-60 Hz), kick = punch (80-100 Hz)
+
+2. **Tighten Playing**:
+   - Lock into kick drum rhythm
+   - Mute/dampen when kick hits (especially in funk)
+   - Less reverb = tighter, less clash
+
+3. **Use Compressor**:
+   - Helps even out dynamics
+   - Prevents bass from overpowering kick on loud notes
+   - Set threshold so kick + bass work together
+
+**Think**: "Work WITH kick" not "compete with kick"
+
+---
+
+#### Problem 3: "Too Much Low-End = Muddy Mix"
+**Why**: Backtrack already has bass/kick, your bass adds MORE low-end
+
+**Solutions**:
+1. **High-Pass Filter** (Advanced):
+   - Add EQ Eight after Bass Amp
+   - High-pass at 35-40 Hz (removes sub-rumble)
+   - Cleans up low-end without losing fundamental
+
+2. **Reduce Reverb Slightly**:
+   - Lower Dry/Wet from 15% → **10-12%**
+   - Less reverb = tighter, clearer bass in busy mix
+
+3. **Check Backtrack Bass**:
+   - Is there already bass in the backtrack?
+   - If yes, you might need less low-end boost
+   - Focus on locking with existing bass (if learning)
+
+**Think**: "Cleanliness" vs "fullness"
+
+---
+
+#### Problem 4: "Can't Hear Mistakes/Timing in Mix"
+**Why**: Reverb and thick tone hide sloppy playing
+
+**Solutions**:
+1. **Practice Solo First**:
+   - Dial tone WITHOUT reverb initially
+   - Make sure notes are clean, timing is tight
+   - Then add reverb after technique is solid
+
+2. **Use Less Reverb for Practice**:
+   - Set Dry/Wet to 5-8% when learning
+   - Increase to 15% for performance/cover recording
+   - Mistakes show up more clearly with less reverb
+
+3. **Check Headphone Mix Balance**:
+   - Bass should be slightly louder than final mix
+   - You need to hear yourself to play accurately
+   - But don't overdo it (unrealistic balance)
+
+**Think**: "Practice dry, perform wet"
+
+---
+
+### Recommended Workflow for Covers
+
+#### Stage 1: Learn the Part (No Backtrack)
+```
+Goal: Clean playing, no mistakes
+- Bass only, minimal reverb (5%)
+- Focus on technique, timing, tone
+- Get comfortable with the part
+```
+
+#### Stage 2: Dial Tone Solo
+```
+Goal: Find your baseline tone
+- Use settings from this guide
+- Bass Amp: Crisp/Middle Earth, moderate EQ
+- Reverb: 15%, Lo Cut 150 Hz
+- This is your "reference tone"
+```
+
+#### Stage 3: Play with Backtrack (First Pass)
+```
+Goal: Identify problems
+- Play your part with backtrack
+- Listen critically:
+  • Can you hear yourself?
+  • Does low-end sound muddy?
+  • Do you clash with kick?
+  • Are you too loud/quiet?
+```
+
+#### Stage 4: Adjust Tone FOR the Mix
+```
+Goal: Make bass fit the backtrack
+Common adjustments:
+- Boost mids if you disappear (Mid +1-2)
+- Boost presence if too dark (Presence +1-2)
+- Cut bass if muddy with kick (Bass -1)
+- Reduce reverb if too washy (Dry/Wet -5%)
+```
+
+#### Stage 5: Balance Levels
+```
+Goal: Proper volume in mix
+- Bass should be felt AND heard
+- Not louder than backtrack kick
+- Use track fader, not amp output
+- Reference: Listen to original song
+```
+
+---
+
+### Quick Comparison: Solo vs Mix Tone Settings
+
+| Parameter        | Solo Tone (Practice) | With Backtrack (Mix) |
+|------------------|----------------------|----------------------|
+| Bass (Amp)       | 7.5-8.5 (full)      | 6.5-7.5 (moderate)  |
+| Middle (Amp)     | 2.0-3.0 (natural)   | 3.5-4.5 (present)   |
+| Presence (Amp)   | 5.0-6.0 (smooth)    | 6.0-7.5 (cutting)   |
+| Treble (Amp)     | 6.5-7.0 (balanced)  | 7.0-7.5 (articulate)|
+| Reverb Dry/Wet   | 15% (full effect)   | 10-12% (cleaner)    |
+| Overall Volume   | Moderate            | Match kick level    |
+
+**Note**: These are tendencies, not rules. Trust your ears!
+
+---
+
+### Pro Tips for Backtrack Mixing
+
+#### 1. **A/B Reference with Original Song**
+- Import original song into Ableton
+- A/B your tone with original bass tone
+- Match the "feel" not exact sound
+- Pay attention to: loudness, brightness, punch
+
+#### 2. **Use Headphone Mix Thoughtfully**
+- Bass slightly louder than "real" mix = easier to play
+- But check final balance by lowering bass track
+- What sounds good to play ≠ what sounds good to listen
+
+#### 3. **Check on Different Speakers**
+- Headphones emphasize bass (especially closed-back)
+- Check mix on phone speaker, laptop, etc.
+- Bass should be present even on small speakers (means good midrange)
+
+#### 4. **Two Tone Presets**
+Save two Bass Amp presets:
+- **"Practice Tone"**: Full, detailed, easy to hear mistakes
+- **"Mix Tone"**: Scooped lows slightly, boosted mids, cuts through
+
+#### 5. **Mind the Low-End Buildup**
+- Room acoustics + headphones + bass = lots of low-end
+- Don't boost bass EQ to compensate for room
+- Trust meters, not just ears (low-end tricks our hearing)
+
+---
+
+### Red Flags to Watch For
+
+#### ❌ "I can't hear my bass at all"
+→ Boost mids (not bass!), increase presence, check volume fader
+
+#### ❌ "Everything sounds muddy/boomy"
+→ Reduce bass EQ, check reverb Lo Cut (150 Hz?), high-pass filter at 35 Hz
+
+#### ❌ "Bass sounds great solo but weak in mix"
+→ Boost mids/presence, reduce reverb, add slight compression
+
+#### ❌ "I keep turning up volume but still can't hear myself"
+→ Frequency masking issue, boost mids instead of volume
+
+#### ❌ "My bass overpowers the backtrack"
+→ Lower track volume, reduce bass EQ, check for frequency buildup
+
+---
+
+### Simple Test: The "Mix Check"
+
+After dialing tone, do this test:
+
+1. **Play with backtrack** at your desired level
+2. **Record 30 seconds**
+3. **Listen back** WITHOUT playing
+4. Ask yourself:
+   - Can I clearly hear every bass note?
+   - Does bass lock with kick drum?
+   - Is low-end clear or muddy?
+   - Does bass support the song or distract?
+
+If any answer is "no", adjust tone and repeat.
+
+---
+
+### Context Matters: Different Backtracks Need Different Tones
+
+#### Sparse Arrangement (Drums + Keys only)
+- More room for bass fullness
+- Can use more low-end (Bass 7.5-8.5)
+- More reverb works (15-18%)
+
+#### Dense Mix (Full band + vocals)
+- Need to cut through
+- Boost mids aggressively (Mid 4-5)
+- Less reverb (10-12%)
+- Focus on upper-mids/presence
+
+#### Electronic/Hip-Hop Tracks
+- Kick drum is HUGE
+- Reduce bass EQ significantly (Bass 6-7)
+- Play around kick, not with it
+- Very tight low-end (less reverb)
+
+#### Live Band Recordings
+- More "natural" space
+- Can match your reverb to track ambience
+- Focus on blend, not cutting through
+
+---
+
+### Final Advice
+
+**Start simple**:
+1. Get good tone solo (use this guide's settings)
+2. Play with backtrack
+3. If something sounds wrong, adjust ONE thing at a time
+4. Re-test with backtrack
+5. Repeat until it fits
+
+**Remember**: The best tone is the one that serves the SONG, not the one that sounds best solo. Your bass is part of a team!
+
+Good luck with your covers! 🎸
