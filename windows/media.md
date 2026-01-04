@@ -11,6 +11,29 @@ Complete workflow from recording to publishing:
 4. **Video Editing** - Compositing and final assembly
 5. **Publishing** - Export and upload to YouTube/Instagram
 
+## TL;DR - Software Installation
+
+```powershell
+# Video recording
+winget install -e --id OBSProject.OBSStudio
+
+# Video editor
+winget install -e --id KDE.kdenlive
+# Alternative: DaVinci Resolve (more stable on Windows)
+
+# Notation software
+winget install -e --id Musescore.Musescore
+
+# Backing track downloader (requires ffmpeg for audio conversion)
+scoop install yt-dlp ffmpeg
+```
+
+**Manual downloads (required):**
+- **Focusrite drivers** - https://focusrite.com (includes ASIO drivers) - **reboot after install**
+- **Ableton Live Lite** - Bundled with Scarlett (serial key in Focusrite account)
+- **MeldaProduction Free Bundle** - https://meldaproduction.com/MFreeFXBundle
+  - Install to: `C:\Program Files\VstPlugins\MeldaProduction`
+
 ## Hardware Setup
 
 ### Audio Interface
