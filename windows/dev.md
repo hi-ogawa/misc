@@ -1,5 +1,7 @@
 # Development Environment
 
+**Prerequisites:** Complete [setup.md](setup.md) first (Git, VSCode, scoop, dotfiles)
+
 ## Package Managers: winget vs scoop
 
 Windows has two main package managers for CLI tools:
@@ -25,16 +27,15 @@ Windows has two main package managers for CLI tools:
 - Tools installed by scoop are added to Windows PATH
 - Installed tools work in **both PowerShell and Git Bash**
 
-## Installation
+## Additional tools
+
+### Claude Code
 
 ```powershell
-winget install -e --id Microsoft.VisualStudioCode
-winget install -e --id Git.Git
 winget install -e --id Anthropic.ClaudeCode
 ```
 
-- *Restart VSCode after each install - terminal won't see newly installed CLIs until restart*
-- Verify: `claude`, `python --version`, `node --version`
+Verify: `claude --version`
 
 ## What does Git for Windows install?
 

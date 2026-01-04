@@ -1,5 +1,7 @@
 # Windows Setup
 
+The same content is found in https://github.com/hi-ogawa/misc/tree/main/windows
+
 ## Installation
 
 - USB installer
@@ -34,21 +36,25 @@
     - File Explorer → View → Show → File name extensions
   - Taskbar
     - Right-click taskbar → Taskbar settings
-    - Taskbar behaviors
+    - Hide unnecessary UI through Taskbar behaviors, items, etc
       - Show taskbar on all displays: OFF
-    - Taskbar items
-      - Search: Hide
-      - Task view: Hide
-      - Widgets: Hide
-      - Chat: Hide
-    - System tray
-      - Settings → Personalization → Taskbar → Other system tray icons
-      - Toggle OFF everything except Battery, Network, Volume
   - Swap Ctrl/Caps (PowerToys)
-    - Install from https://github.com/microsoft/PowerToys/releases (PowerToysSetup-x.xx.x-x64.exe)
     - PowerToys → Keyboard Manager → Remap keys: Caps Lock ↔ Left Ctrl
 - Install Chrome
   - Install, sign in, sync bookmarks and extensions
+- Setup development tools (see `dev.md` etc. for details)
+  - install git, vscode
+  - install scoop https://scoop.sh/
+  - apply dotfiles (see `./dotfiles/README.md`)
+
+Tool installtion via winget:
+
+```powershell
+winget install -e --id Microsoft.PowerToys
+winget install -e --id Google.Chrome
+winget install -e --id Git.Git
+winget install -e --id Microsoft.VisualStudioCode
+```
 
 ## Desktop tips
 
