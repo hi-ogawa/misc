@@ -2,13 +2,29 @@
     "buckets": [
         {
             "Name": "main",
-            "Source": "https://github.com/ScoopInstaller/Main.git"
+            "Source": "https://github.com/ScoopInstaller/Main.git",
+            "Updated": {
+                "value": "\/Date(1767501486000)\/",
+                "DisplayHint": 2,
+                "DateTime": "Sunday, January 4, 2026 1:38:06 PM"
+            },
+            "Manifests": 1412
         }
     ],
     "apps": [
         {
+            "Info": "",
             "Source": "main",
-            "Name": "yazi"
+            "Name": "gh",
+            "Version": "2.83.2",
+            "Updated": "\/Date(1767509400629)\/"
+        },
+        {
+            "Info": "",
+            "Source": "main",
+            "Name": "yazi",
+            "Version": "25.12.29",
+            "Updated": "\/Date(1767504856409)\/"
         }
     ]
 }

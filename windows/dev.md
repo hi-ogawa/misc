@@ -4,35 +4,52 @@
 
 ## Package Managers: winget vs scoop
 
-Windows has two main package managers for CLI tools:
+### Recommendation: Use scoop for CLI tools, winget for GUI apps
 
-### winget (Windows Package Manager)
+**scoop for CLI dev tools** (Preferred)
+- No admin needed
+- No terminal restart needed (PATH updates immediately)
+- User-local install (`~/scoop/apps/`)
+- Better version management
 
-- **Official Microsoft package manager**
-- Pre-installed on Windows 11
-- Good for: GUI applications, major development tools
-- Installs to: `C:\Program Files\` (requires admin for some packages)
-- Usage: `winget install <package>`
+Examples:
+```bash
+scoop install gh yazi jq ripgrep fd fzf
+```
 
-### scoop https://scoop.sh/
+**winget for GUI apps**
+- Official Microsoft tool (pre-installed)
+- Better for GUI apps
+- System-wide install (`C:\Program Files\`)
+- Often needs admin, requires terminal restart
 
-- **Community-driven, CLI-focused**
-- Optimized for development tools and utilities
-- Good for: CLI tools, utilities, Unix-like tools
-- Installs to: `~\scoop\apps\` (no admin needed)
-- Usage: `scoop install <package>`
+Examples:
+```bash
+winget install Git.Git Microsoft.VisualStudioCode Google.Chrome Microsoft.PowerToys
+```
 
-**How scoop works:**
-- scoop itself is PowerShell-based (install and run `scoop` commands in PowerShell)
-- Tools installed by scoop are added to Windows PATH
-- Installed tools work in **both PowerShell and Git Bash**
+See https://scoop.sh/ for scoop details.
 
-## Additional tools
+## CLI Tools
+
+Install via scoop:
+
+```bash
+scoop install gh           # GitHub CLI
+scoop install yazi         # Terminal file manager
+scoop install jq           # JSON processor
+scoop install ripgrep      # Fast grep alternative (rg)
+scoop install fd           # Fast find alternative
+```
 
 ### Claude Code
 
-```powershell
+```bash
+# Via winget (GUI app style)
 winget install -e --id Anthropic.ClaudeCode
+
+# Or via scoop (CLI tool style)
+scoop install claude-code
 ```
 
 Verify: `claude --version`
