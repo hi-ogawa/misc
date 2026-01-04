@@ -25,18 +25,6 @@ scoop install gh yazi jq ripgrep fd fzf
 - Often needs admin, requires terminal restart
 - e.g. Chrome, VsCode
 
-### Claude Code
-
-```bash
-# Via winget (GUI app style)
-winget install -e --id Anthropic.ClaudeCode
-
-# Or via scoop (CLI tool style)
-scoop install claude-code
-```
-
-Verify: `claude --version`
-
 ## What does Git for Windows install?
 
 When you run `winget install Git.Git`, you're installing **"Git for Windows"** which includes multiple components:
