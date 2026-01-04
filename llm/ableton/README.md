@@ -29,11 +29,14 @@ Personal knowledge base for learning Ableton Live Lite, focused on bass cover pr
 ```
 /
 ├── README.md           # This file
-├── plan.md             # Detailed implementation plan
 ├── workflow.md         # Personal workflow notes (⚠️ partially unverified)
 │                       # Mix of: Ableton-specific + general audio + personal setup
 ├── docs/               # (Future) Official documentation
-│   └── official/       # Ableton manual, shortcuts, glossary
+│   ├── official/
+│   │   ├── ableton-manual-*.md      # Official manual chapters
+│   │   ├── keyboard-shortcuts.md    # Exported from Ableton preferences
+│   │   └── glossary.md              # Official terminology
+│   └── resources/      # (Later) Well-known community resources
 └── data/               # Untracked: raw chats, experiments
 ```
 
@@ -62,13 +65,33 @@ Personal knowledge base for learning Ableton Live Lite, focused on bass cover pr
 
 ## Next Steps
 
-See [plan.md](plan.md) for detailed roadmap.
-
 **Immediate:**
-1. Export keyboard shortcuts from Ableton (Preferences → Export)
-2. Obtain official Ableton manual
-3. Convert to markdown format
-4. Test with simple questions
+1. **Obtain Ableton documentation**:
+   - Export keyboard shortcut map from Ableton (Preferences → Export)
+   - Download/extract official manual (PDF → markdown)
+   - Create simple glossary of terms
+
+2. **Test with simple questions**:
+   - "What's the shortcut for creating a locator?"
+   - "How does MIDI fold work?"
+   - "What are warp modes?"
+   - Check if LLM gives accurate answers from docs
+
+3. **Iterate based on results**:
+   - If accurate: expand with more official content
+   - If still hallucinating: improve doc format/structure
+   - If working well: then consider adding personal workflows
+
+## Explicitly Deferred
+
+❌ **Not doing these until official docs prove successful:**
+- Complex folder hierarchies
+- Metadata/tagging systems
+- Personal workflow documentation (beyond basic workflow.md)
+- Ardour comparisons
+- Troubleshooting database
+
+Keep it simple - test with official docs first.
 
 ## Note on Verification
 
