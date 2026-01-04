@@ -144,18 +144,35 @@ Personal workflow for bass cover audio production and MIDI transcription.
 
 ### Plugin Management
 
-**MeldaProduction plugins installed**:
-- Location: `C:\Program Files\VstPlugins\MeldaProduction`
-- Available: MEqualizer, MCompressor, and 33+ other effects
+**Plugin Format Guide**:
+
+Most plugin installers offer multiple formats - you can select which to install:
+- **VST3** (.vst3) - Modern standard, best performance, use this for Ableton ✅
+- **VST2** (.dll) - Older format, skip if VST3 available ❌
+- **AAX** - Pro Tools only, skip if you don't have Pro Tools ❌
+- **AU** (Mac only) - Audio Units for Logic/GarageBand
+- **Standalone** - Runs without DAW, useful for testing/practice ✅
+
+**For Ableton Live Lite**, install only:
+- ✅ VST3 (best option)
+- ✅ Standalone (optional, convenient for testing)
+- ❌ Skip VST2, AAX (save disk space, avoid duplicate entries)
+
+**VST Folder Conventions (Windows)**:
+- **VST2** (.dll): `C:\Program Files\VstPlugins\[Vendor Name]\` (custom location, use vendor subfolders)
+- **VST3** (.vst3): `C:\Program Files\Common Files\VST3\` (fixed by specification, cannot change)
+
+**Installed plugins**:
+- MeldaProduction: VST3 (also has VST2 but disabled in Ableton)
+- IK Multimedia AmpliTube: VST3 + Standalone
 - MPluginManager prompts for admin access: Can ignore, only needed for updates
 
-**Plugin configuration** (first time):
+**Plugin configuration** (current setup):
 1. Preferences → Plug-Ins → Plug-In Sources
-2. Turn ON "Use VST Plug-In Custom Folder"
-3. Browse to: `C:\Program Files\VstPlugins` (parent folder, not subfolder)
-4. Turn ON "Use VST3 Plug-in System Folder"
-5. Click "Rescan"
-6. Plugins appear in Browser → Plug-ins tab
+2. Turn OFF "Use VST Plug-In Custom Folder" (disables VST2, using VST3 only)
+3. Turn ON "Use VST3 Plug-in System Folder" (scans `C:\Program Files\Common Files\VST3\`)
+4. Click "Rescan"
+5. Plugins appear in Browser → Plug-ins tab (VST3 versions only)
 
 ## MIDI Transcription
 
@@ -228,12 +245,16 @@ Personal workflow for bass cover audio production and MIDI transcription.
 - Ctrl+D (Cmd+D) - Duplicate selected notes
 - `0` (zero) - Deactivate (mute) selected notes
 - Ctrl+Space (Option+Space Mac) - Stop playback at end of selection
+- Shift+Left/Right Arrow - Shorten/extend selected note(s) duration by grid increment
 
 **Transcription process:**
 1. Set loop to 2-4 bar section
 2. Fold view to bass range (E1-G3)
 3. Enable note preview (headphone icon in piano roll)
 4. Draw notes in rhythm first, adjust pitch second
+   - In Draw Mode (B), click creates note at current grid length (e.g., 16th note)
+   - To extend note: Select note, then Shift+Right Arrow to extend by grid increments
+   - Alternative: Click right edge of note and drag to desired length
 5. Edit velocity for dynamics
 6. Verify by playing along with bass
 7. Move to next section
