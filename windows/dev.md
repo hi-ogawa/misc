@@ -11,12 +11,7 @@
 - No terminal restart needed (PATH updates immediately)
 - User-local install (`~/scoop/apps/`)
 - Better version management
-- e.g. `gh`, `yazi`
-
-Examples:
-```bash
-scoop install gh yazi jq ripgrep fd fzf
-```
+- e.g. gh, yazi
 
 **winget for GUI apps**
 - Official Microsoft tool (pre-installed)
