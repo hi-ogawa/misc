@@ -172,11 +172,53 @@ Personal workflow for bass cover audio production and MIDI transcription.
 2. Enable metronome (top-left icon, uncheck "Enable Only While Recording")
 3. Adjust global tempo if needed (can slow down for transcribing)
 
+### Slowing Down for Transcription
+
+✅ **VERIFIED**: Warping allows slowing down while maintaining pitch.
+
+**Steps to slow down audio:**
+1. **Enable Warp** on audio clip (double-click clip → turn on Warp switch in Clip View)
+2. **Choose Warp Mode** (in Clip View's Audio panel):
+   - **Complex or Complex Pro**: Best for full songs/polyphonic material
+   - **Tones**: Good for bass/monophonic instruments with distinct pitch
+   - **Beats**: For percussive/rhythmic material
+3. **Lower global tempo** in Control Bar's tempo field (top of screen)
+   - Click and drag to adjust, or hold Shift while dragging for fine adjustments
+   - Example: 120 BPM → 80 BPM for easier transcription
+4. **Enable metronome** (click metronome icon in Control Bar) for tempo reference
+
+**Result**: Audio slows down while maintaining original pitch - perfect for transcription!
+
+**Note**: Don't use Re-Pitch mode for transcription - it changes pitch like old tape/vinyl.
+
 **Locators:**
 - **Default Ableton**: Use "Set Locator" button in Control Bar, or Create menu → Add Locator
 - **Default Ableton**: Click "Previous/Next Locator" buttons to navigate (no keyboard shortcuts by default)
 - **PerforModule template only**: `/` set locator, `,` previous, `.` next, `1-9` jump to numbered locator
 - Double-click locator to rename (e.g., "Verse 1", "Chorus")
+
+### Navigation & Playhead Movement
+
+✅ **VERIFIED**: Insert marker and scrub area behavior confirmed.
+
+**Playhead (Insert Marker)**: The flashing blue line that shows where playback starts.
+
+**Moving playhead without playing:**
+1. **Click in track area** (not scrub area) - moves insert marker without starting playback
+2. **Type position** in Control Bar's Arrangement Position fields (bars-beats-sixteenths)
+3. **Keyboard shortcuts:**
+   - `Home` (Win) / `Fn+Left Arrow` (Mac) - Return to start
+   - `Left/Right arrows` - Move insert marker in time
+   - `Ctrl+Left/Right` (Win) / `Option+Left/Right` (Mac) - Snap to locators/clip edges
+
+**Scrubbing (moving + playing):**
+- **Scrub area** = bar above tracks (between beat ruler and tracks)
+- **Click scrub area** - Starts playback from that point
+- **Hold mouse down** in scrub area - Loops that section
+- `Shift+Click` beat-time ruler - Scrub without quantization
+
+**Clip View scrubbing:**
+- Click lower half of waveform OR scrub area below time ruler - Jumps to that point in clip
 
 **Piano roll shortcuts:**
 - `F` - Fold to Notes (show only key tracks containing notes)
@@ -275,6 +317,18 @@ D:\Projects\song-name\
 ## Common Issues & Solutions
 
 ✅ **VERIFIED**: Solutions confirmed against official documentation.
+
+**Delay when clicking scrub area during playback:**
+- **Issue**: Odd delay when clicking scrub area to jump to a different position while already playing
+- **Cause**: **Quantization** - jumps are quantized to the next bar/beat boundary (musical timing feature)
+- **Solution 1**: Press `Ctrl+0` (Win) / `Cmd+0` (Mac) to **disable quantization** (instant jumps)
+- **Solution 2**: Use smaller quantization for shorter delays:
+  - `Ctrl+6` / `Cmd+6` - Sixteenth-note (very short delay)
+  - `Ctrl+7` / `Cmd+7` - Eighth-note
+  - `Ctrl+8` / `Cmd+8` - Quarter-note
+  - `Ctrl+9` / `Cmd+9` - 1-bar (longest delay)
+- **Note**: Quantization Chooser is in Control Bar (top of screen, near transport controls)
+- **Tip**: Disable quantization (`Ctrl+0`) while transcribing for instant navigation
 
 **Locators:**
 - **Issue**: No default keyboard shortcuts for locators in Ableton Live 12
