@@ -1,0 +1,15 @@
+#!/bin/bash
+# Sync VSCode settings - runs when vscode-settings.json or vscode-keybindings.json change
+
+set -e
+
+VSCODE_DIR="$APPDATA/Code/User"
+
+# Create directory if it doesn't exist
+mkdir -p "$VSCODE_DIR"
+
+# Copy settings
+cp -f "{{ .chezmoi.sourceDir }}/vscode-settings.json" "$VSCODE_DIR/settings.json"
+cp -f "{{ .chezmoi.sourceDir }}/vscode-keybindings.json" "$VSCODE_DIR/keybindings.json"
+
+echo "VSCode settings synced!"

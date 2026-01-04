@@ -43,9 +43,10 @@ The same content is found in https://github.com/hi-ogawa/misc/tree/main/windows
 - Install Chrome
   - Install, sign in, sync bookmarks and extensions
 - Setup basic development tools (see [dev.md](./dev.md) for background)
-  - install git (with bash), vscode via winget
-  - install scoop https://scoop.sh/
-  - follow [dotfiles/README.md](./dotfiles/README.md)
+  - Install git (with bash), vscode via winget
+  - Install scoop: https://scoop.sh/
+  - Install chezmoi and apply dotfiles: `scoop install chezmoi && chezmoi init --apply ~/code/personal/misc/windows/dotfiles`
+  - See [dotfiles/README.md](./dotfiles/README.md) for details
 
 Tool installtion via winget:
 

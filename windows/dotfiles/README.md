@@ -1,57 +1,84 @@
 # Dotfiles
 
-Configuration files for Windows development environment.
+Configuration files for Windows development environment, managed with [chezmoi](https://www.chezmoi.io/).
 
-## Contents
+## What Gets Configured
 
-- `.bash_profile` - Bash login shell config (sources `.bashrc`)
-- `.bashrc` - Bash configuration (yazi shell wrapper)
-- `.gitconfig` - Git configuration (aliases, LF line endings, defaults)
-- `scoop-packages.json` - Scoop package list
-- `vscode-settings.json` - VSCode settings (LF line endings, Git Bash default)
-- `vscode-keybindings.json` - VSCode keybindings
+- **Bash** - Shell wrapper for yazi file manager
+- **Git** - User info, aliases, line ending settings
+- **VSCode** - LF line endings, Git Bash terminal, keybindings
+- **Scoop packages** - gh (GitHub CLI), yazi (terminal file manager)
 
-## Setup
+## Quick Setup
+
+One command to install everything:
 
 ```bash
-# Install scoop packages
-scoop import dotfiles/scoop-packages.json
-
-# Copy configs
-cp -f dotfiles/.bash_profile ~/
-cp -f dotfiles/.bashrc ~/
-cp -f dotfiles/.gitconfig ~/
-cp -f dotfiles/vscode-settings.json "$APPDATA/Code/User/settings.json"
-cp -f dotfiles/vscode-keybindings.json "$APPDATA/Code/User/keybindings.json"
-
-# Reload
-source ~/.bashrc
+scoop install chezmoi
+chezmoi init --apply ~/code/personal/misc/windows/dotfiles
 ```
+
+This will:
+1. Install scoop packages (gh, yazi)
+2. Deploy dotfiles (.bash_profile, .bashrc, .gitconfig)
+3. Configure VSCode settings
 
 Verify:
 
 ```bash
-git config --list  # Should show your aliases
-type y             # Should show yazi wrapper function
+git config --list  # Should show aliases
+type y             # Should show yazi wrapper
 ```
 
-## Maintenance
-
-Update repo after config changes:
+## Daily Usage
 
 ```bash
-# Update scoop packages list
-scoop export > dotfiles/scoop-packages.json
+# Check what would change
+chezmoi diff
 
-# Copy configs back
-cp -f ~/.bash_profile dotfiles/
-cp -f ~/.bashrc dotfiles/
-cp -f ~/.gitconfig dotfiles/
-cp -f "$APPDATA/Code/User/settings.json" dotfiles/vscode-settings.json
-cp -f "$APPDATA/Code/User/keybindings.json" dotfiles/vscode-keybindings.json
+# Apply any updates from the repo
+chezmoi apply
+
+# Edit a config file (opens in $EDITOR)
+chezmoi edit ~/.bashrc
+
+# See what chezmoi is managing
+chezmoi managed
 ```
 
-## TODO
+## Making Changes
 
-- try chezmoi? https://github.com/twpayne/chezmoi
-- consolidate with linux machine config? https://github.com/hi-ogawa/config
+When you edit configs directly (e.g., in VSCode or ~/.bashrc):
+
+```bash
+# Add changes back to chezmoi source
+chezmoi add ~/.bashrc
+chezmoi add "$APPDATA/Code/User/settings.json"
+
+# Or use chezmoi edit to edit the source directly
+chezmoi edit ~/.gitconfig
+
+# Commit changes to git
+cd ~/code/personal/misc/windows
+git add dotfiles/
+git commit -m "update dotfiles"
+```
+
+## File Structure
+
+```
+dotfiles/
+├── dot_bash_profile              → ~/.bash_profile
+├── dot_bashrc                    → ~/.bashrc
+├── dot_gitconfig                 → ~/.gitconfig
+├── run_once_before_install-packages.sh.tmpl   # Installs scoop packages
+├── run_onchange_after_vscode-settings.sh.tmpl # Syncs VSCode configs
+├── vscode-settings.json          # Source for VSCode settings
+├── vscode-keybindings.json       # Source for VSCode keybindings
+└── .chezmoiignore                # Files to ignore
+```
+
+## Next Steps
+
+- Cross-platform support with templates (Linux/macOS)
+- Consolidate with linux machine config: https://github.com/hi-ogawa/config
